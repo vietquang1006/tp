@@ -1,5 +1,5 @@
 [![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
-
+[![Codecov](https://app.codecov.io/gh/AY2526S2-CS2103T-W13-3/tp)]
 ![Ui](docs/images/Ui.png)
 
 * This is **the W13-3 sample project for Software Engineering (SE) students**.<br>
