@@ -61,4 +61,14 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 [[github](http://github.com/natsupercell)]
 
 * Role: Developer
-* Responsibilities: Backend
+* Responsibilities: UI
+
+### Chai Yi Kang
+
+<img src="images/chaiyikang.png" width="200px">
+
+[[homepage](https://chaiyikang.vercel.app)]
+[[github](http://github.com/chaiyikang)]
+
+- Role: Developer
+- Responsibilities: Be cool
