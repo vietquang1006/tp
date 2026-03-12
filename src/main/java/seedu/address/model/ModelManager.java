@@ -130,8 +130,14 @@ public class ModelManager implements Model {
      */
     @Override
     public ObservableList<Person> getFilteredPersonList() {
+        return filteredPersons;
+    }
+
+    @Override
+    public ObservableList<Person> getSortedFilteredPersonList() {
         return sortedFilteredPersons;
     }
+
 
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
