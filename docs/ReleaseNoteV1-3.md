@@ -4,6 +4,7 @@
 
 ### Changes to Features (MVP)
 - 
+- Added the (optional) ability to display contacts in sorted order (ascending or descending by name).
 
 ### Improvements
 - 
