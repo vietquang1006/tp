@@ -20,7 +20,7 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 [[portfolio](team/yiheng.md)]
 
 * Role: Team Lead
-* Responsibilities: 
+* Responsibilities:
     * Backend Integration
     * UI Design
     * Code Review

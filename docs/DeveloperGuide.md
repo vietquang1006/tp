@@ -432,7 +432,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS (Main Success Scenario):**
 1. Marcus instructs the application to list all contact without sorting.
-2. CampusConnect displays all stored contacts in the default order - order of creation.  
+2. CampusConnect displays all stored contacts in the default order - order of creation.
    Use case ends.
 
 **Extensions:**

@@ -7,7 +7,7 @@
 - Added light visual styling such as bold text and color variations to highlight important contact information.
 
 ### Improvements
-- 
+-
 
 ### Bug Fixes
 - None
@@ -18,3 +18,4 @@
 
 ---
 Done by: CS2103T-W13-3
+

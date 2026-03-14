@@ -3,7 +3,7 @@
 ![Ui](docs/images/Ui.png)
 * This is the**team project of CS2103T-W13-3, titled Campus Connect**.<br>
 
-**CampusConnect** is a streamlined contact management application designed specifically for the Secretary of the NUS Students’ Union (NUSSU). 
+**CampusConnect** is a streamlined contact management application designed specifically for the Secretary of the NUS Students’ Union (NUSSU).
 
 Managing multiple student leadership bodies often means juggling scattered contacts across spreadsheets, Telegram, and emails. CampusConnect solves this by centralizing leader information, allowing you to instantly find who you need and see when they are busy, reducing administrative overhead and the mental load of constant context-switching.
 
