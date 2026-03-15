@@ -508,8 +508,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * **CLI command**: A text-based instruction entered by the user to perform an action in the application (e.g., `add`, `delete`, `find`, `list`).
 
-*{More to be added}*
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
@@ -554,6 +552,54 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
+
+### Listing persons
+1. Listing persons without sorting
+
+   1. Prerequisites: The app contains multiple contacts with different names.
+
+   2. Test case: `list`
+      Expected: All contacts are displayed in their default order.
+
+2. Listing persons in ascending order
+
+   1. Prerequisites: Multiple contacts exist with different names.
+
+   2. Test case: `list sort`
+      Expected: All contacts are displayed sorted in ascending alphabetical order of their names.
+
+   3. Test case: `list sort ascending`
+      Expected: Same behaviour as `list sort`.
+
+   4. Test case: `list ascending`
+      Expected: Same behaviour as `list sort`.
+
+3. Listing persons in descending order
+
+   1. Prerequisites: Multiple contacts exist with different names.
+
+   2. Test case: `list sort descending`
+      Expected: All contacts are displayed sorted in descending alphabetical order of their names.
+
+   3. Test case: `list sort reverse`
+      Expected: Same behaviour as `list sort descending`.
+
+   4. Test case: `list descending`
+      Expected: Same behaviour as `list sort descending`.
+
+   5. Test case: `list reverse`
+      Expected: Same behaviour as `list sort descending`.
+
+4. Invalid list commands
+
+   1. Test case: `list abc`
+      Expected: Error message shown indicating invalid command format.
+
+   2. Test case: `list sort abc`
+      Expected: Error message shown indicating invalid command format.
+
+   3. Test case: `list ascending descending`
+      Expected: Error message shown indicating invalid command format.
 
 ### Saving data
 

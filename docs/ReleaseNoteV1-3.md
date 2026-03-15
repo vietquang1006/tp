@@ -2,15 +2,24 @@
 
 ## [v1.3] - 2026-03-19
 
-<<<<<<< HEAD
-### Changes to Features (MVP)
+### Changes to MVP - Feature 1
+- XXX
+
+### Changes to MVP - Feature 2
+- XXX
+
+### Changes to MVP - Feature 3
 - 
-- Added the (optional) ability to display contacts in sorted order (ascending or descending by name).
-=======
+
 ### Changes to MVP - Feature 4
+- Added the (optional) ability to display contacts in sorted order (ascending or descending by name).
 - Improved the readability of the contact list by aligning key fields (name, phone, email, tags) consistently.
 - Added light visual styling such as bold text and color variations to highlight important contact information.
->>>>>>> week9-list-design-improvement
+
+#### Product UI
+Using `list sort reverse` command to display contacts in reverse order:
+
+<img src="images/ProductUI_V1-3.png" width="500px">
 
 ### Improvements
 -
