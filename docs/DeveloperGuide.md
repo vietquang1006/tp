@@ -582,7 +582,7 @@ testers are expected to do more *exploratory* testing.
       Expected: All contacts are displayed sorted in descending alphabetical order of their names.
 
    3. Test case: `list reverse`
-      Expected: Same behaviour as `list sort descending`.
+      Expected: Same behaviour as `list descending`.
 
 4. Invalid list commands
 
