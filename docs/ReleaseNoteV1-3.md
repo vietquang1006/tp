@@ -24,7 +24,7 @@ Using `delete 1` command will trigger a confirmation prompt:
   - Added a click-to-copy function with user feedback.
 
 #### Product UI
-Using `list sort reverse` command to display contacts in reverse order:
+Using `list reverse` command to display contacts in reverse order:
 
 <img src="images/ProductUI_V1-3_list.png" width="500px">
 

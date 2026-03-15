@@ -115,12 +115,11 @@ All contacts are displayed in their default order.
 You can sort contacts alphabetically in ascending or descending order.
 
 **Format:**
-`list [sort] [ascending|descending|reverse]` or `list [ascending|descending|reverse]`
+`list SORT_ORDER`
 
 **Ascending (A → Z):**
 ```
 list sort
-list sort ascending
 list ascending
 ```
 
@@ -130,8 +129,6 @@ All contacts are displayed in ascending alphabetical order by name.
 **Descending (Z → A):**
 
 ```
-list sort descending
-list sort reverse
 list descending
 list reverse
 ```

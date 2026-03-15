@@ -25,24 +25,14 @@ public class ListCommandParser implements Parser<ListCommand> {
         }
 
         String[] tokens = trimmedArgs.split("\\s+");
-        if (tokens.length > 2) {
+
+        if (tokens.length >= 2) {
             throw new ParseException(String.format(
                     MESSAGE_INVALID_COMMAND_FORMAT,
                     ListCommand.MESSAGE_USAGE));
         }
 
-        String keyword;
-
-        if (tokens.length == 1) {
-            keyword = tokens[0].toLowerCase();
-        } else {
-            keyword = tokens[1].toLowerCase();
-            if (!tokens[0].equalsIgnoreCase("sort")) {
-                throw new ParseException(String.format(
-                        MESSAGE_INVALID_COMMAND_FORMAT,
-                        ListCommand.MESSAGE_USAGE));
-            }
-        }
+        String keyword = tokens[0].toLowerCase();
 
         switch (keyword) {
         case "sort":
