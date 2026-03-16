@@ -31,14 +31,15 @@ public class TagContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        // EDIT: change from search full word to search partial word
         return keywords.stream()
-                .anyMatch(
-                        keyword -> person
-                                .getTags()
-                                .stream()
-                                .anyMatch(tag -> tag.tagName.toLowerCase()
-                                        .contains(keyword.toLowerCase())));
+                .anyMatch(keyword -> person
+                        .getTags()
+                        .stream()
+                        .anyMatch(tag -> containsIgnoreCase(tag.tagName, keyword)));
+    }
+
+    private boolean containsIgnoreCase(String source, String keyword) {
+        return source.toLowerCase().contains(keyword.toLowerCase());
     }
 
     @Override

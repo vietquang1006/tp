@@ -9,6 +9,9 @@
 - XXX
 
 ### Changes to MVP - Feature 3
+
+
+### Changes to MVP - Feature 4
 - **Delete Command Safeguard:** Added a mandatory `[y/n]` user confirmation prompt to the `delete INDEX` command to prevent the accidental deletion of contacts.
 
 #### Product UI

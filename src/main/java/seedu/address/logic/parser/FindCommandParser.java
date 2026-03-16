@@ -16,6 +16,9 @@ import seedu.address.model.person.TagContainsKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
+    private static final String SEARCH_MODE_NAME = "name";
+    private static final String SEARCH_MODE_TAG = "tag";
+
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -38,17 +41,12 @@ public class FindCommandParser implements Parser<FindCommand> {
         String searchBy = modeAndQuery[0];
         List<String> keywords = parseKeywords(modeAndQuery[1]);
 
-        if (searchBy.equals("name")) {
-            return new FindCommand(new NameContainsKeywordsPredicate(keywords));
-        } else if (searchBy.equals("tag")) {
-            return new FindCommand(new TagContainsKeywordsPredicate(keywords));
-        } else {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
+        return parseByMode(searchBy, keywords);
     }
 
+    /**
+     * Parses the query segment after the search mode into keyword groups.
+     */
     private List<String> parseKeywords(String rawQuery) throws ParseException {
         String trimmedQuery = rawQuery.trim();
         if (trimmedQuery.isEmpty()) {
@@ -60,7 +58,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 : Stream.of(trimmedQuery.split("\\s+"));
 
         List<String> keywords = keywordStream
-                .map(String::trim)
+                .map(this::normalizeWhitespace)
                 .collect(Collectors.toList());
 
         if (keywords.isEmpty() || keywords.stream().anyMatch(String::isEmpty)) {
@@ -68,6 +66,21 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         return keywords;
+    }
+
+    private FindCommand parseByMode(String searchBy, List<String> keywords) throws ParseException, CommandException {
+        switch (searchBy) {
+        case SEARCH_MODE_NAME:
+            return new FindCommand(new NameContainsKeywordsPredicate(keywords));
+        case SEARCH_MODE_TAG:
+            return new FindCommand(new TagContainsKeywordsPredicate(keywords));
+        default:
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
+
+    private String normalizeWhitespace(String rawKeyword) {
+        return rawKeyword.trim().replaceAll("\\s+", " ");
     }
 
 }
