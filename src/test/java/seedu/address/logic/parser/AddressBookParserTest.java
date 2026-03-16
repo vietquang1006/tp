@@ -117,6 +117,66 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommandWithConfirmation_add() throws Exception {
+        Person person = new PersonBuilder().build();
+        AddCommand command = (AddCommand) parser.parseCommandWithConfirmation(PersonUtil.getAddCommand(person));
+        assertEquals(new AddCommand(person), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_clear() throws Exception {
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_edit() throws Exception {
+        Person person = new PersonBuilder().build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        EditCommand command = (EditCommand) parser.parseCommandWithConfirmation(EditCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_exit() throws Exception {
+        assertTrue(parser.parseCommandWithConfirmation(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_find() throws Exception {
+        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        FindCommand command = (FindCommand) parser.parseCommandWithConfirmation(
+                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_help() throws Exception {
+        assertTrue(parser.parseCommandWithConfirmation(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
+        assertTrue(parser.parseCommandWithConfirmation(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_list() throws Exception {
+        assertTrue(parser.parseCommandWithConfirmation(ListCommand.COMMAND_WORD) instanceof ListCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ListCommand.COMMAND_WORD + " sort") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_unrecognisedInput_throwsParseException() {
+        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
+                -> parser.parseCommandWithConfirmation(""));
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_unknownCommand_throwsParseException() {
+        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () ->
+                parser.parseCommandWithConfirmation("unknownCommand"));
+    }
+
+    @Test
     public void parseYesNo_yes() throws Exception {
         assertTrue(parser.parseYesNo("y"));
         assertTrue(parser.parseYesNo("y ")); // with trailing space

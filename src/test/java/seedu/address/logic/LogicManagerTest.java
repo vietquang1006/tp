@@ -21,6 +21,8 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ConfirmDeleteCommand;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -46,6 +48,7 @@ public class LogicManagerTest {
 
     @BeforeEach
     public void setUp() {
+        model = new ModelManager();
         JsonAddressBookStorage addressBookStorage =
                 new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
@@ -81,6 +84,68 @@ public class LogicManagerTest {
     public void execute_storageThrowsAdException_throwsCommandException() {
         assertCommandFailureForExceptionFromStorage(DUMMY_AD_EXCEPTION, String.format(
                 LogicManager.FILE_OPS_PERMISSION_ERROR_FORMAT, DUMMY_AD_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    public void execute_commandAwaitingConfirmation_success() throws Exception {
+        // Add a person
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + ROLE_DESC_AMY;
+        logic.execute(addCommand);
+        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+
+        // Delete person 1 (first step: confirmation)
+        String deleteCommand = "delete 1";
+        String expectedMessage = String.format(ConfirmDeleteCommand.MESSAGE_ASK_CONFIRMATION,
+                Messages.format(expectedPerson));
+        CommandResult result = logic.execute(deleteCommand);
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+
+        // Confirm (second step: execution)
+        String confirmCommand = "y";
+        String expectedDeleteMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(expectedPerson));
+        CommandResult confirmResult = logic.execute(confirmCommand);
+        assertEquals(expectedDeleteMessage, confirmResult.getFeedbackToUser());
+
+        // Verify address book is empty
+        assertEquals(0, model.getAddressBook().getPersonList().size());
+    }
+
+    @Test
+    public void execute_commandAwaitingConfirmation_cancel() throws Exception {
+        // Add a person
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + ROLE_DESC_AMY;
+        logic.execute(addCommand);
+
+        // Delete person 1 (first step: confirmation)
+        String deleteCommand = "delete 1";
+        logic.execute(deleteCommand);
+
+        // Cancel (second step: execution)
+        String cancelCommand = "n";
+        CommandResult cancelResult = logic.execute(cancelCommand);
+        assertEquals("", cancelResult.getFeedbackToUser());
+
+        // Verify person is still in address book
+        assertEquals(1, model.getAddressBook().getPersonList().size());
+    }
+
+    @Test
+    public void execute_commandAwaitingConfirmation_invalidInputthrowsParseException() throws Exception {
+        // Add a person
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + ADDRESS_DESC_AMY + ROLE_DESC_AMY;
+        logic.execute(addCommand);
+
+        // Delete person 1 (first step: confirmation)
+        String deleteCommand = "delete 1";
+        logic.execute(deleteCommand);
+
+        // Invalid input
+        String invalidCommand = "invalid";
+        assertParseException(invalidCommand, seedu.address.logic.Messages.MESSAGE_ONLY_YES_NO);
     }
 
     @Test
