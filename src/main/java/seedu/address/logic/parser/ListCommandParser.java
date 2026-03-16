@@ -24,37 +24,29 @@ public class ListCommandParser implements Parser<ListCommand> {
             return new ListCommand(ListCommand.SortOrder.NONE);
         }
 
-        // Handling more than 1 argument, e.g. "list sort reverse"
         String[] tokens = trimmedArgs.split("\\s+");
 
-        if (!tokens[0].equalsIgnoreCase("sort")) {
+        if (tokens.length >= 2) {
             throw new ParseException(String.format(
                     MESSAGE_INVALID_COMMAND_FORMAT,
                     ListCommand.MESSAGE_USAGE));
         }
 
-        if (tokens.length == 1) {
+        String keyword = tokens[0].toLowerCase();
+
+        switch (keyword) {
+        case "sort":
+        case "ascending":
             return new ListCommand(ListCommand.SortOrder.ASCENDING);
-        }
 
-        // The allowable arguments are EITHER ONE of "ascending", "descending", and "reverse"
-        if (tokens.length == 2) {
-            String order = tokens[1].toLowerCase();
+        case "descending":
+        case "reverse":
+            return new ListCommand(ListCommand.SortOrder.DESCENDING);
 
-            switch (order) {
-            case "ascending":
-                return new ListCommand(ListCommand.SortOrder.ASCENDING);
-            case "descending":
-            case "reverse":
-                return new ListCommand(ListCommand.SortOrder.DESCENDING);
-            default:
-                throw new ParseException(String.format(
-                        MESSAGE_INVALID_COMMAND_FORMAT,
-                        ListCommand.MESSAGE_USAGE));
-            }
+        default:
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT,
+                    ListCommand.MESSAGE_USAGE));
         }
-        throw new ParseException(String.format(
-                MESSAGE_INVALID_COMMAND_FORMAT,
-                ListCommand.MESSAGE_USAGE));
     }
 }

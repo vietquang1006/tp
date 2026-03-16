@@ -26,19 +26,19 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_sortAscending_returnsAscending() throws Exception {
-        ListCommand command = parser.parse("sort ascending");
+        ListCommand command = parser.parse("ascending");
         assertEquals(ListCommand.SortOrder.ASCENDING, command.getSortOrder());
     }
 
     @Test
     public void parse_sortDescending_returnsDescending() throws Exception {
-        ListCommand command = parser.parse("sort descending");
+        ListCommand command = parser.parse("descending");
         assertEquals(ListCommand.SortOrder.DESCENDING, command.getSortOrder());
     }
 
     @Test
     public void parse_sortReverse_returnsDescending() throws Exception {
-        ListCommand command = parser.parse("sort reverse");
+        ListCommand command = parser.parse("reverse");
         assertEquals(ListCommand.SortOrder.DESCENDING, command.getSortOrder());
     }
 

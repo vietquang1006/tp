@@ -197,27 +197,30 @@
 
 .cell_phone_label:hover {
     -fx-background-color: #357ABD;
-    -fx-cursor: hand; /* show pointer */
 }
 
 .cell_email_label:hover {
     -fx-background-color: rgba(77, 166, 255, 0.2);
-    -fx-cursor: hand;
 }
 
 .cell_address_label:hover {
     -fx-background-color: rgba(207, 207, 207, 0.2);
-    -fx-cursor: hand;
 }
 
 .cell_role_label:hover {
     -fx-background-color: #8a6fcf;
-    -fx-cursor: hand;
 }
 
 .tag:hover {
     -fx-background-color: #4fa3d1;
-    -fx-cursor: hand;
+}
+
+.cell_phone_label:hover,
+.cell_email_label:hover,
+.cell_address_label:hover,
+.cell_role_label:hover,
+.tag:hover{
+    -fx-cursor: hand; /* show pointer */
 }
 
 .stack-pane {
