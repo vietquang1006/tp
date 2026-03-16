@@ -22,9 +22,9 @@ public class ListCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Lists all persons in the address book.\n"
             + "Parameters: [sort] [order]\n"
-            + "Example: " + COMMAND_WORD + " sort\n"
-            + "Example: " + COMMAND_WORD + " sort ascending\n"
-            + "Example: " + COMMAND_WORD + " sort reverse";
+            + "Example: " + COMMAND_WORD + "\n"
+            + "Example: " + COMMAND_WORD + " ascending\n"
+            + "Example: " + COMMAND_WORD + " reverse";
 
     /**
      * Represents the sorting order for the list command.
