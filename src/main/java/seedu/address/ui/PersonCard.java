@@ -115,11 +115,13 @@ public class PersonCard extends UiPart<Region> {
         label.getStyleClass().add(cssClass);
         label.setOnMouseClicked(event -> {
             // Step ONE: Copy to clipboard
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-            ClipboardContent content = new ClipboardContent();
-            content.putString(label.getText());
-            clipboard.setContent(content);
-            System.out.println("Copied: " + label.getText());
+            if (!"true".equals(System.getenv("CI"))) {
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent content = new ClipboardContent();
+                content.putString(label.getText());
+                clipboard.setContent(content);
+                System.out.println("Copied: " + label.getText());
+            }
 
             // Step TWO: Simulate feedback by changing background color
             String originalStyle = label.getStyle();
