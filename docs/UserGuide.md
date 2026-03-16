@@ -91,7 +91,57 @@ Examples:
 
 Shows a list of all persons in the address book.
 
-Format: `list`
+#### 1. Default Listing
+
+Displays all contacts in the order they are stored.
+
+**Format:**
+`
+list
+`
+
+**Example:**
+```
+list
+```
+
+**Expected Result:**
+All contacts are displayed in their default order.
+
+---
+
+#### 2. Sorted Listing
+
+You can sort contacts alphabetically in ascending or descending order.
+
+**Format:**
+`list SORT_ORDER`
+
+**Ascending (A → Z):**
+```
+list sort
+list ascending
+```
+
+**Expected Result:**
+All contacts are displayed in ascending alphabetical order by name.
+
+**Descending (Z → A):**
+
+```
+list descending
+list reverse
+```
+
+**Expected Result:**
+All contacts are displayed in descending alphabetical order by name.
+
+#### 3. Bonus: Copying of fields in a list
+
+You can copy the value of a field (e.g. phone number) of a contact in the list to the clipboard by clicking on the field!
+
+**Expected Result:**
+The field turns pink for a temporary period to indicate that it has been copied, and you can paste the value elsewhere.
 
 ### Editing a person : `edit`
 

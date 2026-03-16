@@ -148,4 +148,34 @@ public class PersonCardTest {
         }
         assertTrue(card.equals(sameCard[0]));
     }
+
+    // Yi Heng: I used AI to help me iterate to cover the display of a personcard with the tags
+    // I prompted AI with the report feedback by CodeCov and what is my current state of PersonCardTest
+    // It replied me with the below test case to cover the display of the tags in PersonCard has the
+    // correct quantity.
+    /**
+     * Tests that tags are correctly created and added to the UI.
+     */
+    @Test
+    public void display_personWithTags_tagsDisplayed() throws Exception {
+        Person person = new PersonBuilder()
+                .withTags("friend", "colleague")
+                .build();
+
+        CountDownLatch latch = new CountDownLatch(1);
+        final PersonCard[] personCard = new PersonCard[1];
+
+        Platform.runLater(() -> {
+            personCard[0] = new PersonCard(person, 1);
+            latch.countDown();
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            fail("Test timed out on JavaFX thread.");
+        }
+
+        javafx.scene.layout.FlowPane tagsPane = getPrivateField(personCard[0], "tags");
+
+        assertEquals(2, tagsPane.getChildren().size());
+    }
 }
