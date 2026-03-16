@@ -68,12 +68,19 @@ public class TagContainsKeywordsPredicateTest {
 
         predicate = new TagContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
+
+        predicate = new TagContainsKeywordsPredicate(Collections.singletonList("owes me"));
+        assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
     }
 
     @Test
     public void constructor_invalidKeyword_throwsCommandException() {
         CommandException exception = assertThrows(CommandException.class, () ->
                 new TagContainsKeywordsPredicate(Arrays.asList("friend", "classmate!")));
+        assertEquals(Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER, exception.getMessage());
+
+        exception = assertThrows(CommandException.class, () ->
+                new TagContainsKeywordsPredicate(Arrays.asList("friend", "group-work")));
         assertEquals(Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER, exception.getMessage());
     }
 

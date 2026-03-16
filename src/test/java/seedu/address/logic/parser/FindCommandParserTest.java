@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +30,10 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "name Alice Bob", expectedFindCommand);
 
         assertParseSuccess(parser, " \n name \n \t Alice  \t Bob \t", expectedFindCommand);
+
+        FindCommand expectedSemicolonCommand =
+                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("alice pauline", "josh")));
+        assertParseSuccess(parser, "name alice pauline ; josh", expectedSemicolonCommand);
     }
 
     @Test
@@ -40,17 +43,16 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "tag friend classmate", expectedFindCommand);
 
         assertParseSuccess(parser, " \n tag \n \t friend  \t classmate \t", expectedFindCommand);
+
+        FindCommand expectedSemicolonCommand =
+                new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("friends", "owes me", "secretary")));
+        assertParseSuccess(parser, "tag friends ; owes me ; secretary", expectedSemicolonCommand);
     }
 
     @Test
-    public void parse_modeOnly_returnsFindCommandWithNoKeywords() throws CommandException {
-        FindCommand expectedNameCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Collections.emptyList()));
-        FindCommand expectedTagCommand =
-                new FindCommand(new TagContainsKeywordsPredicate(Collections.emptyList()));
-
-        assertParseSuccess(parser, "name", expectedNameCommand);
-        assertParseSuccess(parser, "tag", expectedTagCommand);
+    public void parse_modeOnly_throwsParseException() {
+        assertParseFailure(parser, "name", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "tag", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -63,5 +65,7 @@ public class FindCommandParserTest {
     public void parse_invalidKeyword_throwsCommandException() {
         assertParseFailure(parser, "name Alice Bob!", MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER);
         assertParseFailure(parser, "tag friend!", MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER);
+        assertParseFailure(parser, "name alice ; ; bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 }

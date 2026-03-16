@@ -2,8 +2,9 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -28,10 +29,14 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        String[] arguments = trimmedArgs.split("\\s+");
+        String[] modeAndQuery = trimmedArgs.split("\\s+", 2);
+        if (modeAndQuery.length < 2) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
 
-        List<String> keywords = Arrays.stream(arguments).toList().subList(1, arguments.length);
-        String searchBy = arguments[0];
+        String searchBy = modeAndQuery[0];
+        List<String> keywords = parseKeywords(modeAndQuery[1]);
 
         if (searchBy.equals("name")) {
             return new FindCommand(new NameContainsKeywordsPredicate(keywords));
@@ -42,6 +47,27 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
+    }
+
+    private List<String> parseKeywords(String rawQuery) throws ParseException {
+        String trimmedQuery = rawQuery.trim();
+        if (trimmedQuery.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        Stream<String> keywordStream = trimmedQuery.contains(";")
+                ? Stream.of(trimmedQuery.split(";"))
+                : Stream.of(trimmedQuery.split("\\s+"));
+
+        List<String> keywords = keywordStream
+                .map(String::trim)
+                .collect(Collectors.toList());
+
+        if (keywords.isEmpty() || keywords.stream().anyMatch(String::isEmpty)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        return keywords;
     }
 
 }

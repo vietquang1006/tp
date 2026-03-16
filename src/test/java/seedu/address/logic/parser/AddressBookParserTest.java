@@ -88,6 +88,19 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_findWithSemicolonGroups() throws Exception {
+        FindCommand nameCommand = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " name alice pauline ; josh");
+        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("alice pauline", "josh"))),
+                nameCommand);
+
+        FindCommand tagCommand = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " tag friends ; owes me ; secretary");
+        assertEquals(new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("friends", "owes me",
+                "secretary"))), tagCommand);
+    }
+
+    @Test
     public void parseCommand_help() throws Exception {
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
