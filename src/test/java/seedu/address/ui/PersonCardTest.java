@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.CountDownLatch;
@@ -27,6 +28,7 @@ public class PersonCardTest {
      */
     @BeforeAll
     public static void setUp() {
+        assumeFalse("true".equals(System.getenv("CI")), "Skipping GUI tests on CI environments.");
         System.setProperty("java.awt.headless", "true");
         System.setProperty("testfx.robot", "glass");
         System.setProperty("testfx.headless", "true");
