@@ -27,9 +27,7 @@ public class FindCommandParserTest {
     public void parse_validNameArgs_returnsFindCommand() throws CommandException {
         FindCommand expectedFindCommand =
                 new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "name Alice Bob", expectedFindCommand);
-
-        assertParseSuccess(parser, " \n name \n \t Alice  \t Bob \t", expectedFindCommand);
+        assertParseSuccess(parser, "name Alice ; Bob", expectedFindCommand);
 
         FindCommand expectedSemicolonCommand =
                 new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("alice pauline", "josh")));
@@ -40,9 +38,7 @@ public class FindCommandParserTest {
     public void parse_validTagArgs_returnsFindCommand() throws CommandException {
         FindCommand expectedFindCommand =
                 new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("friend", "classmate")));
-        assertParseSuccess(parser, "tag friend classmate", expectedFindCommand);
-
-        assertParseSuccess(parser, " \n tag \n \t friend  \t classmate \t", expectedFindCommand);
+        assertParseSuccess(parser, "tag friend ; classmate", expectedFindCommand);
 
         FindCommand expectedSemicolonCommand =
                 new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("friends", "owes me", "secretary")));

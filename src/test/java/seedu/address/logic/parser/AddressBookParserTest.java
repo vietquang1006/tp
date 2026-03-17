@@ -75,7 +75,7 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ")));
+                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -83,7 +83,7 @@ public class AddressBookParserTest {
     public void parseCommand_findByTag() throws Exception {
         List<String> keywords = Arrays.asList("friend", "classmate");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " tag " + keywords.stream().collect(Collectors.joining(" ")));
+                FindCommand.COMMAND_WORD + " tag " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new TagContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -170,7 +170,7 @@ public class AddressBookParserTest {
     public void parseCommandWithConfirmation_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommandWithConfirmation(
-                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ")));
+                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 

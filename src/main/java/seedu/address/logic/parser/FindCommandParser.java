@@ -53,9 +53,10 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
+        // If not ; means the whole word itself is the keyword
         Stream<String> keywordStream = trimmedQuery.contains(";")
                 ? Stream.of(trimmedQuery.split(";"))
-                : Stream.of(trimmedQuery.split("\\s+"));
+                : Stream.of(rawQuery);
 
         List<String> keywords = keywordStream
                 .map(this::normalizeWhitespace)
