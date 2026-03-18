@@ -4,13 +4,18 @@
 
 ### Changes to MVP - Feature 1
 - **Duplicate Add Command Option:** Added a `[y/n]` user confirmation prompt to the `add` command to warn the user from adding duplicate contacts.
-- **:**
+- **Input Format Refinement:** Updated the `add` and `edit` command input format to use hyphenated flags (e.g., -n, -p) instead of slash-based prefixes.
 
 ### Changes to MVP - Feature 2
 - XXX
 
 ### Changes to MVP - Feature 3
 - **Delete Command Safeguard:** Added a mandatory `[y/n]` user confirmation prompt to the `delete INDEX` command to prevent the accidental deletion of contacts.
+
+### Additional Changes
+- Introduce new interface `ConfirmCommand` that represents command types that handles confirmation from user before execution.
+- Introduce new classes `ConfirmAddCommand` and `ConfirmDeleteCommand` that implement `ConfirmCommand`, and inherit from its base classes (`AddCommand`, `DeleteCommand`).
+- Introduce and implement logic flow for commands that requires confirmation.
 
 #### Product UI
 Using `add -rPresident -nJohn Doe -p98765432 -ejohnd@example.com -a311, Clementi Ave 2, #02-25 -tfriends -towesMoney` 2 times consecutively will trigger a confirmation prompt:

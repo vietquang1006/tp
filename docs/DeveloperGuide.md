@@ -163,7 +163,7 @@ For `delete`, confirmation is always required before the actual deletion is perf
 
 For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
 
-This shared behavior is implemented using an abstract `ConfirmCommand` parent class. Concrete subclasses such as `ConfirmDeleteCommand` and `ConfirmAddCommand` extend `ConfirmCommand` and provide command-specific validation and confirmation messages.
+This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand` and `ConfirmAddCommand` inherit from its base classes (`AddCommand` and `DeleteCommand`), while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
 
 #### Implementation
 
