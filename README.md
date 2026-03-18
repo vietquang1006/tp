@@ -1,6 +1,6 @@
 [![CI Status](https://github.com/AY2526S2-CS2103T-W13-3/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S2-CS2103T-W13-3/tp/actions/workflows/gradle.yml)
 [![codecov](https://codecov.io/gh/AY2526S2-CS2103T-W13-3/tp/graph/badge.svg?token=74GXALW1CP)](https://codecov.io/gh/AY2526S2-CS2103T-W13-3/tp)
-![Ui](docs/images/Ui.png)
+![Ui](docs/images/ProductUI_V1-3_Home.png)
 * This is the**team project of CS2103T-W13-3, titled Campus Connect**.<br>
 
 **CampusConnect** is a streamlined contact management application designed specifically for the Secretary of the NUS Students’ Union (NUSSU).

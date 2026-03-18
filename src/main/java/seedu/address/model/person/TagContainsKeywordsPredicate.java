@@ -8,20 +8,20 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Tag} matches any of the keywords given.
  */
-public class NameContainsKeywordsPredicate implements Predicate<Person> {
+public class TagContainsKeywordsPredicate implements Predicate<Person> {
     private static final String KEYWORD_VALIDATION_REGEX = "^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$";
 
     private final List<String> keywords;
 
     /**
-     * Creates a predicate that matches names containing any of the given keywords.
+     * Creates a predicate that matches tags containing any of the given keywords.
      *
-     * @param keywords Keywords to match against a person's name.
+     * @param keywords Keywords to match against a person's tags.
      * @throws CommandException If any keyword contains a non-alphanumeric character.
      */
-    public NameContainsKeywordsPredicate(List<String> keywords) throws CommandException {
+    public TagContainsKeywordsPredicate(List<String> keywords) throws CommandException {
         if (keywords.stream().anyMatch(keyword -> !keyword.matches(KEYWORD_VALIDATION_REGEX))) {
             throw new CommandException(Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER);
         }
@@ -32,7 +32,10 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return keywords.stream()
-                .anyMatch(keyword -> containsIgnoreCase(person.getName().fullName, keyword));
+                .anyMatch(keyword -> person
+                        .getTags()
+                        .stream()
+                        .anyMatch(tag -> containsIgnoreCase(tag.tagName, keyword)));
     }
 
     private boolean containsIgnoreCase(String source, String keyword) {
@@ -46,12 +49,11 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof NameContainsKeywordsPredicate)) {
+        if (!(other instanceof TagContainsKeywordsPredicate otherTagContainsKeywordsPredicate)) {
             return false;
         }
 
-        NameContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (NameContainsKeywordsPredicate) other;
-        return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
+        return keywords.equals(otherTagContainsKeywordsPredicate.keywords);
     }
 
     @Override

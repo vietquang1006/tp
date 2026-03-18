@@ -7,9 +7,6 @@
 - **Input Format Refinement:** Updated the `add` and `edit` command input format to use hyphenated flags (e.g., -n, -p) instead of slash-based prefixes.
 
 ### Changes to MVP - Feature 2
-- XXX
-
-### Changes to MVP - Feature 3
 - **Delete Command Safeguard:** Added a mandatory `[y/n]` user confirmation prompt to the `delete INDEX` command to prevent the accidental deletion of contacts.
 
 ### Additional Changes
@@ -25,6 +22,12 @@ Using `add -rPresident -nJohn Doe -p98765432 -ejohnd@example.com -a311, Clementi
 Using `delete 1` command will trigger a confirmation prompt:
 
 <img src="images/ProductUI_V1-3_delete.png" width="500px">
+
+### Changes to MVP - Feature 3
+- **Enhanced Find Command:** Updated the `find` command to support explicit search types using `find name ...` and `find tag ...`.
+- **Multi-word Search Support:** Added support for semicolon-separated keyword groups, allowing inputs such as `find name alice pauline ; josh` and `find tag friends ; owes me ; secretary`.
+- **Flexible Matching:** Search is now case-insensitive and supports partial matching for both names and tags.
+- **Input Validation:** Added validation to reject invalid keyword groups containing non-alphanumeric characters.
 
 ### Changes to MVP - Feature 4
 - **Useful List - Sort:** Added the (optional) ability to display contacts in sorted order (ascending or descending by name).

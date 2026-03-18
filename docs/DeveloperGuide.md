@@ -578,8 +578,6 @@ testers are expected to do more *exploratory* testing.
     2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-3. _{ more test cases …​ }_
-
 ### Adding a person
 
 1. Adding a non-duplicate person
@@ -631,7 +629,9 @@ testers are expected to do more *exploratory* testing.
     5. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size), `delete abc`<br>
        Expected: Similar to the previous case. An invalid command or out-of-bounds error is shown immediately without triggering the confirmation prompt.
 
-2. _{ more test cases …​ }_
+
+### Finding persons
+1. TODO: Add test cases for `find` command.
 
 ### Listing persons
 
@@ -679,4 +679,3 @@ testers are expected to do more *exploratory* testing.
 
     1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
-2. _{ more test cases …​ }_

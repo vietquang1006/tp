@@ -48,6 +48,10 @@ public class NameContainsKeywordsPredicateTest {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
+        // One partial keyword
+        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("lic"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
         // Multiple keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
@@ -59,11 +63,18 @@ public class NameContainsKeywordsPredicateTest {
         // Mixed-case keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Multi-word keyword phrase
+        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("alice bob"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
     }
 
     @Test
     public void test_nameDoesNotContainKeywords_returnsFalse() throws CommandException {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Carol"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        predicate = new NameContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
     }
 
@@ -71,6 +82,10 @@ public class NameContainsKeywordsPredicateTest {
     public void constructor_invalidKeyword_throwsCommandException() {
         CommandException exception = assertThrows(CommandException.class, () ->
                 new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob!")));
+        assertEquals(Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER, exception.getMessage());
+
+        exception = assertThrows(CommandException.class, () ->
+                new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob-Charles")));
         assertEquals(Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER, exception.getMessage());
     }
 
