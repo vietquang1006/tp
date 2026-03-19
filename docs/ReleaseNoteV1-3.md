@@ -42,7 +42,7 @@ Using `list reverse` command to display contacts in reverse order:
 <img src="images/ProductUI_V1-3_list.png" width="500px">
 
 ### Improvements
--
+- Not applicable.
 
 ### Bug Fixes
 - Fixed an issue where the address book failed to load contact entries correctly when duplicate names existed.
