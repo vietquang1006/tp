@@ -2,8 +2,35 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-  {:toc}
+## **Table of Contents**
+
+- [Acknowledgements](#acknowledgements)
+- [Setting up, getting started](#setting-up-getting-started)
+- [Design](#design)
+    - [Architecture](#architecture)
+    - [UI component](#ui-component)
+    - [Logic component](#logic-component)
+    - [Model component](#model-component)
+    - [Storage component](#storage-component)
+    - [Common classes](#common-classes)
+- [Implementation](#implementation)
+    - [Confirmation flow for `add` and `delete`](#confirmation-flow-for-add-and-delete)
+    - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+    - [[Proposed] Data archiving](#proposed-data-archiving)
+- [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+- [Appendix: Requirements](#appendix-requirements)
+    - [Product scope](#product-scope)
+    - [User Stories](#user-stories)
+    - [Use cases](#use-cases)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Glossary](#glossary)
+- [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+    - [Launch and shutdown](#launch-and-shutdown)
+    - [Adding a person](#adding-a-person)
+    - [Deleting a person](#deleting-a-person)
+    - [Finding persons](#finding-persons)
+    - [Listing persons](#listing-persons)
+    - [Saving data](#saving-data)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -281,8 +308,6 @@ The following activity diagram summarizes what happens when a user executes a ne
     * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
     * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
-
 ### \[Proposed\] Data archiving
 
 _{Explain here how the data archiving feature will be implemented}_
@@ -334,8 +359,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*` | user | duplicate a contact                                                        | quickly create another contact based on an existing one                                    |
 | `*` | forgetful user | add a new contact with only some of the required fields                    | quickly record someone I just met before I forget their details                            |
 | `*` | user ready to adopt the app | mass-import contact details from a CSV or Excel file                       | onboard hundreds of committee leaders efficiently without manual entry                     |
-
-*{More to be added}*
 
 ### Use cases
 
@@ -558,10 +581,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 Given below are instructions to test the app manually.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** These instructions only provide a starting point for testers to work on;
+**Note:** These instructions only provide a starting point for testers to work on;
 testers are expected to do more *exploratory* testing.
-
-</div>
 
 ### Launch and shutdown
 
@@ -631,7 +652,41 @@ testers are expected to do more *exploratory* testing.
 
 
 ### Finding persons
-1. TODO: Add test cases for `find` command.
+
+1. Finding persons by name
+
+   1. Prerequisites: The app contains multiple contacts with different names.
+
+   2. Test case: `find John`  
+      Expected: All contacts with names containing "John" are displayed.
+
+   3. Test case: `find alice`  
+      Expected: Contacts matching "alice" are displayed (case-insensitive).
+
+   4. Test case: `find John; alice`  
+        Expected: Contacts matching "John" and "alice" are displayed (case-insensitive).
+
+2. Finding persons by partial match
+
+    1. Prerequisites: The app contains contacts such as "Jonathan", "Johnny", "John Doe".
+
+    2. Test case: `find John`  
+       Expected: All contacts with names containing "John" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
+
+3. Finding persons with no matches
+
+    1. Prerequisites: The app contains multiple contacts.
+
+    2. Test case: `find xyz`  
+       Expected: No contacts are displayed. A message indicating no matches found is shown.
+
+4. Invalid find commands
+
+    1. Test case: `find`  
+       Expected: Error message shown indicating invalid command format.
+
+    2. Test case: `find @@@`  
+       Expected: Error message shown or no results returned depending on input validation rules.
 
 ### Listing persons
 
@@ -639,43 +694,43 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: The app contains multiple contacts with different names.
 
-    2. Test case: `list`
+    2. Test case: `list`  
       Expected: All contacts are displayed in their default order.
 
 2. Listing persons in ascending order
 
     1. Prerequisites: Multiple contacts exist with different names.
 
-    2. Test case: `list sort`
+    2. Test case: `list sort`  
        Expected: All contacts are displayed sorted in ascending alphabetical order of their names.
 
-    3. Test case: `list ascending`
+    3. Test case: `list ascending`  
        Expected: Same behaviour as `list sort`.
 
 3. Listing persons in descending order
 
     1. Prerequisites: Multiple contacts exist with different names.
 
-    2. Test case: `list descending`
+    2. Test case: `list descending`  
        Expected: All contacts are displayed sorted in descending alphabetical order of their names.
 
-    3. Test case: `list reverse`
+    3. Test case: `list reverse`  
        Expected: Same behaviour as `list descending`.
 
 4. Invalid list commands
 
-    1. Test case: `list abc`
+    1. Test case: `list abc`  
        Expected: Error message shown indicating invalid command format.
 
-    2. Test case: `list sort abc`
+    2. Test case: `list sort abc`  
        Expected: Error message shown indicating invalid command format.
 
-    3. Test case: `list ascending descending`
+    3. Test case: `list ascending descending`  
        Expected: Error message shown indicating invalid command format.
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. TODO _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
