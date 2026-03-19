@@ -45,15 +45,19 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-    * `list` : Lists all contacts.
+  * `list` : Lists all contacts.
 
-    * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-    * `delete 3` : Deletes the 3rd contact shown in the current list.
+  * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
-    * `clear` : Deletes all contacts.
+  * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-    * `exit` : Exits the app.
+  * `delete 3` : Deletes the 3rd contact shown in the current list.
+
+  * `clear` : Deletes all contacts.
+
+  * `exit` : Exits the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -189,22 +193,23 @@ Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by name/tags: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names/tags contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* `SEARCH_BY` must be either `name` or `tag` (lowercase).
+* The search is case-insensitive. e.g. `alice` will match `Alice`.
+* Use `;` to separate multiple keywords. Each keyword can contain spaces.
+* Persons matching at least one keyword will be returned (`OR` search).
+* Matching is based on text containment. e.g. `ali` will match `Alice`.
+* Keywords can only contain alphanumeric characters and spaces.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
+* `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
+* `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
+* `find name alex ; david` returns `Alex Yeoh`, `David Li`.<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
