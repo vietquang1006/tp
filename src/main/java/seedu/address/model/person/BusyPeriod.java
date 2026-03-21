@@ -14,10 +14,10 @@ import java.util.Objects;
  */
 public class BusyPeriod {
 
-    public static final String MESSAGE_CONSTRAINTS = "Dates must follow the DD-MM-YYYY format (e.g., 25-03-2026).";
+    public static final String MESSAGE_CONSTRAINTS = "Dates must follow the DD/MM/YYYY format (e.g., 25/03/2026).";
     public static final String MESSAGE_DATE_LOGIC = "The start date cannot be later than the end date.";
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public final LocalDate startDate;
     public final LocalDate endDate;

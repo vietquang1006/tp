@@ -27,11 +27,11 @@ public class BusyCommand extends Command{
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the person identified "
             + "by the index number used in the displayed person list as busy for a specified period.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_START_DATE + "START_DATE "
-            + PREFIX_END_DATE + "END_DATE\n"
+            + PREFIX_START_DATE + " START_DATE "
+            + PREFIX_END_DATE + " END_DATE\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_START_DATE + "25/03/2026 "
-            + PREFIX_END_DATE + "28/03/2026";
+            + PREFIX_START_DATE + " 25/03/2026 "
+            + PREFIX_END_DATE + " 28/03/2026";
 
     public static final String MESSAGE_BUSY_PERSON_SUCCESS = "Successfully marked %1$s as busy from %2$s.";
     public static final String MESSAGE_IDENTICAL_BUSY_PERIOD = "%1$s already has the busy period: %2$s.";
@@ -57,18 +57,38 @@ public class BusyCommand extends Command{
         Person personToBusy = lastShownList.get(index.getZeroBased());
         Person busyPerson = createBusyPerson(personToBusy, this.busyPeriod);
 
-        String busyPeriodString = personToBusy.getBusyPeriod()
-                .map(BusyPeriod::toString)
-                .orElse("No busy period");
-
         if (personToBusy.getBusyPeriod().equals(busyPerson.getBusyPeriod())) {
+            String busyPeriodString = personToBusy.getBusyPeriod()
+                    .map(BusyPeriod::toString)
+                    .orElse("No busy period");
             throw new CommandException(String.format(MESSAGE_IDENTICAL_BUSY_PERIOD,
                     personToBusy.getName(), busyPeriodString));
         }
 
         model.setPerson(personToBusy, busyPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+
+        String busyPeriodString = busyPerson.getBusyPeriod()
+                .map(BusyPeriod::toString)
+                .orElse("No busy period");
+
         return new CommandResult(String.format(MESSAGE_BUSY_PERSON_SUCCESS, busyPerson.getName(), busyPeriodString));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof BusyCommand)) {
+            return false;
+        }
+
+        BusyCommand otherBusyCommand = (BusyCommand) other;
+        return index.equals(otherBusyCommand.index)
+                && busyPeriod.equals(otherBusyCommand.busyPeriod);
     }
 
     /**

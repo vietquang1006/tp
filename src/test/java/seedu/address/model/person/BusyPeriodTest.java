@@ -12,21 +12,21 @@ public class BusyPeriodTest {
 
     @Test
     public void constructor_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new BusyPeriod(null, "25-03-2026"));
-        assertThrows(NullPointerException.class, () -> new BusyPeriod("25-03-2026", null));
+        assertThrows(NullPointerException.class, () -> new BusyPeriod(null, "25/03/2026"));
+        assertThrows(NullPointerException.class, () -> new BusyPeriod("25/03/2026", null));
     }
 
     @Test
     public void constructor_invalidDateFormat_throwsIllegalArgumentException() {
-        String invalidDate = "2026/03/25";
-        assertThrows(IllegalArgumentException.class, () -> new BusyPeriod(invalidDate, "28-03-2026"));
-        assertThrows(IllegalArgumentException.class, () -> new BusyPeriod("25-03-2026", invalidDate));
+        String invalidDate = "2026-03-25";
+        assertThrows(IllegalArgumentException.class, () -> new BusyPeriod(invalidDate, "28/03/2026"));
+        assertThrows(IllegalArgumentException.class, () -> new BusyPeriod("25/03/2026", invalidDate));
     }
 
     @Test
     public void constructor_invalidDateLogic_throwsIllegalArgumentException() {
-        String startDate = "28-03-2026";
-        String endDate = "25-03-2026";
+        String startDate = "28/03/2026";
+        String endDate = "25/03/2026";
         assertThrows(IllegalArgumentException.class, () -> new BusyPeriod(startDate, endDate));
     }
 
@@ -38,15 +38,15 @@ public class BusyPeriodTest {
         // invalid formats
         assertFalse(BusyPeriod.isValidDateFormat("")); // empty string
         assertFalse(BusyPeriod.isValidDateFormat(" ")); // spaces only
-        assertFalse(BusyPeriod.isValidDateFormat("25/03/2026")); // wrong separator
-        assertFalse(BusyPeriod.isValidDateFormat("2026-03-25")); // wrong order
-        assertFalse(BusyPeriod.isValidDateFormat("25-03-26")); // wrong year format
-        assertFalse(BusyPeriod.isValidDateFormat("32-03-2026")); // invalid day
-        assertFalse(BusyPeriod.isValidDateFormat("25-13-2026")); // invalid month
+        assertFalse(BusyPeriod.isValidDateFormat("25-03-2026")); // wrong separator
+        assertFalse(BusyPeriod.isValidDateFormat("2026/03/25")); // wrong order
+        assertFalse(BusyPeriod.isValidDateFormat("25/03/26")); // wrong year format
+        assertFalse(BusyPeriod.isValidDateFormat("32/03/2026")); // invalid day
+        assertFalse(BusyPeriod.isValidDateFormat("25/13/2026")); // invalid month
 
         // valid formats
-        assertTrue(BusyPeriod.isValidDateFormat("25-03-2026"));
-        assertTrue(BusyPeriod.isValidDateFormat("01-01-2000"));
+        assertTrue(BusyPeriod.isValidDateFormat("25/03/2026"));
+        assertTrue(BusyPeriod.isValidDateFormat("01/01/2000"));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class BusyPeriodTest {
 
     @Test
     public void isWithinPeriod() {
-        BusyPeriod busyPeriod = new BusyPeriod("25-03-2026", "28-03-2026");
+        BusyPeriod busyPeriod = new BusyPeriod("25/03/2026", "28/03/2026");
 
         // date within period -> true
         assertTrue(busyPeriod.isWithinPeriod(LocalDate.of(2026, 3, 25)));
@@ -82,10 +82,10 @@ public class BusyPeriodTest {
 
     @Test
     public void equals() {
-        BusyPeriod busyPeriod = new BusyPeriod("25-03-2026", "28-03-2026");
+        BusyPeriod busyPeriod = new BusyPeriod("25/03/2026", "28/03/2026");
 
         // same values -> returns true
-        assertTrue(busyPeriod.equals(new BusyPeriod("25-03-2026", "28-03-2026")));
+        assertTrue(busyPeriod.equals(new BusyPeriod("25/03/2026", "28/03/2026")));
 
         // same object -> returns true
         assertTrue(busyPeriod.equals(busyPeriod));
@@ -97,9 +97,9 @@ public class BusyPeriodTest {
         assertFalse(busyPeriod.equals(5.0f));
 
         // different values (different start) -> returns false
-        assertFalse(busyPeriod.equals(new BusyPeriod("26-03-2026", "28-03-2026")));
+        assertFalse(busyPeriod.equals(new BusyPeriod("26/03/2026", "28/03/2026")));
 
         // different values (different end) -> returns false
-        assertFalse(busyPeriod.equals(new BusyPeriod("25-03-2026", "29-03-2026")));
+        assertFalse(busyPeriod.equals(new BusyPeriod("25/03/2026", "29/03/2026")));
     }
 }
