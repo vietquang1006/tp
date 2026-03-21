@@ -178,4 +178,57 @@ public class PersonCardTest {
 
         assertEquals(2, tagsPane.getChildren().size());
     }
+
+    /**
+     * Tests that the busy period is correctly displayed when present.
+     */
+    @Test
+    public void display_personWithBusyPeriod_busyPeriodDisplayed() throws Exception {
+        Person person = new PersonBuilder()
+                .withBusyPeriod("25/03/2026", "28/03/2026")
+                .build();
+
+        CountDownLatch latch = new CountDownLatch(1);
+        final PersonCard[] personCard = new PersonCard[1];
+
+        Platform.runLater(() -> {
+            personCard[0] = new PersonCard(person, 1);
+            latch.countDown();
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            fail("Test timed out on JavaFX thread.");
+        }
+
+        Label busyPeriodLabel = getPrivateField(personCard[0], "busyPeriod");
+
+        assertTrue(busyPeriodLabel.isVisible());
+        assertTrue(busyPeriodLabel.isManaged());
+        assertEquals("Busy: 25/03/2026 to 28/03/2026", busyPeriodLabel.getText());
+    }
+
+    /**
+     * Tests that the busy period label is hidden when not present.
+     */
+    @Test
+    public void display_personWithoutBusyPeriod_busyPeriodHidden() throws Exception {
+        Person person = new PersonBuilder().build(); // No busy period by default
+
+        CountDownLatch latch = new CountDownLatch(1);
+        final PersonCard[] personCard = new PersonCard[1];
+
+        Platform.runLater(() -> {
+            personCard[0] = new PersonCard(person, 1);
+            latch.countDown();
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            fail("Test timed out on JavaFX thread.");
+        }
+
+        Label busyPeriodLabel = getPrivateField(personCard[0], "busyPeriod");
+
+        assertFalse(busyPeriodLabel.isVisible());
+        assertFalse(busyPeriodLabel.isManaged());
+    }
 }

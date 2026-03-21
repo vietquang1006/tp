@@ -91,6 +91,11 @@ public class BusyCommand extends Command{
                 && busyPeriod.equals(otherBusyCommand.busyPeriod);
     }
 
+    @Override
+    public String toString() {
+        return BusyCommand.class.getCanonicalName() + "{index=" + index + ", busyPeriod=" + busyPeriod + "}";
+    }
+
     /**
      * Creates and returns a {@code Person} with the details of {@code personToBusy}
      * with a new {@code BusyPeriod}

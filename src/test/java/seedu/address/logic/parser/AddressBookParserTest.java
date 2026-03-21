@@ -10,11 +10,13 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.BusyCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ConfirmAddCommand;
 import seedu.address.logic.commands.ConfirmDeleteCommand;
@@ -26,6 +28,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.BusyPeriod;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
@@ -42,6 +45,14 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         AddCommand command = (AddCommand) parser.parseCommand(PersonUtil.getAddCommand(person));
         assertEquals(new AddCommand(person), command);
+    }
+
+    @Test
+    public void parseCommand_busy() throws Exception {
+        BusyPeriod busyPeriod = new BusyPeriod("25/03/2026", "28/03/2026");
+        BusyCommand command = (BusyCommand) parser.parseCommand(BusyCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " -s 25/03/2026 -e 28/03/2026");
+        assertEquals(new BusyCommand(INDEX_FIRST_PERSON, Optional.of(busyPeriod)), command);
     }
 
     @Test
@@ -138,6 +149,14 @@ public class AddressBookParserTest {
         ConfirmAddCommand command =
                 (ConfirmAddCommand) parser.parseCommandWithConfirmation(PersonUtil.getAddCommand(person));
         assertEquals(new ConfirmAddCommand(person), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_busy() throws Exception {
+        BusyPeriod busyPeriod = new BusyPeriod("25/03/2026", "28/03/2026");
+        BusyCommand command = (BusyCommand) parser.parseCommandWithConfirmation(BusyCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " -s 25/03/2026 -e 28/03/2026");
+        assertEquals(new BusyCommand(INDEX_FIRST_PERSON, Optional.of(busyPeriod)), command);
     }
 
     @Test
