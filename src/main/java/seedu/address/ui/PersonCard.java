@@ -46,6 +46,8 @@ public class PersonCard extends UiPart<Region> {
     private FlowPane tags;
     @FXML
     private Label role;
+    @FXML
+    private Label busyPeriod;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -59,6 +61,14 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
+        person.getBusyPeriod().ifPresentOrElse(
+                bp -> busyPeriod.setText("Busy: " + bp.toString()),
+                () -> {
+                    busyPeriod.setText("");
+                    busyPeriod.setManaged(false);
+                    busyPeriod.setVisible(false);
+                }
+        );
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .map(tag -> {
@@ -99,6 +109,7 @@ public class PersonCard extends UiPart<Region> {
         makeCopyable(email, "cell_email_label");
         makeCopyable(address, "cell_address_label");
         makeCopyable(role, "cell_role_label");
+        makeCopyable(busyPeriod, "cell_busy_period_label");
         tags.getChildren().forEach(node -> {
             if (node instanceof Label label) {
                 makeCopyable(label, "tag");

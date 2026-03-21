@@ -211,6 +211,15 @@
     -fx-background-color: #8a6fcf;
 }
 
+.cell_busy_period_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #ff6b6b;
+    -fx-background-color: rgba(255, 61, 61, 0.1);
+    -fx-background-radius: 3;
+    -fx-padding: 2 4 2 4;
+}
+
 .tag:hover {
     -fx-background-color: #4fa3d1;
 }

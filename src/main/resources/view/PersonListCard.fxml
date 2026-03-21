@@ -28,6 +28,7 @@
       </Label>
       <Label fx:id="name" text="$first" styleClass="cell_name_label"/>
     </HBox>
+    <Label fx:id="busyPeriod" styleClass="cell_busy_period_label"/>
 
     <!-- BOTTOM: Contact Info (Phone / Email / Address) -->
     <GridPane hgap="15" alignment="CENTER_LEFT">

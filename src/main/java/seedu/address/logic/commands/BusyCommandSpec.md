@@ -1,0 +1,10 @@
+| Category | Details |
+| :--- | :--- |
+| **Description** | To block out a specific time period (start and end date) during which a specified contact is unavailable, aiding in task and schedule management. |
+| **Command Format** | `busy INDEX -s START_DATE -e END_DATE` |
+| **Example Commands** | • `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026`: marks the 1st person in the general list as busy from March 25 to March 28, 2026.<br>• `find Betsy` followed by `busy 2 -s 01/04/2026 -e 05/04/2026`: marks the 2nd person in the search results as busy. |
+| **Parameter: INDEX** | **Values:** 1, 2, 3, up to the maximum index of the currently displayed list.<br>**Errors:** "Error: INDEX must be a positive number." or "Error: INDEX is out of bounds."<br>**Rationale:** Ensures the command targets a valid, existing contact currently visible to the user. |
+| **Parameter: Dates** | **Values:** DD/MM/YYYY format. START_DATE must be chronologically before or equal to END_DATE.<br>**Errors:** "Error: Dates must follow the DD/MM/YYYY format" or "Error: The start date cannot be later than the end date."<br>**Rationale:** Enforcing standard formatting prevents parsing bugs; logic checks prevent impossible scheduling states. |
+| **Outputs** | **Success:** Contact updated. Message: "Successfully marked [Name] as busy from [START_DATE] to [END_DATE]." UI updates with a visual indicator.<br>**Failure:** Contact not updated. Message: "Invalid format! Format: busy INDEX -s START_DATE -e END_DATE" |
+| **Existing Busy Period** | If the contact already has a busy period, running a valid `busy` command will overwrite the existing period. |
+| **Possible Errors** | • Index out of bounds: Index does not exist in the current list view.<br>• Invalid format: Missing flags (-s or -e), missing parameters, or trailing spaces.<br>• Invalid date logic: Inputting non-existent calendar dates (e.g., 30/02/2026). |
