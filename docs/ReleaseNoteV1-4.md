@@ -4,7 +4,11 @@
 
 
 <!-- use this header format and name it appropriately, lets not use feature 1/2/3 -->
-### Changes from MVP to Alpha Release - XYZ bla bla bla
+### Changes from MVP to Alpha Release - Addition Of `Busy` Command
+- Added `busy` command to mark contacts as unavailable for specific periods.
+- Implemented strict date validation for all date-related inputs.
+- Enhanced the UI to display busy periods on contact cards.
+- Made contact fields, including busy periods, copyable by clicking.
 
 ### Changes from MVP to Alpha Release - ABC bla bla bla
 
@@ -13,6 +17,7 @@
 
 
 ### Improvements
+
 
 
 ### Bug Fixes

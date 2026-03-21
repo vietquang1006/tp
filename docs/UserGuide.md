@@ -15,6 +15,7 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
         - [1. Default Listing](#1-default-listing)
         - [2. Sorted Listing](#2-sorted-listing)
         - [3. Bonus: Copying of fields in a list](#3-bonus-copying-of-fields-in-a-list)
+    - [Marking a person as busy : `busy`](#marking-a-person-as-busy--busy)
     - [Editing a person : `edit`](#editing-a-person--edit)
     - [Locating persons by name: `find`](#locating-persons-by-name-find)
     - [Deleting a person : `delete`](#deleting-a-person--delete)
@@ -176,6 +177,23 @@ You can copy the value of a field (e.g. phone number) of a contact in the list t
 **Expected Result:**
 The field turns pink for a temporary period to indicate that it has been copied, and you can paste the value elsewhere.
 
+### Marking a person as busy : `busy`
+
+Marks a contact as busy for a specific period.
+
+Format: `busy INDEX -s START_DATE -e END_DATE`
+
+* Marks the person at the specified `INDEX` as busy from `START_DATE` to `END_DATE`.
+* The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Dates **must follow the DD/MM/YYYY format** (e.g., 25/03/2026).
+* The `START_DATE` must be chronologically before or equal to the `END_DATE`.
+* If the contact already has a busy period, running a valid `busy` command will overwrite the existing period.
+* The busy period will be displayed in the contact's card in the UI.
+
+Examples:
+* `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
+* `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
@@ -283,6 +301,7 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
