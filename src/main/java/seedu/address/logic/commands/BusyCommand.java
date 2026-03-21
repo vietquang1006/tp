@@ -17,6 +17,8 @@ public class BusyCommand extends Command{
 
     public static final String MESSAGE_BUSY_PERSON_SUCCESS = "Successfully marked %1$s as busy from %2$s to %3$s";
 
-    
-    
+    @Override
+    public CommandResult execute(seedu.address.model.Model model) throws seedu.address.logic.commands.exceptions.CommandException {
+        throw new seedu.address.logic.commands.exceptions.CommandException("Not implemented yet");
+    }
 }
