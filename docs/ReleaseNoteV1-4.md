@@ -10,10 +10,16 @@
 - Enhanced the UI to display busy periods on contact cards.
 - Made contact fields, including busy periods, copyable by clicking.
 
+### Changes from MVP to Alpha Release - Confirmation Flow for `Edit`
+- Added confirmation support for the `edit` command.
+- Added a warning when an edit would result in a duplicate contact.
+
 ### Changes from MVP to Alpha Release - ABC bla bla bla
 
 
+
 #### Product UI
+
 
 
 ### Improvements
@@ -23,10 +29,10 @@
 ### Bug Fixes
 
 
+
 ### Documentation
 - Updated the User Guide.
 - Updated the Developer Guide.
 
 ---
 Done by: CS2103T-W13-3
-

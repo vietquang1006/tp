@@ -207,6 +207,18 @@ Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t T
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
+Before the edit is performed, the application will prompt for confirmation.
+
+If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
+
+**Duplicate-edit confirmation prompt:**
+> `Warning: XXX`
+> `is an existing person.`
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
+* If `y` is entered, the edit will proceed.
+* If `n` is entered, the edit will be cancelled.
+
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
