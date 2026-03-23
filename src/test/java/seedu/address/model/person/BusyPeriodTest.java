@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -112,5 +113,77 @@ public class BusyPeriodTest {
 
         // different values (different end) -> returns false
         assertFalse(busyPeriod.equals(new BusyPeriod("25/03/2026", "29/03/2026")));
+    }
+
+    /**
+     * Yi Heng: I used AI to help me ideate what are the possible test cases for overlapsWith() method,
+     * and I have implemented the ones that I think are the most important, as written below.
+     * If you got other suggestions, please let me know! Tks!
+     */
+
+    @Test
+    public void overlapsWith_overlappingPeriods_returnsTrue() {
+        BusyPeriod bp1 = new BusyPeriod("01/03/2026", "30/06/2026");
+        BusyPeriod bp2 = new BusyPeriod("15/06/2026", "31/12/2026");
+        assertTrue(bp1.overlapsWith(bp2));
+        assertTrue(bp2.overlapsWith(bp1)); // symmetry
+    }
+
+    @Test
+    public void overlapsWith_oneInsideOther_returnsTrue() {
+        BusyPeriod outer = new BusyPeriod("01/01/2026", "31/12/2026");
+        BusyPeriod inner = new BusyPeriod("01/06/2026", "30/06/2026");
+        assertTrue(outer.overlapsWith(inner));
+        assertTrue(inner.overlapsWith(outer));
+    }
+
+    @Test
+    public void overlapsWith_exactMatch_returnsTrue() {
+        BusyPeriod bp1 = new BusyPeriod("01/01/2026", "31/12/2026");
+        BusyPeriod bp2 = new BusyPeriod("01/01/2026", "31/12/2026");
+        assertTrue(bp1.overlapsWith(bp2));
+    }
+
+    @Test
+    public void overlapsWith_touchingOnBoundary_returnsTrue() {
+        // End of bbusyperiod1 == Start of busyperiod2
+        // they share exactly one day in common, so they DO overlap
+        BusyPeriod bp1 = new BusyPeriod("01/01/2026", "15/06/2026");
+        BusyPeriod bp2 = new BusyPeriod("15/06/2026", "31/12/2026");
+        assertTrue(bp1.overlapsWith(bp2));
+        assertTrue(bp2.overlapsWith(bp1));
+    }
+
+    @Test
+    public void overlapsWith_nonOverlappingPeriods_returnsFalse() {
+        BusyPeriod bp1 = new BusyPeriod("01/01/2026", "31/05/2026");
+        BusyPeriod bp2 = new BusyPeriod("01/06/2026", "31/12/2026");
+        assertFalse(bp1.overlapsWith(bp2));
+        assertFalse(bp2.overlapsWith(bp1));
+    }
+
+    @Test
+    public void getStartDateString_returnsCorrectFormat() {
+        BusyPeriod bp = new BusyPeriod("25/03/2026", "28/03/2026");
+        assertEquals("25/03/2026", bp.getStartDateString());
+    }
+
+    @Test
+    public void getEndDateString_returnsCorrectFormat() {
+        BusyPeriod bp = new BusyPeriod("25/03/2026", "28/03/2026");
+        assertEquals("28/03/2026", bp.getEndDateString());
+    }
+
+    @Test
+    public void toStringMethod() {
+        BusyPeriod bp = new BusyPeriod("25/03/2026", "28/03/2026");
+        assertEquals("25/03/2026 to 28/03/2026", bp.toString());
+    }
+
+    @Test
+    public void hashCode_equalObjects_sameHashCode() {
+        BusyPeriod bp1 = new BusyPeriod("25/03/2026", "28/03/2026");
+        BusyPeriod bp2 = new BusyPeriod("25/03/2026", "28/03/2026");
+        assertEquals(bp1.hashCode(), bp2.hashCode());
     }
 }

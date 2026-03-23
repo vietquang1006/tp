@@ -9,17 +9,18 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 
 - [Quick start](#quick-start)
 - [Features](#features)
-    - [Viewing help : `help`](#viewing-help--help)
+    - [Viewing help: `help`](#viewing-help--help)
     - [Adding a person: `add`](#adding-a-person-add)
-    - [Listing all persons : `list`](#listing-all-persons--list)
+    - [Listing all persons: `list`](#listing-all-persons--list)
         - [1. Default Listing](#1-default-listing)
         - [2. Sorted Listing](#2-sorted-listing)
         - [3. Bonus: Copying of fields in a list](#3-bonus-copying-of-fields-in-a-list)
     - [Marking a person as busy : `busy`](#marking-a-person-as-busy--busy)
+    - [Locating persons by busy period: `busyfilter`](#locating-persons-by-busy-period-busyfilter)
     - [Editing a person : `edit`](#editing-a-person--edit)
-    - [Locating persons by name: `find`](#locating-persons-by-name-find)
+    - [Locating persons by name/tags: `find`](#locating-persons-by-nametags-find)
     - [Deleting a person : `delete`](#deleting-a-person--delete)
-    - [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    - [Clearing listed/filtered entries : `clear`](#clearing-listedfiltered-entries--clear)
     - [Exiting the program : `exit`](#exiting-the-program--exit)
     - [Saving the data](#saving-the-data)
     - [Editing the data file](#editing-the-data-file)
@@ -56,7 +57,7 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 
   * `delete 3` : Deletes the 3rd contact shown in the current list.
 
-  * `clear` : Deletes all contacts.
+  * `clear` : Deletes listed/filtered contacts.
 
   * `exit` : Exits the app.
 
@@ -142,8 +143,6 @@ list
 **Expected Result:**
 All contacts are displayed in their default order.
 
----
-
 #### 2. Sorted Listing
 
 You can sort contacts alphabetically in ascending or descending order.
@@ -194,11 +193,39 @@ Examples:
 * `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
 * `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
 
+### Locating persons by busy period: `busyfilter`
+
+Filters and displays contacts who are busy during a specified date range.
+
+A contact is considered busy if there exists at least one day within the given period such that the contact is busy on that day.
+
+Otherwise, the contact is considered not busy if for all days in the specified period, the contact is not busy.
+
+#### Basic Usage
+
+Shows all contacts who are busy at **any point within the given date range**.
+
+**Format:**
+`
+busyfilter -s START_DATE -e END_DATE
+`
+
+* `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
+* Contacts with busy period are considered available and will not be displayed.
+
+**Example:**
+```
+busyfilter -s 01/01/2026 -e 31/01/2026
+```
+
+**Expected Result:**
+All contacts who have are busy on any day from 1 Jan 2026 to 31 Jan 2026 are listed.
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
+Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -265,11 +292,25 @@ Examples:
 * `list` followed by `delete 2` prompts confirmation for deleting the 2nd person in the address book.
 * `find name Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
 
-### Clearing all entries : `clear`
+### Clearing listed/filtered entries : `clear`
 
-Clears all entries from the address book.
+Clears the contacts currently shown in the list.
 
 Format: `clear`
+
+* The command targets only the currently listed/filtered contacts.
+* A confirmation prompt is shown before contacts are removed.
+
+**Clear confirmation prompt:**
+> `Are you sure you want to clear the currently listed contacts? [y/n]`
+
+* If `y` is entered, the listed/filtered contacts are deleted.
+* If `n` is entered, the operation is cancelled.
+
+Examples:
+* `list` followed by `clear` then `y` clears all currently listed contacts.
+* `find tag friends` followed by `clear` then `y` clears only the filtered contacts in that result.
+* `clear` followed by `n` cancels the operation and leaves all contacts unchanged.
 
 ### Exiting the program : `exit`
 
@@ -315,11 +356,17 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+<<<<<<< HEAD
+**Clear** | `clear` (then confirm with `y` or cancel with `n`)
+=======
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
+**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
 **Clear** | `clear`
+>>>>>>> master
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
-**Find** | `find FIELD KEYWORD [MORE_KEYWORDS]`<br> e.g., `find name James Jake`
+**Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
 **List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
 **Help** | `help`
+**Exit** | `exit`
 
