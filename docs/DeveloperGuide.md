@@ -14,7 +14,7 @@ title: Developer Guide
     - [Storage component](#storage-component)
     - [Common classes](#common-classes)
 - [Implementation](#implementation)
-    - [Confirmation flow for `add` and `delete`](#confirmation-flow-for-add-and-delete)
+    - [Confirmation flow for `add`, `delete`, and `clear`](#confirmation-flow-for-add-delete-and-clear)
     - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
     - [[Proposed] Data archiving](#proposed-data-archiving)
 - [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
