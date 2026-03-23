@@ -550,6 +550,50 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. CampusConnect displays an error message explaining the command format.
     * 3a2. Marcus re-enters a valid sort field.
     * Use case resumes at step 1.
+---
+
+**UC09: Mark a Contact as Busy**
+
+**Goal:** To allow users to block out a specific period during which a contact is unavailable.
+
+**MSS (Main Success Scenario):**
+1. Marcus instructs the application to mark the nth contact as busy from a start date to an end date.
+2. CampusConnect validates the dates and the selected contact.
+3. CampusConnect overwrites any existing busy period for the contact with the new dates.
+4. CampusConnect confirms the update and displays the contact’s updated profile.<br>
+   Use case ends.
+
+**Extensions:**
+
+* 2a. Marcus enters an invalid date format or the end date is before the start date.
+  * 2a1. CampusConnect displays an error message explaining the correct format and constraints.
+  * 2a2. Marcus re-enters the command with valid dates.<br>
+  Use case resumes at step 1.
+* 2b. Marcus selects a contact number (nth contact) that does not exist in the current list.
+    * 2b1. CampusConnect displays an error message indicating the contact selection is invalid.
+    * 2b2. Marcus selects a valid contact from the list.<br>
+      Use case resumes at step 1.
+---
+
+**UC10: List All Contacts Busy Within a Date Range**
+
+**Goal:** To filter and display all contacts who are busy during a specified date range.
+
+**MSS (Main Success Scenario):**
+1. Marcus instructs the application to list all contacts busy from a start date to an end date.
+2. CampusConnect validates the dates.
+3. CampusConnect evaluates all contacts’ busy periods against the specified range.
+4. CampusConnect displays only the contacts who are busy on **any day within the range**.<br>
+    Use case ends.
+
+**Extensions:**
+* 2a. Marcus enters an invalid date format or the end date is before the start date.
+    * 2a1. CampusConnect displays an error message explaining the correct format and constraints.
+    * 2a2. Marcus re-enters the command with valid dates.<br>
+    Use case resumes at step 1.
+* 4a. No contacts are busy during the specified period.
+    * 4a1. CampusConnect displays a “No busy contacts found” message.<br>
+    Use case ends.
 
 ---
 ### Non-Functional Requirements
@@ -681,35 +725,35 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: The app contains multiple contacts with different names.
 
-   2. Test case: `find John`
+   2. Test case: `find John`<br>
       Expected: All contacts with names containing "John" are displayed.
 
-   3. Test case: `find alice`
+   3. Test case: `find alice`<br>
       Expected: Contacts matching "alice" are displayed (case-insensitive).
 
-   4. Test case: `find John; alice`
+   4. Test case: `find John; alice`<br>
         Expected: Contacts matching "John" and "alice" are displayed (case-insensitive).
 
 2. Finding persons by partial match
 
     1. Prerequisites: The app contains contacts such as "Jonathan", "Johnny", "John Doe".
 
-    2. Test case: `find John`
+    2. Test case: `find John`<br>
        Expected: All contacts with names containing "John" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
 
 3. Finding persons with no matches
 
     1. Prerequisites: The app contains multiple contacts.
 
-    2. Test case: `find xyz`
+    2. Test case: `find xyz`<br>
        Expected: No contacts are displayed. A message indicating no matches found is shown.
 
 4. Invalid find commands
 
-    1. Test case: `find`
+    1. Test case: `find`<br>
        Expected: Error message shown indicating invalid command format.
 
-    2. Test case: `find @@@`
+    2. Test case: `find @@@`<br>
        Expected: Error message shown indicating invalid command format.
 
 ### Listing persons
@@ -718,38 +762,38 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: The app contains multiple contacts with different names.
 
-    2. Test case: `list`
+    2. Test case: `list`<br>
       Expected: All contacts are displayed in their default order.
 
 2. Listing persons in ascending order
 
     1. Prerequisites: Multiple contacts exist with different names.
 
-    2. Test case: `list sort`
+    2. Test case: `list sort`<br>
        Expected: All contacts are displayed sorted in ascending alphabetical order of their names.
 
-    3. Test case: `list ascending`
+    3. Test case: `list ascending`<br>
        Expected: Same behaviour as `list sort`.
 
 3. Listing persons in descending order
 
     1. Prerequisites: Multiple contacts exist with different names.
 
-    2. Test case: `list descending`
+    2. Test case: `list descending`<br>
        Expected: All contacts are displayed sorted in descending alphabetical order of their names.
 
-    3. Test case: `list reverse`
+    3. Test case: `list reverse`<br>
        Expected: Same behaviour as `list descending`.
 
 4. Invalid list commands
 
-    1. Test case: `list abc`
+    1. Test case: `list abc`<br>
        Expected: Error message shown indicating invalid command format.
 
-    2. Test case: `list sort abc`
+    2. Test case: `list sort abc`<br>
        Expected: Error message shown indicating invalid command format.
 
-    3. Test case: `list ascending descending`
+    3. Test case: `list ascending descending`<br>
        Expected: Error message shown indicating invalid command format.
 
 ### Marking a person as busy
@@ -778,6 +822,33 @@ testers are expected to do more *exploratory* testing.
 
     3. Test case: `busy x -s 25/03/2026 -e 28/03/2026` (where x is out of bounds)<br>
        Expected: Error message shown indicating invalid person displayed index.
+
+### Filtering persons busy within a date range
+
+1. Filtering with valid date range
+
+    1. Prerequisites: Multiple persons exist in the list, with some having busy periods.
+
+    2. Test case: `busyfilter -s 25/03/2026 -e 28/03/2026`<br>
+       Expected: Only contacts who are busy on **any day** from 25/03/2026 to 28/03/2026 are displayed. A message shows the number of contacts listed.
+
+2. No contacts busy during specified period
+
+    1. Prerequisites: No persons have busy periods overlapping the specified range.
+
+    2. Test case: `busyfilter -s 01/01/2026 -e 05/01/2026`<br>
+       Expected: A message indicating “0 persons listed!” is displayed. The list view remains empty.
+
+3. Invalid busyfilter commands
+
+    1. Test case: `busyfilter -s 31/04/2026 -e 01/05/2026` (Invalid calendar date)<br>
+       Expected: Error message shown indicating that dates must follow the DD/MM/YYYY format.
+
+    2. Test case: `busyfilter -s 28/03/2026 -e 25/03/2026` (Start date after end date)<br>
+       Expected: Error message shown: "The start date cannot be later than the end date."
+
+    3. Test case: `busyfilter -s invalid -e invalid`<br>
+       Expected: Error message shown indicating that dates must follow the DD/MM/YYYY format.
 
 ### Saving data
 

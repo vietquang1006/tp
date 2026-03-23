@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BusyCommand;
+import seedu.address.logic.commands.BusyFilterCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ConfirmAddCommand;
 import seedu.address.logic.commands.ConfirmClearCommand;
@@ -29,6 +30,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.BusyInDateRangePredicate;
 import seedu.address.model.person.BusyPeriod;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -54,6 +56,14 @@ public class AddressBookParserTest {
         BusyCommand command = (BusyCommand) parser.parseCommand(BusyCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " -s 25/03/2026 -e 28/03/2026");
         assertEquals(new BusyCommand(INDEX_FIRST_PERSON, Optional.of(busyPeriod)), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_busyfilter() throws Exception {
+        BusyInDateRangePredicate predicate = new BusyInDateRangePredicate("25/03/2026", "28/03/2026");
+        BusyFilterCommand command = (BusyFilterCommand) parser.parseCommandWithConfirmation(
+                BusyFilterCommand.COMMAND_WORD + " -s 25/03/2026 -e 28/03/2026");
+        assertEquals(new BusyFilterCommand(predicate), command);
     }
 
     @Test

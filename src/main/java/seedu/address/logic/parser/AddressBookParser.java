@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BusyCommand;
+import seedu.address.logic.commands.BusyFilterCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.ConfirmAddCommand;
@@ -121,6 +122,9 @@ public class AddressBookParser {
 
         case BusyCommand.COMMAND_WORD:
             return new BusyCommandParser().parse(arguments);
+
+        case BusyFilterCommand.COMMAND_WORD:
+            return new BusyFilterCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
