@@ -137,9 +137,7 @@ Shows a list of all persons in the address book.
 Displays all contacts in the order they are stored.
 
 **Format:**
-`
-list
-`
+`list`
 
 **Example:**
 ```
@@ -217,9 +215,7 @@ Otherwise, the contact is considered not busy if for all days in the specified p
 Shows all contacts who are busy at **any point within the given date range**.
 
 **Format:**
-`
-busyfilter -s START_DATE -e END_DATE
-`
+`busyfilter -s START_DATE -e END_DATE`
 
 * `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
 * Contacts with busy period are considered available and will not be displayed.
