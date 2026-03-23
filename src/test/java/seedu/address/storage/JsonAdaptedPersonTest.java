@@ -47,6 +47,14 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_nullOptionalFields_returnsPersonWithoutOptionalFields() throws Exception {
+        Person emptyFieldsPerson = new PersonBuilder(BENSON)
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+        JsonAdaptedPerson person = new JsonAdaptedPerson(emptyFieldsPerson);
+        assertEquals(emptyFieldsPerson, person.toModelType());
+    }
+
+    @Test
     public void toModelType_invalidRole_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(INVALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,

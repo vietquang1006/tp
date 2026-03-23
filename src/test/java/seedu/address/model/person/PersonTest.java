@@ -97,6 +97,15 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // Test equality with missing optional fields
+        Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+        Person emptyFieldsPersonCopy = new PersonBuilder().withName(ALICE.getName().fullName)
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+        assertTrue(emptyFieldsPerson.equals(emptyFieldsPersonCopy));
+        assertFalse(emptyFieldsPerson.equals(ALICE));
+        assertFalse(ALICE.equals(emptyFieldsPerson));
     }
 
     @Test
@@ -106,5 +115,11 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail().get() + ", address=" + ALICE.getAddress().get()
                 + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
+
+        Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+        String expectedEmpty = Person.class.getCanonicalName() + "{name=" + emptyFieldsPerson.getName()
+                + ", tags=" + emptyFieldsPerson.getTags() + "}";
+        assertEquals(expectedEmpty, emptyFieldsPerson.toString());
     }
 }
