@@ -12,6 +12,11 @@
 
 ### Changes from MVP to Alpha Release - ABC bla bla bla
 
+### Changes from MVP to Alpha Release - Updated clear command with confirmation
+- Added a `ConfirmClearCommand` workflow so `clear` now asks for confirmation before deletion.
+- Replaced the previous immediate full reset behavior with a two-step process (`clear` -> prompt -> `y`/`n`).
+- Updated `clear` to delete only the currently listed/filtered contacts, then refresh the list to show remaining contacts.
+
 
 #### Product UI
 
@@ -29,4 +34,3 @@
 
 ---
 Done by: CS2103T-W13-3
-

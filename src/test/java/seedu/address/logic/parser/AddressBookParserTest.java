@@ -19,6 +19,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BusyCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ConfirmAddCommand;
+import seedu.address.logic.commands.ConfirmClearCommand;
 import seedu.address.logic.commands.ConfirmDeleteCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -168,8 +169,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommandWithConfirmation_clear() throws Exception {
-        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD) instanceof ConfirmClearCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD + " 3")
+                instanceof ConfirmClearCommand);
     }
 
     @Test

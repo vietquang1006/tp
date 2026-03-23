@@ -14,7 +14,7 @@ title: Developer Guide
     - [Storage component](#storage-component)
     - [Common classes](#common-classes)
 - [Implementation](#implementation)
-    - [Confirmation flow for `add` and `delete`](#confirmation-flow-for-add-and-delete)
+    - [Confirmation flow for `add`, `delete`, and `clear`](#confirmation-flow-for-add-delete-and-clear)
     - [Busy status feature](#busy-status-feature)
     - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
     - [[Proposed] Data archiving](#proposed-data-archiving)
@@ -31,7 +31,6 @@ title: Developer Guide
     - [Deleting a person](#deleting-a-person)
     - [Finding persons](#finding-persons)
     - [Listing persons](#listing-persons)
-    - [Marking a person as busy](#marking-a-person-as-busy)
     - [Saving data](#saving-data)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -184,15 +183,17 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Confirmation flow for `add` and `delete`
+### Confirmation flow for `add`, `delete`, and `clear`
 
 The application supports a shared confirmation workflow for commands that should not be executed immediately.
 
 For `delete`, confirmation is always required before the actual deletion is performed.
 
+For `clear`, confirmation is always required before clearing the currently listed/filtered contacts.
+
 For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
 
-This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand` and `ConfirmAddCommand` inherit from its base classes (`AddCommand` and `DeleteCommand`), while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
+This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand`, `ConfirmClearCommand`, and `ConfirmAddCommand` inherit from their base classes, while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
 
 #### Implementation
 
@@ -202,6 +203,7 @@ If the command does not require confirmation, it is executed normally.
 
 If the command requires confirmation, a corresponding `ConfirmCommand` subclass is executed first:
 - `ConfirmDeleteCommand` for `delete`
+- `ConfirmClearCommand` for `clear`
 - `ConfirmAddCommand` for duplicate `add`
 
 These confirmation commands do not perform the final action immediately. Instead, they return a `CommandResult` indicating that the application is awaiting confirmation input.
@@ -223,8 +225,8 @@ This design separates:
 
 As a result:
 - shared confirmation logic can be reused across multiple commands
-- `ConfirmDeleteCommand` and `ConfirmAddCommand` avoid duplicating common confirmation flow
-- the actual `AddCommand` and `DeleteCommand` remain focused on performing the final data modification
+- `ConfirmDeleteCommand`, `ConfirmClearCommand`, and `ConfirmAddCommand` avoid duplicating common confirmation flow
+- the actual `AddCommand`, `DeleteCommand`, and `ClearCommand` remain focused on performing the final data modification
 
 For duplicate `add`, this design also allows normal non-duplicate additions to proceed immediately, while still protecting the user from accidentally adding duplicate contacts.
 
