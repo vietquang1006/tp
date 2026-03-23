@@ -58,14 +58,22 @@ By enabling fast command-based interactions, CampusConnect helps users **quickly
   * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
   * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
+  * `add -n John Doe -p 98765432 -e johnd@example.com -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+
+  <div markdown="block" class="alert alert-info">
+**:information_source: Command confirmation:**<br>
+  Certain commands like `delete` and `clear` will ask for confirmation. Input `y` to confirm or `n` to cancel.
+</div>
 
   * `delete 3` : Deletes the 3rd contact shown in the current list.
+
+  * `busy 1 -s 23/03/2026 -e 30/03/2026` : Marks the 1st contact in the list as busy from 23 March 2026 to 30 March 2026.
 
   * `clear` : Deletes listed/filtered contacts.
 
   * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -387,8 +395,8 @@ Action | Format, Examples
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
+**Delete** | `delete INDEX`<br> e.g., `delete 3` (then confirm with `y` or cancel with `n`)
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com` (then confirm with `y` or cancel with `n`)
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
 **List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
 **Help** | `help`
