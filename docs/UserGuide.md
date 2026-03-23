@@ -65,7 +65,7 @@ By enabling fast command-based interactions, CampusConnect helps users **quickly
 
   * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
