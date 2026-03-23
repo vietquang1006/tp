@@ -17,9 +17,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BusyCommand;
+import seedu.address.logic.commands.BusyFilterCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ConfirmAddCommand;
+import seedu.address.logic.commands.ConfirmClearCommand;
 import seedu.address.logic.commands.ConfirmDeleteCommand;
+import seedu.address.logic.commands.ConfirmEditCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -28,6 +31,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.BusyInDateRangePredicate;
 import seedu.address.model.person.BusyPeriod;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -53,6 +57,14 @@ public class AddressBookParserTest {
         BusyCommand command = (BusyCommand) parser.parseCommand(BusyCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " -s 25/03/2026 -e 28/03/2026");
         assertEquals(new BusyCommand(INDEX_FIRST_PERSON, Optional.of(busyPeriod)), command);
+    }
+
+    @Test
+    public void parseCommandWithConfirmation_busyfilter() throws Exception {
+        BusyInDateRangePredicate predicate = new BusyInDateRangePredicate("25/03/2026", "28/03/2026");
+        BusyFilterCommand command = (BusyFilterCommand) parser.parseCommandWithConfirmation(
+                BusyFilterCommand.COMMAND_WORD + " -s 25/03/2026 -e 28/03/2026");
+        assertEquals(new BusyFilterCommand(predicate), command);
     }
 
     @Test
@@ -168,17 +180,20 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommandWithConfirmation_clear() throws Exception {
-        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD) instanceof ConfirmClearCommand);
+        assertTrue(parser.parseCommandWithConfirmation(ClearCommand.COMMAND_WORD + " 3")
+                instanceof ConfirmClearCommand);
     }
 
     @Test
     public void parseCommandWithConfirmation_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
-        EditCommand command = (EditCommand) parser.parseCommandWithConfirmation(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+        ConfirmEditCommand command = (ConfirmEditCommand) parser.parseCommandWithConfirmation(
+                EditCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test

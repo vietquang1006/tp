@@ -2,6 +2,8 @@
 
 ## [v1.4] - 2026-03-26
 
+#### Product UI
+<img src="images/ProductUI_V1-4_busy.png" width="500px">
 
 <!-- use this header format and name it appropriately, lets not use feature 1/2/3 -->
 ### Changes from MVP to Alpha Release - Addition Of `Busy` Command
@@ -16,15 +18,22 @@
 - Streamlined success command message formats to elegantly omit fields that were not provided.
 - Persisted data safely handling missing fields through improved JSON mapping logic using `java.util.Optional`.
 
-### Changes from MVP to Alpha Release - ABC bla bla bla
+### Changes from MVP to Alpha Release - Addition of `BusyFilter` Command
+- Introduced the `busyfilter` command, allowing users to filter contacts based on whether they are busy during a specified date range.
+- Implemented overlap logic to accurately determine if a contact's busy periods intersect with the specified range.
+- Updated parser and command infrastructure to support input validation and seamless integration with existing contact list filtering.
 
+### Changes from MVP to Alpha Release - Updated clear command with confirmation
+- Added a `ConfirmClearCommand` workflow so `clear` now asks for confirmation before deletion.
+- Replaced the previous immediate full reset behavior with a two-step process (`clear` -> prompt -> `y`/`n`).
+- Updated `clear` to delete only the currently listed/filtered contacts, then refresh the list to show remaining contacts.
 
-#### Product UI
-
+### Changes from MVP to Alpha Release - Confirmation Flow for `Edit`
+- Added confirmation support for the `edit` command.
+- Added a warning when an edit would result in a duplicate contact.
 
 ### Improvements
-
-
+- Helps users avoid scheduling meetings during contacts' peak busy periods.
 
 ### Bug Fixes
 
@@ -35,4 +44,3 @@
 
 ---
 Done by: CS2103T-W13-3
-

@@ -20,8 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ConfirmAddCommand;
+import seedu.address.logic.commands.ConfirmClearCommand;
 import seedu.address.logic.commands.ConfirmDeleteCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -336,6 +338,60 @@ public class LogicManagerTest {
                 String.format(DeleteCommand.MESSAGE_SUCCESS, Messages.format(expectedPerson)),
                 result.getFeedbackToUser());
         assertEquals(0, model.getAddressBook().getPersonList().size());
+    }
+
+    /**
+     * Executes {@code ClearCommand} and verifies that the command requires
+     * confirmation before listed persons are cleared.
+     */
+    @Test
+    public void executeClearCommand_requiresConfirmation() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + ROLE_DESC_AMY + NAME_DESC_AMY
+                + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+
+        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+
+        CommandResult result = logic.execute(ClearCommand.COMMAND_WORD);
+
+        assertEquals(
+                String.format(ConfirmClearCommand.MESSAGE_ASK_CONFIRMATION, "\n" + Messages.format(expectedPerson)),
+                result.getFeedbackToUser());
+        assertEquals(1, model.getAddressBook().getPersonList().size());
+    }
+
+    /**
+     * Executes {@code ClearCommand}, confirms the operation, and verifies that
+     * listed persons are cleared successfully.
+     */
+    @Test
+    public void executeClearCommand_confirmed_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + ROLE_DESC_AMY + NAME_DESC_AMY
+                + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+
+        logic.execute(ClearCommand.COMMAND_WORD);
+        CommandResult result = logic.execute("y");
+
+        assertEquals(ClearCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(0, model.getAddressBook().getPersonList().size());
+    }
+
+    /**
+     * Executes {@code ClearCommand}, rejects the confirmation, and verifies that
+     * no person is removed.
+     */
+    @Test
+    public void executeClearCommand_cancelled_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + ROLE_DESC_AMY + NAME_DESC_AMY
+                + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+
+        logic.execute(ClearCommand.COMMAND_WORD);
+        CommandResult result = logic.execute("n");
+
+        assertEquals("", result.getFeedbackToUser());
+        assertEquals(1, model.getAddressBook().getPersonList().size());
     }
 
     /**
