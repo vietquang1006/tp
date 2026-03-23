@@ -94,14 +94,15 @@ public class EditCommand extends Command {
     protected static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
         assert personToEdit != null;
 
-        Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
+        Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole().orElse(null));
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
-        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone().orElse(null));
+        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail().orElse(null));
+        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress().orElse(null));
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedRole, updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Person(updatedRole, updatedName, updatedPhone, updatedEmail, updatedAddress,
+                updatedTags, personToEdit.getBusyPeriod());
     }
 
     @Override

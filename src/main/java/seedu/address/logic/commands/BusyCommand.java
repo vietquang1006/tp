@@ -110,11 +110,11 @@ public class BusyCommand extends Command {
     private static Person createBusyPerson(Person personToBusy, Optional<BusyPeriod> busyPeriod) {
         assert personToBusy != null;
 
-        Role role = personToBusy.getRole();
+        Optional<Role> role = personToBusy.getRole();
         Name name = personToBusy.getName();
-        Phone phone = personToBusy.getPhone();
-        Email email = personToBusy.getEmail();
-        Address address = personToBusy.getAddress();
+        Optional<Phone> phone = personToBusy.getPhone();
+        Optional<Email> email = personToBusy.getEmail();
+        Optional<Address> address = personToBusy.getAddress();
         Set<Tag> tags = personToBusy.getTags();
 
 

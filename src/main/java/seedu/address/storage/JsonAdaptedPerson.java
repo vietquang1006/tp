@@ -61,11 +61,11 @@ class JsonAdaptedPerson {
      * Converts a given {@code Person} into this class for Jackson use.
      */
     public JsonAdaptedPerson(Person source) {
-        role = source.getRole().roleName;
+        role = source.getRole().map(r -> r.roleName).orElse(null);
         name = source.getName().fullName;
-        phone = source.getPhone().value;
-        email = source.getEmail().value;
-        address = source.getAddress().value;
+        phone = source.getPhone().map(p -> p.value).orElse(null);
+        email = source.getEmail().map(e -> e.value).orElse(null);
+        address = source.getAddress().map(a -> a.value).orElse(null);
         busyStartDate = source.getBusyPeriod().map(BusyPeriod::getStartDateString).orElse(null);
         busyEndDate = source.getBusyPeriod().map(BusyPeriod::getEndDateString).orElse(null);
         tags.addAll(source.getTags().stream()
@@ -84,11 +84,15 @@ class JsonAdaptedPerson {
             personTags.add(tag.toModelType());
         }
 
-        String modelRoleStr = role == null ? "Student" : role;
-        if (!Role.isValidRole(modelRoleStr)) {
-            throw new IllegalValueException(Role.MESSAGE_CONSTRAINTS);
+        java.util.Optional<Role> modelRole;
+        if (role != null) {
+            if (!Role.isValidRole(role)) {
+                throw new IllegalValueException(Role.MESSAGE_CONSTRAINTS);
+            }
+            modelRole = java.util.Optional.of(new Role(role));
+        } else {
+            modelRole = java.util.Optional.empty();
         }
-        final Role modelRole = new Role(modelRoleStr);
 
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
@@ -98,29 +102,35 @@ class JsonAdaptedPerson {
         }
         final Name modelName = new Name(name);
 
-        if (phone == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName()));
+        java.util.Optional<Phone> modelPhone;
+        if (phone != null) {
+            if (!Phone.isValidPhone(phone)) {
+                throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
+            }
+            modelPhone = java.util.Optional.of(new Phone(phone));
+        } else {
+            modelPhone = java.util.Optional.empty();
         }
-        if (!Phone.isValidPhone(phone)) {
-            throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
-        }
-        final Phone modelPhone = new Phone(phone);
 
-        if (email == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
+        java.util.Optional<Email> modelEmail;
+        if (email != null) {
+            if (!Email.isValidEmail(email)) {
+                throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
+            }
+            modelEmail = java.util.Optional.of(new Email(email));
+        } else {
+            modelEmail = java.util.Optional.empty();
         }
-        if (!Email.isValidEmail(email)) {
-            throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
-        }
-        final Email modelEmail = new Email(email);
 
-        if (address == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
+        java.util.Optional<Address> modelAddress;
+        if (address != null) {
+            if (!Address.isValidAddress(address)) {
+                throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
+            }
+            modelAddress = java.util.Optional.of(new Address(address));
+        } else {
+            modelAddress = java.util.Optional.empty();
         }
-        if (!Address.isValidAddress(address)) {
-            throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
-        }
-        final Address modelAddress = new Address(address);
 
         if (busyStartDate != null && !BusyPeriod.isValidDateFormat(busyStartDate)) {
             throw new IllegalValueException(BusyPeriod.MESSAGE_CONSTRAINTS);

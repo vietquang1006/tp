@@ -57,7 +57,7 @@ By enabling fast command-based interactions, CampusConnect helps users **quickly
 
   * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
-  * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
 
   * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -105,7 +105,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​`
+Format: `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 
@@ -124,6 +124,7 @@ If the person being added **already exists**, the application will prompt for co
 * If `n` is entered, the add operation will be cancelled.
 
 Examples:
+* `add -n John Doe`
 * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`
 * `add -r Logistics -n Betsy Crowe -t friend -e betsycrowe@example.com -a Newgate Prison -p 1234567 -t criminal`
 
@@ -382,7 +383,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`

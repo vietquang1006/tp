@@ -24,11 +24,11 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
 
-    private Role role;
+    private Optional<Role> role;
     private Name name;
-    private Phone phone;
-    private Email email;
-    private Address address;
+    private Optional<Phone> phone;
+    private Optional<Email> email;
+    private Optional<Address> address;
     private Set<Tag> tags;
     private Optional<BusyPeriod> busyPeriod;
 
@@ -36,11 +36,11 @@ public class PersonBuilder {
      * Creates a {@code PersonBuilder} with the default details.
      */
     public PersonBuilder() {
-        role = new Role(DEFAULT_ROLE);
+        role = Optional.of(new Role(DEFAULT_ROLE));
         name = new Name(DEFAULT_NAME);
-        phone = new Phone(DEFAULT_PHONE);
-        email = new Email(DEFAULT_EMAIL);
-        address = new Address(DEFAULT_ADDRESS);
+        phone = Optional.of(new Phone(DEFAULT_PHONE));
+        email = Optional.of(new Email(DEFAULT_EMAIL));
+        address = Optional.of(new Address(DEFAULT_ADDRESS));
         tags = new HashSet<>();
         busyPeriod = Optional.empty();
     }
@@ -78,7 +78,7 @@ public class PersonBuilder {
      * Sets the {@code Address} of the {@code Person} that we are building.
      */
     public PersonBuilder withAddress(String address) {
-        this.address = new Address(address);
+        this.address = Optional.ofNullable(address).map(Address::new);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class PersonBuilder {
      * Sets the {@code Phone} of the {@code Person} that we are building.
      */
     public PersonBuilder withPhone(String phone) {
-        this.phone = new Phone(phone);
+        this.phone = Optional.ofNullable(phone).map(Phone::new);
         return this;
     }
 
@@ -94,7 +94,7 @@ public class PersonBuilder {
      * Sets the {@code Email} of the {@code Person} that we are building.
      */
     public PersonBuilder withEmail(String email) {
-        this.email = new Email(email);
+        this.email = Optional.ofNullable(email).map(Email::new);
         return this;
     }
 
@@ -102,7 +102,7 @@ public class PersonBuilder {
      * Sets the {@code Role} of the {@code Person} that we are building.
      */
     public PersonBuilder withRole(String role) {
-        this.role = new Role(role);
+        this.role = Optional.ofNullable(role).map(Role::new);
         return this;
     }
 

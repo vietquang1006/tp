@@ -12,44 +12,56 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
- * Represents a Person's role in the address book.
- * Guarantees: details are present and not null, field values are validated, immutable.
- * Note: Each {@code Person} entry is expected to have a single role.
- * If a person holds multiple responsibilities, it is recommended to
- * create separate entries for each role.
+ * Represents a Person's identity in the address book.
+ * Guarantees: minimum details are present and not null, field values are validated, immutable.
  */
 public class Person {
 
     // Identity fields
-    private final Role role;
+    private final Optional<Role> role;
     private final Name name;
-    private final Phone phone;
-    private final Email email;
+    private final Optional<Phone> phone;
+    private final Optional<Email> email;
 
     // Data fields
-    private final Address address;
+    private final Optional<Address> address;
     private final Set<Tag> tags = new HashSet<>();
     private final Optional<BusyPeriod> busyPeriod;
 
     /**
-     * Every field must be present and not null, except BusyPeriod.
+     * Legacy constructor: Wraps nullable parameters in Optionals.
      */
     public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(role, name, phone, email, address, tags);
-        this.role = role;
+        requireAllNonNull(name, tags);
+        this.role = Optional.ofNullable(role);
         this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
+        this.phone = Optional.ofNullable(phone);
+        this.email = Optional.ofNullable(email);
+        this.address = Optional.ofNullable(address);
         this.tags.addAll(tags);
         this.busyPeriod = Optional.empty();
     }
 
     /**
-     * Every field must be present and not null.
+     * Legacy constructor: Wraps nullable parameters in Optionals.
      */
     public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
                   Optional<BusyPeriod> busyPeriod) {
+        requireAllNonNull(name, tags, busyPeriod);
+        this.role = Optional.ofNullable(role);
+        this.name = name;
+        this.phone = Optional.ofNullable(phone);
+        this.email = Optional.ofNullable(email);
+        this.address = Optional.ofNullable(address);
+        this.tags.addAll(tags);
+        this.busyPeriod = busyPeriod;
+    }
+
+    /**
+     * Main constructor utilizing Optionals natively.
+     */
+    public Person(Optional<Role> role, Name name, Optional<Phone> phone, Optional<Email> email,
+                  Optional<Address> address, Set<Tag> tags, Optional<BusyPeriod> busyPeriod) {
         requireAllNonNull(role, name, phone, email, address, tags, busyPeriod);
         this.role = role;
         this.name = name;
@@ -60,7 +72,7 @@ public class Person {
         this.busyPeriod = busyPeriod;
     }
 
-    public Role getRole() {
+    public Optional<Role> getRole() {
         return role;
     }
 
@@ -68,15 +80,15 @@ public class Person {
         return name;
     }
 
-    public Phone getPhone() {
+    public Optional<Phone> getPhone() {
         return phone;
     }
 
-    public Email getEmail() {
+    public Optional<Email> getEmail() {
         return email;
     }
 
-    public Address getAddress() {
+    public Optional<Address> getAddress() {
         return address;
     }
 
@@ -94,8 +106,6 @@ public class Person {
     public Optional<BusyPeriod> getBusyPeriod() {
         return this.busyPeriod;
     }
-
-
 
     /**
      * Returns true if both persons have the same identity.
@@ -142,13 +152,13 @@ public class Person {
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this)
-                .add("role", role)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags);
-        busyPeriod.ifPresent(bp -> builder.add("busyPeriod", busyPeriod));
+                .add("name", name);
+        role.ifPresent(r -> builder.add("role", r));
+        phone.ifPresent(p -> builder.add("phone", p));
+        email.ifPresent(e -> builder.add("email", e));
+        address.ifPresent(a -> builder.add("address", a));
+        builder.add("tags", tags);
+        busyPeriod.ifPresent(bp -> builder.add("busyPeriod", bp));
 
         return builder.toString();
     }

@@ -41,7 +41,7 @@ import static seedu.address.testutil.TypicalPersons.BOB;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
-import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ConfirmAddCommand;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -51,8 +51,8 @@ import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
-public class AddCommandParserTest {
-    private AddCommandParser parser = new AddCommandParser();
+public class ConfirmAddCommandParserTest {
+    private ConfirmAddCommandParser parser = new ConfirmAddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
@@ -65,7 +65,7 @@ public class AddCommandParserTest {
         assertParseSuccess(parser,
                 PREAMBLE_WHITESPACE + ROLE_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
-                new AddCommand(expectedPerson));
+                new ConfirmAddCommand(expectedPerson));
 
         // multiple tags - all accepted
         Person expectedPersonMultipleTags = new PersonBuilder(BOB)
@@ -75,7 +75,7 @@ public class AddCommandParserTest {
         assertParseSuccess(parser,
                 ROLE_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
-                new AddCommand(expectedPersonMultipleTags));
+                new ConfirmAddCommand(expectedPersonMultipleTags));
     }
 
     @Test
@@ -161,17 +161,17 @@ public class AddCommandParserTest {
         Person expectedPerson = new PersonBuilder(AMY).withTags().build();
         assertParseSuccess(parser,
                 ROLE_DESC_AMY + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
-                new AddCommand(expectedPerson));
+                new ConfirmAddCommand(expectedPerson));
 
         // missing role, phone, email, address, tags
         Person expectedPersonAllOptionalMissing = new PersonBuilder(AMY).withRole(null).withPhone(null)
                 .withEmail(null).withAddress(null).withTags().build();
-        assertParseSuccess(parser, NAME_DESC_AMY, new AddCommand(expectedPersonAllOptionalMissing));
+        assertParseSuccess(parser, NAME_DESC_AMY, new ConfirmAddCommand(expectedPersonAllOptionalMissing));
     }
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, ConfirmAddCommand.MESSAGE_USAGE);
 
         // missing name prefix
         assertParseFailure(parser,
@@ -231,6 +231,6 @@ public class AddCommandParserTest {
         assertParseFailure(parser,
                 PREAMBLE_NON_EMPTY + ROLE_DESC_BOB + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ConfirmAddCommand.MESSAGE_USAGE));
     }
 }

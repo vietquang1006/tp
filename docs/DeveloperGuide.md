@@ -692,7 +692,7 @@ testers are expected to do more *exploratory* testing.
 
 3. Invalid add commands
 
-    1. Test case: `add -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`<br>
+    1. Test case: `add -r President -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`<br>
        Expected: Error message shown indicating missing required fields.
 
     2. Test case: `add -r President -n John Doe -p invalid -e johnd@example.com -a John street, block 123, #01-01`<br>

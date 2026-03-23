@@ -80,10 +80,10 @@ public class PersonCardTest {
 
         assertEquals("1. ", idLabel.getText());
         assertEquals(person.getName().fullName, nameLabel.getText());
-        assertEquals(person.getPhone().value, phoneLabel.getText());
-        assertEquals(person.getAddress().value, addressLabel.getText());
-        assertEquals(person.getEmail().value, emailLabel.getText());
-        assertEquals(person.getRole().roleName, roleLabel.getText());
+        assertEquals(person.getPhone().map(p -> p.value).orElse(""), phoneLabel.getText());
+        assertEquals(person.getAddress().map(a -> a.value).orElse(""), addressLabel.getText());
+        assertEquals(person.getEmail().map(e -> e.value).orElse(""), emailLabel.getText());
+        assertEquals(person.getRole().map(r -> r.roleName).orElse(""), roleLabel.getText());
     }
 
     /**
@@ -230,5 +230,41 @@ public class PersonCardTest {
 
         assertFalse(busyPeriodLabel.isVisible());
         assertFalse(busyPeriodLabel.isManaged());
+    }
+
+    /**
+     * Tests that optional fields are hidden when not provided.
+     */
+    @Test
+    public void display_personWithMissingFields_fieldsHidden() throws Exception {
+        Person person = new PersonBuilder().withName("Missing Fields")
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+
+
+        CountDownLatch latch = new CountDownLatch(1);
+        final PersonCard[] personCard = new PersonCard[1];
+
+        Platform.runLater(() -> {
+            personCard[0] = new PersonCard(person, 1);
+            latch.countDown();
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            fail("Test timed out on JavaFX thread.");
+        }
+
+        Label phoneLabel = getPrivateField(personCard[0], "phone");
+        Label addressLabel = getPrivateField(personCard[0], "address");
+        Label emailLabel = getPrivateField(personCard[0], "email");
+        Label roleLabel = getPrivateField(personCard[0], "role");
+
+        assertFalse(phoneLabel.isVisible());
+        assertFalse(phoneLabel.isManaged());
+        assertFalse(addressLabel.isVisible());
+        assertFalse(addressLabel.isManaged());
+        assertFalse(emailLabel.isVisible());
+        assertFalse(emailLabel.isManaged());
+        assertFalse(roleLabel.isVisible());
+        assertFalse(roleLabel.isManaged());
     }
 }
