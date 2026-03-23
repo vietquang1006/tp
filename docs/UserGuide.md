@@ -209,11 +209,13 @@ Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t T
 
 Before the edit is performed, the application will prompt for confirmation.
 
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
 If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
 
 **Duplicate-edit confirmation prompt:**
-> `Warning: XXX`
-> `is an existing person.`
+> `Warning: XXX`<br>
+> `is an existing person.`<br>
 > `Are you sure you want to edit the contact: YYY? [y/n]`
 
 * If `y` is entered, the edit will proceed.
