@@ -4,8 +4,7 @@ title: User Guide
 ---
 
 <div markdown="block" class="intro-box">
-
-# CampusConnect
+# **CampusConnect**
 
 CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimized for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI).
 
