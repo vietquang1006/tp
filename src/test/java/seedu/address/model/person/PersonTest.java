@@ -122,4 +122,15 @@ public class PersonTest {
                 + ", tags=" + emptyFieldsPerson.getTags() + "}";
         assertEquals(expectedEmpty, emptyFieldsPerson.toString());
     }
+
+    @Test
+    public void legacyConstructors_validInputs_success() {
+        Person legacy1 = new Person(
+            new Role("Developer"), new Name("John"), new Phone("123456"),
+            new Email("john@email.com"), new Address("123 Street"), new java.util.HashSet<>()
+        );
+        assertEquals("John", legacy1.getName().fullName);
+        assertEquals("Developer", legacy1.getRole().get().roleName);
+        assertTrue(legacy1.getBusyPeriod().isEmpty());
+    }
 }

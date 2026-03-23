@@ -231,4 +231,39 @@ public class PersonCardTest {
         assertFalse(busyPeriodLabel.isVisible());
         assertFalse(busyPeriodLabel.isManaged());
     }
+
+    /**
+     * Tests that optional fields are hidden when not provided.
+     */
+    @Test
+    public void display_personWithMissingFields_fieldsHidden() throws Exception {
+        Person person = new PersonBuilder().withName("Missing Fields")
+                .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
+        
+        CountDownLatch latch = new CountDownLatch(1);
+        final PersonCard[] personCard = new PersonCard[1];
+
+        Platform.runLater(() -> {
+            personCard[0] = new PersonCard(person, 1);
+            latch.countDown();
+        });
+
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            fail("Test timed out on JavaFX thread.");
+        }
+
+        Label phoneLabel = getPrivateField(personCard[0], "phone");
+        Label addressLabel = getPrivateField(personCard[0], "address");
+        Label emailLabel = getPrivateField(personCard[0], "email");
+        Label roleLabel = getPrivateField(personCard[0], "role");
+
+        assertFalse(phoneLabel.isVisible());
+        assertFalse(phoneLabel.isManaged());
+        assertFalse(addressLabel.isVisible());
+        assertFalse(addressLabel.isManaged());
+        assertFalse(emailLabel.isVisible());
+        assertFalse(emailLabel.isManaged());
+        assertFalse(roleLabel.isVisible());
+        assertFalse(roleLabel.isManaged());
+    }
 }
