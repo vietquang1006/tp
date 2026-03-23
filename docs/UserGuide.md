@@ -60,26 +60,26 @@ To ensure this guide is effective, we assume the target user:
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases/tag/v1.3).
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases/tag/v1.3).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for your CampusConnect.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar campusconnect.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar campusconnect.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/ProductUI_V1-3_home.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
   * `list` : Lists all contacts.
 
-  * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-001` : Adds a contact named `John Doe` to the Address Book.
 
   * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
   * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
 
-  * `add -n John Doe -p 98765432 -e johnd@example.com -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -n John Doe -p 98765432 -e johnd@u.nus.edu -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
 <div markdown="block" class="alert alert-info">
 **:information_source: Command confirmation:**<br>
@@ -156,8 +156,8 @@ If the person being added **already exists**, the application will prompt for co
 
 Examples:
 * `add -n John Doe`
-* `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`
-* `add -r Logistics -n Betsy Crowe -t friend -e betsycrowe@example.com -a Newgate Prison -p 1234567 -t criminal`
+* `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-002`
+* `add -r Coordinator -n Lim Wei Jie -p 98765678 -e lwj.example@u.nus.edu -a 18 College Avenue West, #01-001`
 
 ### Listing all persons : `list`
 
@@ -289,8 +289,8 @@ If the edited person duplicates an existing person, the application will also sh
 * If `n` is entered, the edit will be cancelled.
 
 Examples:
-*  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 -p 91234567 -e johndoe@u.nus.edu` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
+*  `edit 2 -n Wang -t` Edits the name of the 2nd person to be `Wang` and clears all existing tags.
 
 ### Locating persons by name/tags: `find`
 
@@ -395,9 +395,9 @@ CampusConnect data are saved automatically as a JSON file `[JAR file location]/d
 
 If you are a student user (e.g. NUSSU Secretary) that is not tech-savvy, you are not recommended to edit this file.
 
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+If your changes to the data file makes its format invalid, CampusConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+Furthermore, certain edits can cause the CampusConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
 ### Archiving data files `[coming in v2.0]`
@@ -409,7 +409,7 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous CampusConnect home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -424,12 +424,12 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br><br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br><br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@u.nus.edu -a 123, Clementi Rd, 1234665 -t friend -t colleague`
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br><br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br><br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
 **Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
-**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@example.com` <br>(then confirm with `y` or cancel with `n`)
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@u.nus.edu` <br>(then confirm with `y` or cancel with `n`)
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
 **List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
 **Help** | `help`
