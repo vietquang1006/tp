@@ -18,8 +18,6 @@
 - Implemented overlap logic to accurately determine if a contact's busy periods intersect with the specified range.
 - Updated parser and command infrastructure to support input validation and seamless integration with existing contact list filtering.
 
-### Changes from MVP to Alpha Release - ABC bla bla bla
-
 ### Changes from MVP to Alpha Release - Updated clear command with confirmation
 - Added a `ConfirmClearCommand` workflow so `clear` now asks for confirmation before deletion.
 - Replaced the previous immediate full reset behavior with a two-step process (`clear` -> prompt -> `y`/`n`).
@@ -30,6 +28,7 @@
 - Helps users avoid scheduling meetings during contacts' peak busy periods.
 
 ### Bug Fixes
+
 
 
 ### Documentation

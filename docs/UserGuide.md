@@ -186,6 +186,10 @@ Marks a contact as busy for a specific period.
 
 Format: `busy INDEX -s START_DATE -e END_DATE`
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+Running `busy` again for the same contact replaces the previous busy period instead of merging date ranges.
+</div>
+
 * Marks the person at the specified `INDEX` as busy from `START_DATE` to `END_DATE`.
 * The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * Dates **must follow the DD/MM/YYYY format** (e.g., 25/03/2026).
@@ -238,6 +242,20 @@ Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
+Before the edit is performed, the application will prompt for confirmation.
+
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
+If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
+
+**Duplicate-edit confirmation prompt:**
+> `Warning: XXX`<br>
+> `is an existing person.`<br>
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
+* If `y` is entered, the edit will proceed.
+* If `n` is entered, the edit will be cancelled.
+
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
@@ -247,6 +265,10 @@ Examples:
 Finds persons whose names/tags contain any of the given keywords.
 
 Format: `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `;` to split phrases into multiple search groups, e.g. `find name alice pauline ; josh`.
+</div>
 
 * `SEARCH_BY` must be either `name` or `tag` (lowercase).
 * The search is case-insensitive. e.g. `alice` will match `Alice`.
@@ -266,6 +288,10 @@ Examples:
 Deletes the specified person from the address book.
 
 Format: `delete INDEX`
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+`INDEX` refers to the currently displayed list. Run `list` first if you want to delete from the full contact list.
+</div>
 
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
@@ -287,6 +313,10 @@ Examples:
 Clears the contacts currently shown in the list.
 
 Format: `clear`
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+`clear` affects all contacts currently shown in the list. If the list is filtered, only the filtered contacts are targeted.
+</div>
 
 * The command targets only the currently listed/filtered contacts.
 * A confirmation prompt is shown before contacts are removed.
@@ -346,13 +376,9 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
-<<<<<<< HEAD
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
-=======
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
-**Clear** | `clear`
->>>>>>> master
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
