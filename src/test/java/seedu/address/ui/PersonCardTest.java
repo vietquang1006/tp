@@ -80,10 +80,10 @@ public class PersonCardTest {
 
         assertEquals("1. ", idLabel.getText());
         assertEquals(person.getName().fullName, nameLabel.getText());
-        assertEquals(person.getPhone().value, phoneLabel.getText());
-        assertEquals(person.getAddress().value, addressLabel.getText());
-        assertEquals(person.getEmail().value, emailLabel.getText());
-        assertEquals(person.getRole().roleName, roleLabel.getText());
+        assertEquals(person.getPhone().map(p -> p.value).orElse(""), phoneLabel.getText());
+        assertEquals(person.getAddress().map(a -> a.value).orElse(""), addressLabel.getText());
+        assertEquals(person.getEmail().map(e -> e.value).orElse(""), emailLabel.getText());
+        assertEquals(person.getRole().map(r -> r.roleName).orElse(""), roleLabel.getText());
     }
 
     /**

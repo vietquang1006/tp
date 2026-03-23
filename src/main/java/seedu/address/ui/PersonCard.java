@@ -57,10 +57,26 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        role.setText(person.getRole().roleName);
-        phone.setText(person.getPhone().value);
-        address.setText(person.getAddress().value);
-        email.setText(person.getEmail().value);
+        person.getRole().ifPresentOrElse(r -> role.setText(r.roleName), () -> {
+            role.setText("");
+            role.setVisible(false);
+            role.setManaged(false);
+        });
+        person.getPhone().ifPresentOrElse(p -> phone.setText(p.value), () -> {
+            phone.setText("");
+            phone.setVisible(false);
+            phone.setManaged(false);
+        });
+        person.getAddress().ifPresentOrElse(a -> address.setText(a.value), () -> {
+            address.setText("");
+            address.setVisible(false);
+            address.setManaged(false);
+        });
+        person.getEmail().ifPresentOrElse(e -> email.setText(e.value), () -> {
+            email.setText("");
+            email.setVisible(false);
+            email.setManaged(false);
+        });
         person.getBusyPeriod().ifPresentOrElse(
                 bp -> busyPeriod.setText("Busy: " + bp.toString()), () -> {
                     busyPeriod.setText("");

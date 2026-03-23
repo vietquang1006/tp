@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -37,21 +38,25 @@ public class ConfirmAddCommandParser implements Parser<ConfirmAddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_ROLE, PREFIX_NAME, PREFIX_PHONE,
                         PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_ROLE, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL)
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ConfirmAddCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ROLE, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
 
-        Role role = ParserUtil.parseRole(argMultimap.getValue(PREFIX_ROLE).get());
+        Optional<Role> role = argMultimap.getValue(PREFIX_ROLE).isPresent()
+                ? Optional.of(ParserUtil.parseRole(argMultimap.getValue(PREFIX_ROLE).get())) : Optional.empty();
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
-        Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
+        Optional<Phone> phone = argMultimap.getValue(PREFIX_PHONE).isPresent()
+                ? Optional.of(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get())) : Optional.empty();
+        Optional<Email> email = argMultimap.getValue(PREFIX_EMAIL).isPresent()
+                ? Optional.of(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get())) : Optional.empty();
+        Optional<Address> address = argMultimap.getValue(PREFIX_ADDRESS).isPresent()
+                ? Optional.of(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get())) : Optional.empty();
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Person person = new Person(role, name, phone, email, address, tagList);
+        Person person = new Person(role, name, phone, email, address, tagList, Optional.empty());
         return new ConfirmAddCommand(person);
     }
 
