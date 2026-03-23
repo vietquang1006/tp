@@ -24,18 +24,7 @@ public class ConfirmDeleteCommand extends DeleteCommand implements ConfirmComman
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getSortedFilteredPersonList();
-
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
-
-        Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        return new CommandResult(
-                String.format(MESSAGE_ASK_CONFIRMATION, Messages.format(personToDelete)),
-                false, false, true
-        );
+        return new CommandResult(getConfirmationMessage(model), false, false, true);
     }
 
     @Override

@@ -14,7 +14,7 @@ title: Developer Guide
     - [Storage component](#storage-component)
     - [Common classes](#common-classes)
 - [Implementation](#implementation)
-    - [Confirmation flow for `add`, `delete`, and `clear`](#confirmation-flow-for-add-delete-and-clear)
+    - [Confirmation flow for `add`, `edit`, `delete`, and `clear`](#confirmation-flow-for-add-delete-and-clear)
     - [Busy status feature](#busy-status-feature)
     - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
     - [[Proposed] Data archiving](#proposed-data-archiving)
@@ -28,6 +28,7 @@ title: Developer Guide
 - [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
     - [Launch and shutdown](#launch-and-shutdown)
     - [Adding a person](#adding-a-person)
+    - [Editing a person](#editing-a-person)
     - [Deleting a person](#deleting-a-person)
     - [Finding persons](#finding-persons)
     - [Listing persons](#listing-persons)
@@ -183,7 +184,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Confirmation flow for `add`, `delete`, and `clear`
+### Confirmation flow for `add`, `edit`, `delete`, and `clear`
 
 The application supports a shared confirmation workflow for commands that should not be executed immediately.
 
@@ -700,6 +701,27 @@ testers are expected to do more *exploratory* testing.
     3. Test case: `add -r President -n John Doe -p 98765432 -e invalid -a John street, block 123, #01-01`<br>
        Expected: Error message shown indicating invalid email format.
 
+### Editing a person
+
+1. Editing a person while all persons are being shown
+
+    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+    2. Test case: `edit 1 -p 91234567`
+       Expected: A confirmation message is shown.
+
+    3. Test case: `edit 2 -n NAME_OF_EXISTING_PERSON`
+        1. If `NAME_OF_EXISTING_PERSON` is the same as name of the person being edited:
+           Expected: A confirmation message are shown.
+        2. Otherwise:
+           Expected: A warning and confirmation message are shown.
+
+    4. Test case: `edit 0 -p 91234567`
+       Expected: No person is edited. Error details shown in the status message.
+
+    5. Other incorrect edit commands to try: `edit`, `edit x`, `edit 1`
+       Expected: Similar to previous.
+
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -723,7 +745,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Finding persons by name
 
-   1. Prerequisites: The app contains multiple contacts with different names.
+    1. Prerequisites: The app contains multiple contacts with different names.
 
    2. Test case: `find John`<br>
       Expected: All contacts with names containing "John" are displayed.
