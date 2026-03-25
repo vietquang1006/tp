@@ -36,7 +36,7 @@
 - Helps users avoid scheduling meetings during contacts' peak busy periods.
 
 ### Bug Fixes
-
+- NA
 
 ### Documentation
 - Updated the User Guide.
