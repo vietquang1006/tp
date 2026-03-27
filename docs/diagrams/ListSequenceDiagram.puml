@@ -41,7 +41,6 @@ ListCommandParser --> AddressBookParser : l
 deactivate ListCommandParser
 'Hidden arrow to position the destroy marker below the end of the activation bar.
 ListCommandParser -[hidden]-> AddressBookParser
-destroy ListCommandParser
 
 AddressBookParser --> LogicManager : l
 deactivate AddressBookParser
@@ -69,4 +68,5 @@ deactivate ListCommand
 deactivate LogicManager
 
 destroy ListCommand
+destroy ListCommandParser
 @enduml
