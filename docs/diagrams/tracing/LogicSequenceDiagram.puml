@@ -4,19 +4,43 @@ skinparam ArrowFontStyle plain
 
 Participant ":LogicManager" as logic LOGIC_COLOR
 Participant ":AddressBookParser" as abp LOGIC_COLOR
-Participant ":EditCommandParser" as ecp LOGIC_COLOR
-Participant "command:EditCommand" as ec LOGIC_COLOR
+Participant "command:ConfirmClearCommand" as ccc LOGIC_COLOR
+Participant "command:ClearCommand" as cc LOGIC_COLOR
+Participant ":Model" as model MODEL_COLOR
 
-[-> logic : execute
+[-> logic : execute(commandText)
 activate logic
-logic -> abp ++: parseCommand(commandText)
-create ecp
-abp -> ecp
-abp -> ecp ++: parse(arguments)
-create ec
-ecp -> ec ++: index, editPersonDescriptor
-ec --> ecp --
-ecp --> abp --: command
-abp --> logic --: command
 
+alt not awaiting confirmation
+logic -> abp ++: parseCommandWithConfirmation(commandText)
+create ccc
+abp -> ccc
+abp <-- ccc: command
+abp --> logic --: ConfirmClearCommand
+
+logic -> ccc ++: execute(model)
+ccc --> logic --: CommandResult(awaitingConfirmation=true)
+logic -> abp ++: parseCommand(commandText)
+create cc
+abp -> cc
+abp <-- cc: command
+abp --> logic --: ClearCommand
+
+else awaiting confirmation (next input)
+logic -> abp ++: parseYesNo(commandText)
+abp --> logic --: hasConfirmed
+
+alt hasConfirmed = true (input: y)
+logic -> cc ++: execute(model)
+cc -> model ++: getSortedFilteredPersonList()
+model --> cc --: listed persons
+cc -> model ++: deletePerson(person) [for each listed person]
+cc -> model ++: updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)
+cc --> logic --: CommandResult(MESSAGE_SUCCESS)
+else hasConfirmed = false (input: n)
+logic ->] : CommandResult("")
+end
+end
+
+deactivate logic
 @enduml

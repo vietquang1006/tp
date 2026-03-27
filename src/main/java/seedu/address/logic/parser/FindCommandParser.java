@@ -41,6 +41,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         String searchBy = modeAndQuery[0];
         List<String> keywords = parseKeywords(modeAndQuery[1]);
 
+
         return parseByMode(searchBy, keywords);
     }
 
@@ -48,6 +49,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      * Parses the query segment after the search mode into keyword groups.
      */
     private List<String> parseKeywords(String rawQuery) throws ParseException {
+
         String trimmedQuery = rawQuery.trim();
         if (trimmedQuery.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
