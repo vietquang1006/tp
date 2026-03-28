@@ -17,4 +17,10 @@ public class HelpCommandTest {
         CommandResult expectedCommandResult = new CommandResult(SHOWING_HELP_MESSAGE, true, false, false);
         assertCommandSuccess(new HelpCommand(), model, expectedCommandResult, expectedModel);
     }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        HelpCommand command = new HelpCommand();
+        org.junit.jupiter.api.Assertions.assertEquals(HelpCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

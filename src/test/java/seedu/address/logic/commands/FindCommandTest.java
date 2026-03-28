@@ -120,4 +120,10 @@ public class FindCommandTest {
     private TagContainsKeywordsPredicate prepareTagPredicate(String userInput) throws CommandException {
         return new TagContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
     }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() throws Exception {
+        FindCommand command = new FindCommand(prepareTagPredicate("alice"));
+        org.junit.jupiter.api.Assertions.assertEquals(FindCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }
