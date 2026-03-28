@@ -65,6 +65,9 @@ public class HelpWindow extends UiPart<Stage> {
         getRoot().requestFocus();
     }
 
+    /**
+     * Opens the user guide in the default web browser.
+     */
     @FXML
     public void openUserGuide() {
         try {

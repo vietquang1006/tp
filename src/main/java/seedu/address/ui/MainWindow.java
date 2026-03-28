@@ -1,7 +1,5 @@
 package seedu.address.ui;
 
-import java.awt.Desktop;
-import java.net.URI;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
