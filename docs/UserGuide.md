@@ -124,11 +124,17 @@ To ensure this guide is effective, we assume the target user:
 
 ### Viewing help : `help`
 
-Opens up the online user guide in the default browser. You can also access the user guide via the `Help` menu or by pressing `F1` on your keyboard.
+Opens up the online user guide in the default browser.
 
 ![help message](images/helpMessage.png)
 
 **Format:** `help`
+
+<div markdown="span" class="alert alert-primary">
+:bulb: **Tip:**<br><br>
+
+Alternatively, you can also access the user guide via the `Help` menu or by pressing `F1` on your keyboard.
+</div>
 
 ### Adding a person: `add`
 
