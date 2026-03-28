@@ -11,7 +11,7 @@
 - Feature `help`: Directly opens the user guide on the user's default browser.
 
 ### Bug Fixes
-- Feature `add`: 
+- Feature `add`:
 
 ### Documentation
 - Updated the User Guide.

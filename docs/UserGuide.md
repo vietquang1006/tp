@@ -332,7 +332,7 @@ Deletes the specified person from the address book.
 
 <div markdown="span" class="alert alert-warning">
 
-:exclamation: 
+:exclamation:
 
 **Caution:**<br><br>
 
@@ -393,7 +393,7 @@ CampusConnect data are saved in the hard disk automatically after any command th
 
 ### Editing the data file
 
-CampusConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. 
+CampusConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
 
 <div markdown="span" class="alert alert-warning">
 
