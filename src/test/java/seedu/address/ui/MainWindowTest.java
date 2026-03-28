@@ -127,6 +127,7 @@ public class MainWindowTest {
      */
     @BeforeEach
     void setUp() throws Exception {
+        assumeFalse("true".equals(System.getenv("CI")), "Skipping MainWindow GUI tests on CI");
         CountDownLatch latch = new CountDownLatch(1);
 
         Platform.runLater(() -> {
@@ -152,6 +153,9 @@ public class MainWindowTest {
         if (!latch.await(5, TimeUnit.SECONDS)) {
             fail("Timeout waiting for JavaFX thread setup");
         }
+    }
+
+    private void assumeFalse(boolean ci, String s) {
     }
 
     /**
