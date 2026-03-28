@@ -124,7 +124,7 @@ To ensure this guide is effective, we assume the target user:
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens up the online user guide in the default browser. 
 
 ![help message](images/helpMessage.png)
 
