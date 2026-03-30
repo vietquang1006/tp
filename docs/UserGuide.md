@@ -252,14 +252,6 @@ Examples:
 
 ### Locating persons by busy period: `busyfilter`
 
-Filters and displays contacts who are busy during a specified date range.
-
-A contact is considered busy if there exists at least one day within the given period such that the contact is busy on that day.
-
-Otherwise, the contact is considered not busy if for all days in the specified period, the contact is not busy.
-
-#### Basic Usage
-
 Shows all contacts who are busy at **any point within the given date range**.
 
 **Format:**
@@ -275,6 +267,10 @@ busyfilter -s 01/01/2026 -e 31/01/2026
 
 **Expected Result:**
 All contacts who have are busy on any day from 1 Jan 2026 to 31 Jan 2026 are listed.
+
+A contact is considered busy if there exists at least one day within the given period such that the contact is busy on that day.
+
+Otherwise, the contact is considered not busy if for all days in the specified period, the contact is not busy.
 
 ### Editing a person : `edit`
 
