@@ -15,11 +15,23 @@ public class Messages {
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
     public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
+    public static final String MESSAGE_NO_PERSON_LISTED_OVERVIEW = "No person listed!";
+    public static final String MESSAGE_PERSON_LISTED_OVERVIEW = "%1$d person listed!";
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER = "Only give alphanumeric keywords";
     public static final String MESSAGE_ONLY_YES_NO = "Please enter either \'y\' or \'n\'";
+
+    public static String getMessageForPersonsListed(int n) {
+        if (n == 0) {
+            return MESSAGE_NO_PERSON_LISTED_OVERVIEW;
+        } else if (n == 1) {
+            return String.format(MESSAGE_PERSON_LISTED_OVERVIEW, n);
+        } else {
+            return String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, n);
+        }
+    }
 
     /**
      * Returns an error message indicating the duplicate prefixes.
