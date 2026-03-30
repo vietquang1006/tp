@@ -8,6 +8,7 @@
 <!-- use this header format and name it appropriately, lets not use feature 1/2/3 -->
 ### Improvements
 - Feature `add`:
+- Feature `busyfilter`: Improved invalid command message.
 - Feature `help`: Directly opens the user guide on the user's default browser.
 
 ### Bug Fixes
