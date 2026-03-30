@@ -124,11 +124,17 @@ To ensure this guide is effective, we assume the target user:
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens up the online user guide in the default browser.
 
 ![help message](images/helpMessage.png)
 
 **Format:** `help`
+
+<div markdown="span" class="alert alert-primary">
+:bulb: **Tip:**<br><br>
+
+Alternatively, you can also access the user guide via the `Help` menu or by pressing `F1` on your keyboard.
+</div>
 
 ### Adding a person: `add`
 
@@ -326,7 +332,7 @@ Deletes the specified person from the address book.
 
 <div markdown="span" class="alert alert-warning">
 
-:exclamation: 
+:exclamation:
 
 **Caution:**<br><br>
 
@@ -387,7 +393,7 @@ CampusConnect data are saved in the hard disk automatically after any command th
 
 ### Editing the data file
 
-CampusConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. 
+CampusConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
 
 <div markdown="span" class="alert alert-warning">
 
