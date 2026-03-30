@@ -195,6 +195,9 @@ You can sort contacts alphabetically in ascending or descending order.
 **Ascending (A → Z):**
 ```
 list sort
+```
+or
+```
 list ascending
 ```
 
@@ -204,8 +207,11 @@ All contacts are displayed in ascending alphabetical order by name.
 **Descending (Z → A):**
 
 ```
-list descending
 list reverse
+```
+or
+```
+list descending
 ```
 
 **Expected Result:**
