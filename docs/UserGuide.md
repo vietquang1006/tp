@@ -3,8 +3,6 @@ layout: page
 title: User Guide
 ---
 
-![Ui](images/Address.png)
-
 <div markdown="block" class="intro-box">
 
 ## **CampusConnect**
@@ -28,6 +26,9 @@ To ensure this guide is effective, we assume the target user:
 
 </div>
 
+### **User Interface Introduction**
+
+![Ui](images/Address.png)
 
 ## **Table of Contents**
 
