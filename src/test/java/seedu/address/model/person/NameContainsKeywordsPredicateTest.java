@@ -32,6 +32,11 @@ public class NameContainsKeywordsPredicateTest {
         NameContainsKeywordsPredicate firstPredicateCopy = new NameContainsKeywordsPredicate(firstPredicateKeywordList);
         assertTrue(firstPredicate.equals(firstPredicateCopy));
 
+        // different relation -> returns false
+        NameContainsKeywordsPredicate allPredicate = new NameContainsKeywordsPredicate(firstPredicateKeywordList,
+                KeywordRelation.ALL);
+        assertFalse(firstPredicate.equals(allPredicate));
+
         // different types -> returns false
         assertFalse(firstPredicate.equals(1));
 
@@ -52,8 +57,12 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Collections.singletonList("lic"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Multiple keywords (all match)
+        // Multiple keywords (any match)
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Multiple keywords (all match)
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"), KeywordRelation.ALL);
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
         // Mixed-case keywords
@@ -73,6 +82,10 @@ public class NameContainsKeywordsPredicateTest {
         // Any matching keyword returns true
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
+
+        // All relation requires both keywords
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"), KeywordRelation.ALL);
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
 
         predicate = new NameContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
@@ -94,7 +107,8 @@ public class NameContainsKeywordsPredicateTest {
         List<String> keywords = List.of("keyword1", "keyword2");
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(keywords);
 
-        String expected = NameContainsKeywordsPredicate.class.getCanonicalName() + "{keywords=" + keywords + "}";
+        String expected = NameContainsKeywordsPredicate.class.getCanonicalName()
+                + "{keywords=" + keywords + ", relation=" + KeywordRelation.ANY + "}";
         assertEquals(expected, predicate.toString());
     }
 }

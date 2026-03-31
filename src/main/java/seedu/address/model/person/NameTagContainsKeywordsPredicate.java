@@ -17,6 +17,8 @@ public class NameTagContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> tagKeywords;
     private final NameContainsKeywordsPredicate namePredicate;
     private final TagContainsKeywordsPredicate tagPredicate;
+    private final KeywordRelation nameRelation;
+    private final KeywordRelation tagRelation;
 
     /**
      * Creates a predicate that matches name keywords, tag keywords, or both.
@@ -26,14 +28,46 @@ public class NameTagContainsKeywordsPredicate implements Predicate<Person> {
      */
     public NameTagContainsKeywordsPredicate(
             List<String> nameKeywords, List<String> tagKeywords) throws CommandException {
+        this(nameKeywords, tagKeywords, KeywordRelation.ANY, KeywordRelation.ANY);
+    }
+
+    /**
+     * Creates a predicate that matches name keywords, tag keywords, or both using the same relation.
+     *
+     * @param nameKeywords Keywords to match against a person's name, or null to ignore names.
+     * @param tagKeywords Keywords to match against a person's tags, or null to ignore tags.
+     * @param relation How to combine keyword matches.
+     */
+    public NameTagContainsKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords,
+                                            KeywordRelation relation) throws CommandException {
+        this(nameKeywords, tagKeywords, relation, relation);
+    }
+
+    /**
+     * Creates a predicate that matches name keywords, tag keywords, or both using provided relations.
+     *
+     * @param nameKeywords Keywords to match against a person's name, or null to ignore names.
+     * @param tagKeywords Keywords to match against a person's tags, or null to ignore tags.
+     * @param nameRelation How to combine name keyword matches.
+     * @param tagRelation How to combine tag keyword matches.
+     */
+    public NameTagContainsKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords,
+                                            KeywordRelation nameRelation, KeywordRelation tagRelation)
+            throws CommandException {
         if (nameKeywords == null && tagKeywords == null) {
             throw new IllegalArgumentException("At least one keyword list must be provided.");
         }
 
         this.nameKeywords = nameKeywords;
         this.tagKeywords = tagKeywords;
-        this.namePredicate = nameKeywords == null ? null : new NameContainsKeywordsPredicate(nameKeywords);
-        this.tagPredicate = tagKeywords == null ? null : new TagContainsKeywordsPredicate(tagKeywords);
+        this.nameRelation = nameRelation;
+        this.tagRelation = tagRelation;
+        this.namePredicate = nameKeywords == null
+                ? null
+                : new NameContainsKeywordsPredicate(nameKeywords, nameRelation);
+        this.tagPredicate = tagKeywords == null
+                ? null
+                : new TagContainsKeywordsPredicate(tagKeywords, tagRelation);
     }
 
     @Override
@@ -56,7 +90,9 @@ public class NameTagContainsKeywordsPredicate implements Predicate<Person> {
 
         NameTagContainsKeywordsPredicate otherPredicate = (NameTagContainsKeywordsPredicate) other;
         return Objects.equals(nameKeywords, otherPredicate.nameKeywords)
-                && Objects.equals(tagKeywords, otherPredicate.tagKeywords);
+                && Objects.equals(tagKeywords, otherPredicate.tagKeywords)
+                && nameRelation == otherPredicate.nameRelation
+                && tagRelation == otherPredicate.tagRelation;
     }
 
     @Override
@@ -64,7 +100,8 @@ public class NameTagContainsKeywordsPredicate implements Predicate<Person> {
         return new ToStringBuilder(this)
                 .add("nameKeywords", nameKeywords)
                 .add("tagKeywords", tagKeywords)
+                .add("nameRelation", nameRelation)
+                .add("tagRelation", tagRelation)
                 .toString();
     }
 }
-

@@ -27,9 +27,16 @@ public class NameTagContainsKeywordsPredicateTest {
                 new NameTagContainsKeywordsPredicate(nameKeywords, tagKeywords);
         NameTagContainsKeywordsPredicate differentPredicate =
                 new NameTagContainsKeywordsPredicate(Collections.singletonList("Alice"), tagKeywords);
+        NameTagContainsKeywordsPredicate allPredicate =
+                new NameTagContainsKeywordsPredicate(nameKeywords, tagKeywords, KeywordRelation.ALL);
+        NameTagContainsKeywordsPredicate mixedPredicate =
+                new NameTagContainsKeywordsPredicate(
+                        nameKeywords, tagKeywords, KeywordRelation.ALL, KeywordRelation.ANY);
 
         assertTrue(predicate.equals(predicate));
         assertTrue(predicate.equals(samePredicate));
+        assertFalse(predicate.equals(allPredicate));
+        assertFalse(predicate.equals(mixedPredicate));
         assertFalse(predicate.equals(1));
         assertFalse(predicate.equals(null));
         assertFalse(predicate.equals(differentPredicate));
@@ -42,6 +49,10 @@ public class NameTagContainsKeywordsPredicateTest {
 
         assertTrue(predicate.test(new PersonBuilder().withName("Benson Meier").build()));
         assertFalse(predicate.test(new PersonBuilder().withName("Carl Kurz").build()));
+
+        NameTagContainsKeywordsPredicate allPredicate = new NameTagContainsKeywordsPredicate(
+                Arrays.asList("Benson", "Meier"), null, KeywordRelation.ALL);
+        assertTrue(allPredicate.test(new PersonBuilder().withName("Benson Meier").build()));
     }
 
     @Test
@@ -51,6 +62,10 @@ public class NameTagContainsKeywordsPredicateTest {
 
         assertTrue(predicate.test(new PersonBuilder().withTags("friends").build()));
         assertFalse(predicate.test(new PersonBuilder().withTags("family").build()));
+
+        NameTagContainsKeywordsPredicate allPredicate = new NameTagContainsKeywordsPredicate(
+                null, Arrays.asList("friends", "project"), KeywordRelation.ALL);
+        assertFalse(allPredicate.test(new PersonBuilder().withTags("friends").build()));
     }
 
     @Test
@@ -74,7 +89,8 @@ public class NameTagContainsKeywordsPredicateTest {
         NameTagContainsKeywordsPredicate predicate = new NameTagContainsKeywordsPredicate(nameKeywords, tagKeywords);
 
         String expected = NameTagContainsKeywordsPredicate.class.getCanonicalName()
-                + "{nameKeywords=" + nameKeywords + ", tagKeywords=" + tagKeywords + "}";
+                + "{nameKeywords=" + nameKeywords + ", tagKeywords=" + tagKeywords
+                + ", nameRelation=" + KeywordRelation.ANY + ", tagRelation=" + KeywordRelation.ANY + "}";
         assertEquals(expected, predicate.toString());
     }
 }

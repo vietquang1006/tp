@@ -11,19 +11,20 @@ import seedu.address.model.person.Person;
 
 
 /**
- * Finds and lists all persons whose name and/or tags contain all of the provided keywords.
+ * Finds and lists all persons whose name and/or tags contain the provided keywords.
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names/tags contain all "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names/tags contain "
             + "specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]...]\n"
-            + "Examples: " + COMMAND_WORD + " -n alice pauline ; josh\n"
-            + "          " + COMMAND_WORD + " -t friends ; owes me ; secretary\n"
-            + "          " + COMMAND_WORD + " -n meier -t friends";
+            + "Parameters: -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-m and|or] "
+            + "[-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]... [-m and|or]]\n"
+            + "Examples: " + COMMAND_WORD + " -n dan ; elle -m and -t friends ; student -m or\n"
+            + "          " + COMMAND_WORD + " -n alice pauline ; josh -m or\n"
+            + "          " + COMMAND_WORD + " -t friends ; owes me ; secretary -m and";
 
     private final Predicate<Person> predicate;
 
