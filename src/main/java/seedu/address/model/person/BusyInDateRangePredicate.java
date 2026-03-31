@@ -32,9 +32,8 @@ public class BusyInDateRangePredicate implements Predicate<Person> {
      */
     @Override
     public boolean test(Person person) {
-        return person.getBusyPeriod()
-                .map(bp -> bp.overlapsWith(this.range))
-                .orElse(false);
+        return person.getBusyPeriods().stream()
+                .anyMatch(bp -> bp.overlapsWith(this.range));
     }
 
     @Override

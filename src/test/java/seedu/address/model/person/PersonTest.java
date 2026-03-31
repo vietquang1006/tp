@@ -113,13 +113,13 @@ public class PersonTest {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName()
                 + ", role=" + ALICE.getRole().get() + ", phone=" + ALICE.getPhone().get()
                 + ", email=" + ALICE.getEmail().get() + ", address=" + ALICE.getAddress().get()
-                + ", tags=" + ALICE.getTags() + "}";
+                + ", tags=" + ALICE.getTags() + ", busyPeriods=" + ALICE.getBusyPeriods() + "}";
         assertEquals(expected, ALICE.toString());
 
         Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
         String expectedEmpty = Person.class.getCanonicalName() + "{name=" + emptyFieldsPerson.getName()
-                + ", tags=" + emptyFieldsPerson.getTags() + "}";
+                + ", tags=" + emptyFieldsPerson.getTags() + ", busyPeriods=" + emptyFieldsPerson.getBusyPeriods() + "}";
         assertEquals(expectedEmpty, emptyFieldsPerson.toString());
     }
 
@@ -131,6 +131,6 @@ public class PersonTest {
         );
         assertEquals("John", legacy1.getName().fullName);
         assertEquals("Developer", legacy1.getRole().get().roleName);
-        assertTrue(legacy1.getBusyPeriod().isEmpty());
+        assertTrue(legacy1.getBusyPeriods().isEmpty());
     }
 }

@@ -31,9 +31,8 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
-    private final String busyStartDate;
-    private final String busyEndDate;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final List<JsonAdaptedBusyPeriod> busyPeriods = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,16 +43,21 @@ class JsonAdaptedPerson {
                              @JsonProperty("address") String address,
                              @JsonProperty("busyStartDate") String busyStartDate,
                              @JsonProperty("busyEndDate") String busyEndDate,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+                             @JsonProperty("busyPeriods") List<JsonAdaptedBusyPeriod> busyPeriods) {
         this.role = role;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.busyStartDate = busyStartDate;
-        this.busyEndDate = busyEndDate;
         if (tags != null) {
             this.tags.addAll(tags);
+        }
+        if (busyPeriods != null) {
+            this.busyPeriods.addAll(busyPeriods);
+        }
+        if (busyStartDate != null && busyEndDate != null) {
+            this.busyPeriods.add(new JsonAdaptedBusyPeriod(busyStartDate, busyEndDate));
         }
     }
 
@@ -66,10 +70,11 @@ class JsonAdaptedPerson {
         phone = source.getPhone().map(p -> p.value).orElse(null);
         email = source.getEmail().map(e -> e.value).orElse(null);
         address = source.getAddress().map(a -> a.value).orElse(null);
-        busyStartDate = source.getBusyPeriod().map(BusyPeriod::getStartDateString).orElse(null);
-        busyEndDate = source.getBusyPeriod().map(BusyPeriod::getEndDateString).orElse(null);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
+                .collect(Collectors.toList()));
+        busyPeriods.addAll(source.getBusyPeriods().stream()
+                .map(JsonAdaptedBusyPeriod::new)
                 .collect(Collectors.toList()));
     }
 
@@ -82,6 +87,11 @@ class JsonAdaptedPerson {
         final List<Tag> personTags = new ArrayList<>();
         for (JsonAdaptedTag tag : tags) {
             personTags.add(tag.toModelType());
+        }
+
+        final List<BusyPeriod> personBusyPeriods = new ArrayList<>();
+        for (JsonAdaptedBusyPeriod busyPeriod : busyPeriods) {
+            personBusyPeriods.add(busyPeriod.toModelType());
         }
 
         java.util.Optional<Role> modelRole;
@@ -132,25 +142,8 @@ class JsonAdaptedPerson {
             modelAddress = java.util.Optional.empty();
         }
 
-        if (busyStartDate != null && !BusyPeriod.isValidDateFormat(busyStartDate)) {
-            throw new IllegalValueException(BusyPeriod.MESSAGE_CONSTRAINTS);
-        }
-        if (busyEndDate != null && !BusyPeriod.isValidDateFormat(busyEndDate)) {
-            throw new IllegalValueException(BusyPeriod.MESSAGE_CONSTRAINTS);
-        }
-
-        java.util.Optional<BusyPeriod> modelBusyPeriod;
-        if (busyStartDate != null && busyEndDate != null) {
-            try {
-                modelBusyPeriod = java.util.Optional.of(new BusyPeriod(busyStartDate, busyEndDate));
-            } catch (IllegalArgumentException e) {
-                throw new IllegalValueException(e.getMessage());
-            }
-        } else {
-            modelBusyPeriod = java.util.Optional.empty();
-        }
-
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelRole, modelName, modelPhone, modelEmail, modelAddress, modelTags, modelBusyPeriod);
+        final Set<BusyPeriod> modelBusyPeriods = new HashSet<>(personBusyPeriods);
+        return new Person(modelRole, modelName, modelPhone, modelEmail, modelAddress, modelTags, modelBusyPeriods);
     }
 }

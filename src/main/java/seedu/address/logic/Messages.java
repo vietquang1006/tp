@@ -45,6 +45,9 @@ public class Messages {
         person.getAddress().ifPresent(address -> builder.append("; Address: ").append(address));
         builder.append("; Tags: ");
         person.getTags().forEach(builder::append);
+        if (!person.getBusyPeriods().isEmpty()) {
+            builder.append("; Busy: ").append(person.getBusyPeriods());
+        }
         return builder.toString();
     }
 }

@@ -26,7 +26,7 @@ public class Person {
     // Data fields
     private final Optional<Address> address;
     private final Set<Tag> tags = new HashSet<>();
-    private final Optional<BusyPeriod> busyPeriod;
+    private final Set<BusyPeriod> busyPeriods = new HashSet<>();
 
     /**
      * Legacy constructor: Wraps nullable parameters in Optionals.
@@ -39,37 +39,36 @@ public class Person {
         this.email = Optional.ofNullable(email);
         this.address = Optional.ofNullable(address);
         this.tags.addAll(tags);
-        this.busyPeriod = Optional.empty();
     }
 
     /**
      * Legacy constructor: Wraps nullable parameters in Optionals.
      */
     public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
-                  Optional<BusyPeriod> busyPeriod) {
-        requireAllNonNull(name, tags, busyPeriod);
+                  Set<BusyPeriod> busyPeriods) {
+        requireAllNonNull(name, tags, busyPeriods);
         this.role = Optional.ofNullable(role);
         this.name = name;
         this.phone = Optional.ofNullable(phone);
         this.email = Optional.ofNullable(email);
         this.address = Optional.ofNullable(address);
         this.tags.addAll(tags);
-        this.busyPeriod = busyPeriod;
+        this.busyPeriods.addAll(busyPeriods);
     }
 
     /**
      * Main constructor utilizing Optionals natively.
      */
     public Person(Optional<Role> role, Name name, Optional<Phone> phone, Optional<Email> email,
-                  Optional<Address> address, Set<Tag> tags, Optional<BusyPeriod> busyPeriod) {
-        requireAllNonNull(role, name, phone, email, address, tags, busyPeriod);
+                  Optional<Address> address, Set<Tag> tags, Set<BusyPeriod> busyPeriods) {
+        requireAllNonNull(role, name, phone, email, address, tags, busyPeriods);
         this.role = role;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
-        this.busyPeriod = busyPeriod;
+        this.busyPeriods.addAll(busyPeriods);
     }
 
     public Optional<Role> getRole() {
@@ -101,10 +100,11 @@ public class Person {
     }
 
     /**
-     * Returns an {@code Optional<BusyPeriod>}.
+     * Returns an immutable busy period set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
      */
-    public Optional<BusyPeriod> getBusyPeriod() {
-        return this.busyPeriod;
+    public Set<BusyPeriod> getBusyPeriods() {
+        return Collections.unmodifiableSet(busyPeriods);
     }
 
     /**
@@ -141,12 +141,12 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && busyPeriod.equals(otherPerson.busyPeriod);
+                && busyPeriods.equals(otherPerson.busyPeriods);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(role, name, phone, email, address, tags, busyPeriod);
+        return Objects.hash(role, name, phone, email, address, tags, busyPeriods);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class Person {
         email.ifPresent(e -> builder.add("email", e));
         address.ifPresent(a -> builder.add("address", a));
         builder.add("tags", tags);
-        busyPeriod.ifPresent(bp -> builder.add("busyPeriod", bp));
+        builder.add("busyPeriods", busyPeriods);
 
         return builder.toString();
     }

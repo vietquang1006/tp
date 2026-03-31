@@ -30,7 +30,7 @@ public class PersonBuilder {
     private Optional<Email> email;
     private Optional<Address> address;
     private Set<Tag> tags;
-    private Optional<BusyPeriod> busyPeriod;
+    private Set<BusyPeriod> busyPeriods;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -42,7 +42,7 @@ public class PersonBuilder {
         email = Optional.of(new Email(DEFAULT_EMAIL));
         address = Optional.of(new Address(DEFAULT_ADDRESS));
         tags = new HashSet<>();
-        busyPeriod = Optional.empty();
+        busyPeriods = new HashSet<>();
     }
 
     /**
@@ -55,7 +55,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
-        busyPeriod = personToCopy.getBusyPeriod();
+        busyPeriods = new HashSet<>(personToCopy.getBusyPeriods());
     }
 
     /**
@@ -110,11 +110,11 @@ public class PersonBuilder {
      * Sets the {@code BusyPeriod} of the {@code Person} that we are building.
      */
     public PersonBuilder withBusyPeriod(String startDate, String endDate) {
-        this.busyPeriod = Optional.of(new BusyPeriod(startDate, endDate));
+        this.busyPeriods.add(new BusyPeriod(startDate, endDate));
         return this;
     }
 
     public Person build() {
-        return new Person(role, name, phone, email, address, tags, busyPeriod);
+        return new Person(role, name, phone, email, address, tags, busyPeriods);
     }
 }

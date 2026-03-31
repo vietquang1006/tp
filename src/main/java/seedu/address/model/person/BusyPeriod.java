@@ -114,4 +114,35 @@ public class BusyPeriod {
         return Objects.hash(startDate, endDate);
     }
 
+    /**
+     * Merges overlapping or adjacent busy periods in the given set.
+     * @param busyPeriods Set of busy periods to merge.
+     * @return A new set of merged busy periods.
+     */
+    public static java.util.Set<BusyPeriod> merge(java.util.Set<BusyPeriod> busyPeriods) {
+        if (busyPeriods.isEmpty()) {
+            return new java.util.HashSet<>();
+        }
+
+        java.util.List<BusyPeriod> sortedPeriods = new java.util.ArrayList<>(busyPeriods);
+        sortedPeriods.sort(java.util.Comparator.comparing(bp -> bp.startDate));
+
+        java.util.List<BusyPeriod> mergedPeriods = new java.util.ArrayList<>();
+        BusyPeriod current = sortedPeriods.get(0);
+
+        for (int i = 1; i < sortedPeriods.size(); i++) {
+            BusyPeriod next = sortedPeriods.get(i);
+            if (current.overlapsWith(next) || current.endDate.plusDays(1).equals(next.startDate)) {
+                LocalDate newEnd = current.endDate.isAfter(next.endDate) ? current.endDate : next.endDate;
+                current = new BusyPeriod(current.getStartDateString(), newEnd.format(DATE_FORMATTER));
+            } else {
+                mergedPeriods.add(current);
+                current = next;
+            }
+        }
+        mergedPeriods.add(current);
+
+        return new java.util.HashSet<>(mergedPeriods);
+    }
+
 }

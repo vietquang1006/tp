@@ -47,14 +47,14 @@ public class BusyCommandTest {
     }
 
     @Test
-    public void execute_validIndexUnfilteredListOverwrite_success() {
+    public void execute_validIndexUnfilteredListMerge_success() {
         // First set a busy period
         Person personToBusy = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person personWithInitialBusy = new PersonBuilder(personToBusy)
                 .withBusyPeriod("01/01/2026", "02/01/2026").build();
         model.setPerson(personToBusy, personWithInitialBusy);
 
-        // Now overwrite it
+        // Now add another one
         BusyPeriod newBusyPeriod = new BusyPeriod("25/03/2026", "28/03/2026");
         BusyCommand busyCommand = new BusyCommand(INDEX_FIRST_PERSON, Optional.of(newBusyPeriod));
 
@@ -62,7 +62,9 @@ public class BusyCommandTest {
                 personToBusy.getName(), newBusyPeriod.toString());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        Person busyPerson = new PersonBuilder(personToBusy).withBusyPeriod("25/03/2026", "28/03/2026").build();
+        Person busyPerson = new PersonBuilder(personToBusy)
+                .withBusyPeriod("01/01/2026", "02/01/2026")
+                .withBusyPeriod("25/03/2026", "28/03/2026").build();
         expectedModel.setPerson(personWithInitialBusy, busyPerson);
 
         assertCommandSuccess(busyCommand, model, expectedMessage, expectedModel);
@@ -89,6 +91,29 @@ public class BusyCommandTest {
         BusyCommand busyCommand = new BusyCommand(outOfBoundIndex, Optional.of(busyPeriod));
 
         assertCommandFailure(busyCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_validIndexUnfilteredListMergeOverlapping_success() {
+        // First set a busy period
+        Person personToBusy = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person personWithInitialBusy = new PersonBuilder(personToBusy)
+                .withBusyPeriod("01/01/2026", "05/01/2026").build();
+        model.setPerson(personToBusy, personWithInitialBusy);
+
+        // Now add an overlapping one
+        BusyPeriod newBusyPeriod = new BusyPeriod("04/01/2026", "10/01/2026");
+        BusyCommand busyCommand = new BusyCommand(INDEX_FIRST_PERSON, Optional.of(newBusyPeriod));
+
+        String expectedMessage = String.format(BusyCommand.MESSAGE_BUSY_PERSON_SUCCESS,
+                personToBusy.getName(), newBusyPeriod.toString());
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Person busyPerson = new PersonBuilder(personToBusy)
+                .withBusyPeriod("01/01/2026", "10/01/2026").build();
+        expectedModel.setPerson(personWithInitialBusy, busyPerson);
+
+        assertCommandSuccess(busyCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
