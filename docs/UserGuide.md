@@ -292,6 +292,14 @@ Exits the CampusConnect application.
 
 **Format:** `exit`
 
+Before the exit is performed, the application will prompt for confirmation.
+
+**Exit confirmation prompt:**
+> `Are you sure you want to exit the application? [y/n]`
+
+* If `y` is entered, the application will exit.
+* If `n` is entered, the exit operation will be cancelled.
+
 ### Locating persons by name/tags: `find`
 
 Finds persons whose names/tags contain any of the given keywords.
@@ -506,7 +514,7 @@ Action | Format, Examples
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@u.nus.edu` <br>(then confirm with `y` or cancel with `n`)
-**Exit** | `exit`
+**Exit** | `exit`<br>(then confirm with `y` or cancel with `n`)
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
 **Help** | `help`
 **List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
