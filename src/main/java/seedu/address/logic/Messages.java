@@ -20,6 +20,7 @@ public class Messages {
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER = "Only give alphanumeric keywords";
     public static final String MESSAGE_ONLY_YES_NO = "Please enter either \'y\' or \'n\'";
+    public static final String MESSAGE_SUCCESSFUL_CANCEL = "%1$s command cancelled.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.

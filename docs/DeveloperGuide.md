@@ -227,9 +227,9 @@ These confirmation commands do not perform the final action immediately. Instead
 `LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms. (The sequence diagram for this interaction is detailed in the [Logic Component](#logic-component) section above).
 
 After that:
-- if the user enters `y`, the stored command is executed
-- if the user enters `n`, the operation is cancelled
-- if the user enters any other input, the application reports an invalid confirmation input
+- if the user enters `y`, the stored command is executed.
+- if the user enters `n`, the operation is cancelled. A message reflecting that the corresponding command was cancelled is shown.
+- if the user enters any other input, the application reports an invalid confirmation input.
 
 For duplicate `add`, the stored command is a confirmed `AddCommand`, which force-adds the duplicate contact after the user explicitly confirms. This keeps the confirmation decision in `ConfirmAddCommand` while leaving the actual insertion to `AddCommand`.
 

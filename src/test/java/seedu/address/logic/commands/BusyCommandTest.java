@@ -127,4 +127,11 @@ public class BusyCommandTest {
         assertEquals(expected, busyCommand.toString());
     }
 
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        BusyCommand command = new BusyCommand(seedu.address.commons.core.index.Index.fromOneBased(1),
+                java.util.Optional.of(
+                        new seedu.address.model.person.BusyPeriod("25/03/2026", "28/03/2026")));
+        org.junit.jupiter.api.Assertions.assertEquals(BusyCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

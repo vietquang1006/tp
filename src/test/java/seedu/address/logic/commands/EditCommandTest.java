@@ -161,4 +161,10 @@ public class EditCommandTest {
         assertEquals(expected, editCommand.toString());
     }
 
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        EditCommand command = new EditCommand(seedu.address.commons.core.index.Index.fromOneBased(1),
+                new EditCommand.EditPersonDescriptor());
+        org.junit.jupiter.api.Assertions.assertEquals(EditCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

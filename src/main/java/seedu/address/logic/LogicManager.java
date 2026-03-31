@@ -1,5 +1,7 @@
 package seedu.address.logic;
 
+import static seedu.address.logic.Messages.MESSAGE_SUCCESSFUL_CANCEL;
+
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
@@ -53,28 +55,11 @@ public class LogicManager implements Logic {
 
         CommandResult commandResult = null;
 
-        boolean currentlyAwaitingYesNo = this.isAwaitingConfirmation;
-        if (!currentlyAwaitingYesNo) {
-            Command command = addressBookParser.parseCommandWithConfirmation(commandText);
-            // either execute a ConfirmXXXCommand (e.g. ConfirmDeleteCommand) or a normal command
-            // that has no confirmation step (e.g. list)
-            commandResult = command.execute(model);
-            boolean thisCommandRequiresConfirmation = commandResult.isAwaitingConfirmation();
-            if (thisCommandRequiresConfirmation) {
-                this.isAwaitingConfirmation = true;
-                this.awaitingCommand = addressBookParser.parseCommand(commandText);
-            }
-        } else if (currentlyAwaitingYesNo) {
-            boolean hasConfirmed = addressBookParser.parseYesNo(commandText);
-            if (hasConfirmed) {
-                commandResult = awaitingCommand.execute(model);
-            } else {
-                commandResult = new CommandResult("");
-            }
-            this.isAwaitingConfirmation = false;
-            this.awaitingCommand = null;
+        if (!isAwaitingConfirmation) {
+            commandResult = handleNotAwaitingExecute(commandText);
+        } else {
+            commandResult = handleAwaitingExecute(commandText);
         }
-
         try {
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
@@ -83,6 +68,37 @@ public class LogicManager implements Logic {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
 
+        return commandResult;
+    }
+
+    private CommandResult handleNotAwaitingExecute(String commandText)
+            throws CommandException, ParseException {
+        Command command = addressBookParser.parseCommandWithConfirmation(commandText);
+        // either execute a ConfirmXXXCommand (e.g. ConfirmDeleteCommand) or a normal command
+        // that has no confirmation step (e.g. list)
+        CommandResult commandResult = command.execute(model);
+        boolean thisCommandRequiresConfirmation = commandResult.isAwaitingConfirmation();
+        if (thisCommandRequiresConfirmation) {
+            this.isAwaitingConfirmation = true;
+            this.awaitingCommand = addressBookParser.parseCommand(commandText);
+        }
+        return commandResult;
+    }
+
+    private CommandResult handleAwaitingExecute(String commandText)
+            throws CommandException, ParseException {
+        boolean hasConfirmed = addressBookParser.parseYesNo(commandText);
+        CommandResult commandResult = null;
+        if (hasConfirmed) {
+            commandResult = awaitingCommand.execute(model);
+        } else {
+            String awaitingCommandWord = awaitingCommand.getCommandWord();
+            String properAwaitingCommandWord = awaitingCommandWord.substring(0, 1).toUpperCase()
+                    + awaitingCommandWord.substring(1).toLowerCase();
+            commandResult = new CommandResult(String.format(MESSAGE_SUCCESSFUL_CANCEL, properAwaitingCommandWord));
+        }
+        this.isAwaitingConfirmation = false;
+        this.awaitingCommand = null;
         return commandResult;
     }
 

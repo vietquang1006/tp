@@ -17,4 +17,10 @@ public class ExitCommandTest {
         CommandResult expectedCommandResult = new CommandResult(MESSAGE_EXIT_ACKNOWLEDGEMENT, false, true, false);
         assertCommandSuccess(new ExitCommand(), model, expectedCommandResult, expectedModel);
     }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        ExitCommand command = new ExitCommand();
+        org.junit.jupiter.api.Assertions.assertEquals(ExitCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

@@ -233,9 +233,7 @@ Deletes the specified person from the address book.
 
 <div markdown="span" class="alert alert-warning">
 
-:exclamation:
-
-**Caution:**<br><br>
+:exclamation: **Caution:**<br><br>
 
 `INDEX` refers to the currently displayed list. Run `list` first if you want to delete from the full contact list.
 </div>
