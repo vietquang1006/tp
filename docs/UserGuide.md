@@ -76,7 +76,7 @@ To ensure this guide is effective, we assume the target user:
 
   * `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-001` : Adds a contact named `John Doe` to the Address Book.
 
-  * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
+  * `find -n Alice ; Benson` : Find contacts whose names contain both Alice and Benson.
 
   * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
 
@@ -174,7 +174,7 @@ Running `busy` again for the same contact replaces the previous busy period inst
 
 Examples:
 * `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
-* `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
+* `find -n Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
 
 ### Locating persons by busy period: `busyfilter`
 
@@ -222,7 +222,7 @@ Clears the contacts currently shown in the list.
 
 Examples:
 * `list` followed by `clear` then `y` clears all currently listed contacts.
-* `find tag NUSSU welfare club members` followed by `clear` then `y` clears only the filtered contacts in that result.
+* `find -t NUSSU welfare club members` followed by `clear` then `y` clears only the filtered contacts in that result.
 * `clear` followed by `n` cancels the operation and leaves all contacts unchanged.
 
 ### Deleting a person : `delete`
@@ -253,7 +253,7 @@ Deletes the specified person from the address book.
 
 Examples:
 * `list` followed by `delete 2` prompts confirmation for deleting the 2nd person in the address book.
-* `find name Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
+* `find -n Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
 
 ### Editing a person : `edit`
 
@@ -296,27 +296,29 @@ Exits the CampusConnect application.
 
 Finds persons whose names/tags contain any of the given keywords.
 
-**Format:** `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
+**Format:** `find -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]...]`
 
 <div markdown="span" class="alert alert-primary">
 
 :bulb: **Tip:**<br><br>
 
-Use `;` to split phrases into multiple search groups, e.g. `find name alice pauline ; josh`.
+Use `;` to split phrases into multiple keyword groups, e.g. `find -n alice pauline ; josh`.
 </div>
 
-* `SEARCH_BY` must be either `name` or `tag` (lowercase).
+* At least one of `-n` for name or `-t` for tag must be provided.
 * The search is case-insensitive. e.g. `alice` will match `Alice`.
-* Use `;` to separate multiple keywords. Each keyword can contain spaces.
-* Persons matching at least one keyword will be returned (`OR` search).
+* Use `;` to separate multiple keyword groups. Each keyword group can contain spaces.
+* All provided keyword groups for a field must match (`AND` search).
+* If both `-n` and `-t` are provided, a person must satisfy both.
 * Matching is based on text containment. e.g. `ali` will match `Alice`.
 * Keywords can only contain alphanumeric characters and spaces.
 
 Examples:
-* `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
-* `find tag RAG2026 ; finance department ; secretaries` returns persons with tags containing `RAG2026`, `finance department`, or `secretaries`.
-* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
-  ![result for 'find name heng ; kang'](images/findNameHengKang.png)
+* `find -n alice pauline ; josh` returns persons whose names contain both `alice pauline` and `josh`.
+* `find -t RAG2026 ; finance department ; secretaries` returns persons with tags containing all listed groups.
+* `find -n meier -t friends` returns persons whose names contain `meier` and tags containing `friends`.
+* `find -n heng ; kang` returns persons whose names contain both `heng` or `kang`.<br>
+  ![result for 'find -n heng ; kang'](images/findNameHengKang.png)
 
 ### Viewing help : `help`
 
@@ -508,4 +510,6 @@ Action | Format, Examples
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
 **Help** | `help`
 **List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
+
+
 
