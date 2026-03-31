@@ -373,7 +373,8 @@ public class LogicManagerTest {
         logic.execute(ClearCommand.COMMAND_WORD);
         CommandResult result = logic.execute("y");
 
-        assertEquals(ClearCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        String expectedMessage = String.format(ClearCommand.MESSAGE_SUCCESS, 1);
+        assertEquals(expectedMessage, result.getFeedbackToUser());
         assertEquals(0, model.getAddressBook().getPersonList().size());
     }
 
