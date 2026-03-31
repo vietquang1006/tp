@@ -46,34 +46,34 @@ task coverage(type: JacocoReport) {
 }
 
 dependencies {
+    def osName = System.getProperty("os.name").toLowerCase()
+    def osArch = System.getProperty("os.arch").toLowerCase()
+
+    def javaFxPlatform
+    if (osName.contains("win")) {
+        javaFxPlatform = "win"
+    } else if (osName.contains("mac")) {
+        javaFxPlatform = (osArch.contains("aarch64") || osArch.contains("arm64")) ? "mac-aarch64" : "mac"
+    } else {
+        javaFxPlatform = "linux"
+    }
+
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'
 
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: javaFxPlatform
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: javaFxPlatform
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: javaFxPlatform
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: javaFxPlatform
+    implementation group: 'org.openjfx', name: 'javafx-web', version: javaFxVersion, classifier: javaFxPlatform
+    implementation group: 'org.openjfx', name: 'javafx-media', version: javaFxVersion, classifier: javaFxPlatform
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
-
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
 }
-
-run {
-    enableAssertions = true
-}
-
 
 shadowJar {
     archiveFileName = 'addressbook.jar'
