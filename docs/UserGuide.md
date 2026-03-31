@@ -266,23 +266,33 @@ Edits an existing person in the address book.
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
-Before the edit is performed, the application will prompt for confirmation.
+Before the edit is performed, the application will prompt for confirmation and show the exact fields that will be changed.
 
-> `Are you sure you want to edit the contact: YYY? [y/n]`
+**Edit confirmation prompt:**
+> `Are you sure you want to edit the contact: YYY?`<br>
+> `Changes made:`<br>
+> `Name: John -> Mary`<br>
+> `Phone number: 99999999 -> 91111111`<br>
+> `[y/n]`
+
+Only the fields that are actually changed are shown in the `Changes made:` section.
 
 If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
 
 **Duplicate-edit confirmation prompt:**
 > `Warning: XXX`<br>
 > `is an existing person.`<br>
-> `Are you sure you want to edit the contact: YYY? [y/n]`
+> `Are you sure you want to edit the contact: YYY?`<br>
+> `Changes made:`<br>
+> `Name: John -> Mary`<br>
+> `[y/n]`
 
 * If `y` is entered, the edit will proceed.
 * If `n` is entered, the edit will be cancelled.
 
 Examples:
-*  `edit 1 -p 91234567 -e johndoe@u.nus.edu` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
-*  `edit 2 -n Wang -t` Edits the name of the 2nd person to be `Wang` and clears all existing tags.
+*  `edit 1 -p 91234567 -e johndoe@u.nus.edu` prompts for confirmation and shows that only the phone number and email address will be updated.
+*  `edit 2 -n Wang -t` prompts for confirmation and shows that the name is changed to `Wang` and all existing tags are cleared.
 
 ### Exiting the program : `exit`
 

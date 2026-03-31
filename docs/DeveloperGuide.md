@@ -221,8 +221,21 @@ If the command requires confirmation, a corresponding `ConfirmCommand` subclass 
 - `ConfirmDeleteCommand` for `delete`
 - `ConfirmClearCommand` for `clear`
 - `ConfirmAddCommand` for duplicate `add`
+- `ConfirmEditCommand` for `edit`
 
 These confirmation commands do not perform the final action immediately. Instead, they return a `CommandResult` indicating that the application is awaiting confirmation input.
+
+For `edit`, `ConfirmEditCommand` first constructs the edited `Person` using the provided `EditPersonDescriptor`, then compares it against the original `Person` field by field. The confirmation message includes a `Changes made:` section that shows only the fields that differ, for example:
+
+```text
+Are you sure you want to edit the contact: John?
+Changes made:
+Name: John -> Mary
+Phone number: 99999999 -> 91111111
+[y/n]
+```
+
+This makes the confirmation step more explicit by showing the exact changes before the edit is applied. The field-diff formatting logic is centralised in `ConfirmEditCommand#buildChangesMessage(...)`, allowing tests to reuse the same logic without duplicating formatting code.
 
 `LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms. (The sequence diagram for this interaction is detailed in the [Logic Component](#logic-component) section above).
 
@@ -723,13 +736,16 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
     2. Test case: `edit 1 -p 91234567`
-       Expected: A confirmation message is shown.
+       Expected: A confirmation message is shown, including a `Changes made:` section listing `Phone number: OLD_PHONE -> 91234567`.
 
-    3. Test case: `edit 2 -n NAME_OF_EXISTING_PERSON`
+    3. Test case: `edit 1 -n Mary -p 91111111`
+       Expected: A confirmation message is shown, including a `Changes made:` section listing both the updated name and phone number on separate lines.
+
+    4. Test case: `edit 2 -n NAME_OF_EXISTING_PERSON`
         1. If `NAME_OF_EXISTING_PERSON` is the same as name of the person being edited:
-           Expected: A confirmation message are shown.
+           Expected: A confirmation message is shown.
         2. Otherwise:
-           Expected: A warning and confirmation message are shown.
+           Expected: A warning and confirmation message are shown, together with the `Changes made:` section.
 
     4. Test case: `edit 0 -p 91234567`
        Expected: No person is edited. Error details shown in the status message.
