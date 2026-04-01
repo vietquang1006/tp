@@ -52,9 +52,9 @@ public class TagContainsKeywordsPredicateTest {
         predicate = new TagContainsKeywordsPredicate(Collections.singletonList("class"));
         assertTrue(predicate.test(new PersonBuilder().withTags("classmate").build()));
 
-        // Multiple keywords with one match
-        predicate = new TagContainsKeywordsPredicate(Arrays.asList("teaching", "friend"));
-        assertTrue(predicate.test(new PersonBuilder().withTags("friend", "family").build()));
+        // Multiple keywords (all match across tags)
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "class"));
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend", "classmate").build()));
 
         // Mixed-case keywords
         predicate = new TagContainsKeywordsPredicate(Arrays.asList("FrIeNd", "cLaSs"));
@@ -68,6 +68,10 @@ public class TagContainsKeywordsPredicateTest {
 
         predicate = new TagContainsKeywordsPredicate(Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
+
+        // Any matching keyword returns true
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "owes"));
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend").build()));
 
         predicate = new TagContainsKeywordsPredicate(Collections.singletonList("owes me"));
         assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));

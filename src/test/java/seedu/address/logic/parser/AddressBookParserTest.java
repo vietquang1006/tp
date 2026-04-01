@@ -34,6 +34,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.BusyInDateRangePredicate;
 import seedu.address.model.person.BusyPeriod;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.NameTagContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
@@ -99,7 +100,7 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ; ")));
+                FindCommand.COMMAND_WORD + " -n " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -107,19 +108,27 @@ public class AddressBookParserTest {
     public void parseCommand_findByTag() throws Exception {
         List<String> keywords = Arrays.asList("friend", "classmate");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " tag " + keywords.stream().collect(Collectors.joining(" ; ")));
+                FindCommand.COMMAND_WORD + " -t " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new TagContainsKeywordsPredicate(keywords)), command);
+    }
+
+    @Test
+    public void parseCommand_findNameAndTag() throws Exception {
+        FindCommand command = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " -n meier -t friends");
+        assertEquals(new FindCommand(new NameTagContainsKeywordsPredicate(
+                Arrays.asList("meier"), Arrays.asList("friends"))), command);
     }
 
     @Test
     public void parseCommand_findWithSemicolonGroups() throws Exception {
         FindCommand nameCommand = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " name alice pauline ; josh");
+                FindCommand.COMMAND_WORD + " -n alice pauline ; josh");
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("alice pauline", "josh"))),
                 nameCommand);
 
         FindCommand tagCommand = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " tag friends ; owes me ; secretary");
+                FindCommand.COMMAND_WORD + " -t friends ; owes me ; secretary");
         assertEquals(new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("friends", "owes me",
                 "secretary"))), tagCommand);
     }
@@ -206,7 +215,7 @@ public class AddressBookParserTest {
     public void parseCommandWithConfirmation_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommandWithConfirmation(
-                FindCommand.COMMAND_WORD + " name " + keywords.stream().collect(Collectors.joining(" ; ")));
+                FindCommand.COMMAND_WORD + " -n " + keywords.stream().collect(Collectors.joining(" ; ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
