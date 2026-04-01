@@ -24,7 +24,8 @@ public class NameTagContainsKeywordsPredicate implements Predicate<Person> {
      * @param nameKeywords Keywords to match against a person's name, or null to ignore names.
      * @param tagKeywords Keywords to match against a person's tags, or null to ignore tags.
      */
-    public NameTagContainsKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords) throws CommandException {
+    public NameTagContainsKeywordsPredicate(
+            List<String> nameKeywords, List<String> tagKeywords) throws CommandException {
         if (nameKeywords == null && tagKeywords == null) {
             throw new IllegalArgumentException("At least one keyword list must be provided.");
         }
