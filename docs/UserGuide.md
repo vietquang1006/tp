@@ -266,7 +266,7 @@ Edits an existing person in the address book.
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
-Before the edit is performed, the application will prompt for confirmation and show the exact fields that will be changed.
+Before the edit is performed, the application will prompt for confirmation and show the exact fields that will be changed. If the edit does not make any effective change, the command will be rejected.
 
 **Edit confirmation prompt:**
 > `Are you sure you want to edit the contact: YYY?`<br>
@@ -278,6 +278,8 @@ Before the edit is performed, the application will prompt for confirmation and s
 Only the fields that are actually changed are shown in the `Changes made:` section.
 
 If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
+
+If the edit does not make any effective change, the command will be rejected.
 
 **Duplicate-edit confirmation prompt:**
 > `Warning: XXX`<br>
@@ -293,6 +295,9 @@ If the edited person duplicates an existing person, the application will also sh
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@u.nus.edu` prompts for confirmation and shows that only the phone number and email address will be updated.
 *  `edit 2 -n Wang -t` prompts for confirmation and shows that the name is changed to `Wang` and all existing tags are cleared.
+
+An edit with no effective change produces the following message:
+> `No changes were made to the contact.`
 
 ### Exiting the program : `exit`
 
