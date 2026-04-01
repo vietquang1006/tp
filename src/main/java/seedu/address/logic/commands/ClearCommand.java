@@ -28,4 +28,8 @@ public class ClearCommand extends Command {
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, currentPersonList.size()));
     }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
+    }
 }

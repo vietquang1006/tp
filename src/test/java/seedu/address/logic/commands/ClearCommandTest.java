@@ -32,4 +32,9 @@ public class ClearCommandTest {
         assertCommandSuccess(new ClearCommand(), model, expectedMessage, expectedModel);
     }
 
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        ClearCommand command = new ClearCommand();
+        org.junit.jupiter.api.Assertions.assertEquals(ClearCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

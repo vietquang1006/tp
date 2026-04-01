@@ -94,4 +94,11 @@ public class BusyFilterCommandTest {
         String expected = BusyFilterCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, command.toString());
     }
+
+    @Test
+    public void getCommandWord() {
+        BusyInDateRangePredicate predicate = new BusyInDateRangePredicate("01/01/2026", "31/12/2026");
+        BusyFilterCommand command = new BusyFilterCommand(predicate);
+        assertEquals(BusyFilterCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

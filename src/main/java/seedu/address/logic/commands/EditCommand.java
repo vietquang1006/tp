@@ -250,4 +250,8 @@ public class EditCommand extends Command {
                     .toString();
         }
     }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
+    }
 }

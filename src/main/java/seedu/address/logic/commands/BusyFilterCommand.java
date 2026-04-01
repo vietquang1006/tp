@@ -53,5 +53,9 @@ public class BusyFilterCommand extends Command {
                 .add("predicate", predicate)
                 .toString();
     }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
+    }
 }
 
