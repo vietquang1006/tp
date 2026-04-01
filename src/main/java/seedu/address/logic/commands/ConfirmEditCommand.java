@@ -71,7 +71,7 @@ public class ConfirmEditCommand extends EditCommand implements ConfirmCommand {
     /**
      * Builds a multi-line message showing the differences between the original and edited person.
      */
-    protected String buildChangesMessage(Person originalPerson, Person editedPerson) {
+    protected String buildChangesMessage(Person originalPerson, Person editedPerson) throws CommandException {
         List<String> changes = new ArrayList<>();
 
         addChange(changes, "Role", originalPerson.getRole(), editedPerson.getRole());
@@ -86,6 +86,9 @@ public class ConfirmEditCommand extends EditCommand implements ConfirmCommand {
                     formatTags(editedPerson.getTags())));
         }
 
+        if (changes.isEmpty()) {
+            throw new CommandException(MESSAGE_NO_CHANGE);
+        }
         return String.join("\n", changes);
     }
 

@@ -53,6 +53,8 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_NO_CHANGE =
+            "The edit does not make any changes to the contact.";
 
     protected final Index index;
     protected final EditPersonDescriptor editPersonDescriptor;

@@ -34,10 +34,10 @@ import seedu.address.testutil.PersonBuilder;
  */
 public class ConfirmEditCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_allFieldsSpecifiedUnfilteredList_success() {
+    public void execute_allFieldsSpecifiedUnfilteredList_success() throws CommandException {
         Person personToEdit = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
@@ -56,7 +56,7 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
-    public void execute_someFieldsSpecifiedUnfilteredList_success() {
+    public void execute_someFieldsSpecifiedUnfilteredList_success() throws CommandException {
         Index indexLastPerson = Index.fromOneBased(model.getSortedFilteredPersonList().size());
         Person lastPerson = model.getSortedFilteredPersonList().get(indexLastPerson.getZeroBased());
 
@@ -81,7 +81,7 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
-    public void execute_nameAndPhoneSpecifiedUnfilteredList_success() {
+    public void execute_nameAndPhoneSpecifiedUnfilteredList_success() throws CommandException {
         Person personToEdit = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
@@ -127,7 +127,7 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
-    public void execute_duplicatePersonUnfilteredList_warningShown() {
+    public void execute_duplicatePersonUnfilteredList_warningShown() throws CommandException {
         Person firstPerson = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPerson = model.getSortedFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
@@ -175,6 +175,14 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
+    public void execute_noEffectiveChange_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().build();
+        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(confirmEditCommand, model, ConfirmEditCommand.MESSAGE_NO_CHANGE);
+    }
+
+    @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getSortedFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
@@ -196,6 +204,22 @@ public class ConfirmEditCommandTest {
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
         assertCommandFailure(confirmEditCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void buildChangesMessage_noChange_throwsCommandException() {
+        Person person = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        ConfirmEditCommand confirmEditCommand =
+                new ConfirmEditCommand(INDEX_FIRST_PERSON, new EditPersonDescriptorBuilder().build());
+
+        try {
+            confirmEditCommand.buildChangesMessage(person, person);
+        } catch (CommandException e) {
+            assertEquals(ConfirmEditCommand.MESSAGE_NO_CHANGE, e.getMessage());
+            return;
+        }
+
+        throw new AssertionError("Expected CommandException to be thrown.");
     }
 
     @Test
