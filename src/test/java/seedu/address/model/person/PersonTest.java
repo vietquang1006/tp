@@ -98,6 +98,10 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different busy periods -> returns false
+        editedAlice = new PersonBuilder(ALICE).withBusyPeriod("01/01/2026", "02/01/2026").build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // Test equality with missing optional fields
         Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();

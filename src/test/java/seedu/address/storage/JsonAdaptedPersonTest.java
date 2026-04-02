@@ -47,6 +47,35 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_validBusyPeriods_returnsPerson() throws Exception {
+        Person personWithBusyPeriods = new PersonBuilder(BENSON)
+                .withBusyPeriod(VALID_BUSY_START_DATE, VALID_BUSY_END_DATE).build();
+        JsonAdaptedPerson jsonAdaptedPerson = new JsonAdaptedPerson(personWithBusyPeriods);
+        assertEquals(personWithBusyPeriods, jsonAdaptedPerson.toModelType());
+    }
+
+    @Test
+    public void toModelType_busyStartDateEndDate_returnsPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_ADDRESS, VALID_BUSY_START_DATE, VALID_BUSY_END_DATE, VALID_TAGS, null);
+        Person expectedPerson = new PersonBuilder(BENSON)
+                .withBusyPeriod(VALID_BUSY_START_DATE, VALID_BUSY_END_DATE).build();
+        assertEquals(expectedPerson, person.toModelType());
+    }
+
+    @Test
+    public void toModelType_bothBusyFields_returnsPersonWithAllBusyPeriods() throws Exception {
+        List<JsonAdaptedBusyPeriod> busyPeriods = new ArrayList<>();
+        busyPeriods.add(new JsonAdaptedBusyPeriod("01/01/2026", "02/01/2026"));
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_ADDRESS, "03/01/2026", "04/01/2026", VALID_TAGS, busyPeriods);
+        Person expectedPerson = new PersonBuilder(BENSON)
+                .withBusyPeriod("01/01/2026", "02/01/2026")
+                .withBusyPeriod("03/01/2026", "04/01/2026").build();
+        assertEquals(expectedPerson, person.toModelType());
+    }
+
+    @Test
     public void toModelType_nullOptionalFields_returnsPersonWithoutOptionalFields() throws Exception {
         Person emptyFieldsPerson = new PersonBuilder(BENSON)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();

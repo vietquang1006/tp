@@ -188,6 +188,20 @@ public class BusyPeriodTest {
     }
 
     @Test
+    public void merge_emptySet_returnsEmptySet() {
+        assertTrue(BusyPeriod.merge(new java.util.HashSet<>()).isEmpty());
+    }
+
+    @Test
+    public void merge_singlePeriod_returnsSamePeriod() {
+        java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
+        periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
+        java.util.Set<BusyPeriod> merged = BusyPeriod.merge(periods);
+        assertEquals(1, merged.size());
+        assertTrue(merged.contains(new BusyPeriod("01/01/2026", "05/01/2026")));
+    }
+
+    @Test
     public void merge_overlappingPeriods_merged() {
         java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
         periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
