@@ -24,8 +24,9 @@ public class BusyFilterCommandTest {
         BusyFilterCommand command = new BusyFilterCommand(predicate);
 
         expectedModel.updateFilteredPersonList(predicate);
-        String expectedMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW,
-                expectedModel.getSortedFilteredPersonList().size());
+        String expectedMessage = Messages.getMessageForPersonsListed(
+                expectedModel.getSortedFilteredPersonList().size()
+        );
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(expectedModel.getSortedFilteredPersonList(), model.getSortedFilteredPersonList());
@@ -38,7 +39,7 @@ public class BusyFilterCommandTest {
         BusyFilterCommand command = new BusyFilterCommand(predicate);
 
         expectedModel.updateFilteredPersonList(predicate);
-        String expectedMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getMessageForPersonsListed(0);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(0, model.getSortedFilteredPersonList().size());
