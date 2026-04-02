@@ -98,6 +98,10 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different busy periods -> returns false
+        editedAlice = new PersonBuilder(ALICE).withBusyPeriod("01/01/2026", "02/01/2026").build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // Test equality with missing optional fields
         Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
@@ -113,13 +117,13 @@ public class PersonTest {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName()
                 + ", role=" + ALICE.getRole().get() + ", phone=" + ALICE.getPhone().get()
                 + ", email=" + ALICE.getEmail().get() + ", address=" + ALICE.getAddress().get()
-                + ", tags=" + ALICE.getTags() + "}";
+                + ", tags=" + ALICE.getTags() + ", busyPeriods=" + ALICE.getBusyPeriods() + "}";
         assertEquals(expected, ALICE.toString());
 
         Person emptyFieldsPerson = new PersonBuilder().withName(ALICE.getName().fullName)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
         String expectedEmpty = Person.class.getCanonicalName() + "{name=" + emptyFieldsPerson.getName()
-                + ", tags=" + emptyFieldsPerson.getTags() + "}";
+                + ", tags=" + emptyFieldsPerson.getTags() + ", busyPeriods=" + emptyFieldsPerson.getBusyPeriods() + "}";
         assertEquals(expectedEmpty, emptyFieldsPerson.toString());
     }
 
@@ -131,6 +135,6 @@ public class PersonTest {
         );
         assertEquals("John", legacy1.getName().fullName);
         assertEquals("Developer", legacy1.getRole().get().roleName);
-        assertTrue(legacy1.getBusyPeriod().isEmpty());
+        assertTrue(legacy1.getBusyPeriods().isEmpty());
     }
 }

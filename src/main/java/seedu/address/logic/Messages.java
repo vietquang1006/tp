@@ -64,6 +64,9 @@ public class Messages {
             builder.append("; Tags: ");
             person.getTags().forEach(builder::append);
         }
+        if (!person.getBusyPeriods().isEmpty()) {
+            builder.append("; Busy: ").append(person.getBusyPeriods());
+        }
         return builder.toString();
     }
 }

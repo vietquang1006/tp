@@ -47,6 +47,35 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_validBusyPeriods_returnsPerson() throws Exception {
+        Person personWithBusyPeriods = new PersonBuilder(BENSON)
+                .withBusyPeriod(VALID_BUSY_START_DATE, VALID_BUSY_END_DATE).build();
+        JsonAdaptedPerson jsonAdaptedPerson = new JsonAdaptedPerson(personWithBusyPeriods);
+        assertEquals(personWithBusyPeriods, jsonAdaptedPerson.toModelType());
+    }
+
+    @Test
+    public void toModelType_busyStartDateEndDate_returnsPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_ADDRESS, VALID_BUSY_START_DATE, VALID_BUSY_END_DATE, VALID_TAGS, null);
+        Person expectedPerson = new PersonBuilder(BENSON)
+                .withBusyPeriod(VALID_BUSY_START_DATE, VALID_BUSY_END_DATE).build();
+        assertEquals(expectedPerson, person.toModelType());
+    }
+
+    @Test
+    public void toModelType_bothBusyFields_returnsPersonWithAllBusyPeriods() throws Exception {
+        List<JsonAdaptedBusyPeriod> busyPeriods = new ArrayList<>();
+        busyPeriods.add(new JsonAdaptedBusyPeriod("01/01/2026", "02/01/2026"));
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_ADDRESS, "03/01/2026", "04/01/2026", VALID_TAGS, busyPeriods);
+        Person expectedPerson = new PersonBuilder(BENSON)
+                .withBusyPeriod("01/01/2026", "02/01/2026")
+                .withBusyPeriod("03/01/2026", "04/01/2026").build();
+        assertEquals(expectedPerson, person.toModelType());
+    }
+
+    @Test
     public void toModelType_nullOptionalFields_returnsPersonWithoutOptionalFields() throws Exception {
         Person emptyFieldsPerson = new PersonBuilder(BENSON)
                 .withRole(null).withPhone(null).withEmail(null).withAddress(null).build();
@@ -58,7 +87,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidRole_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(INVALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        null, null, VALID_TAGS);
+                        null, null, VALID_TAGS, null);
         String expectedMessage = Role.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -67,7 +96,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidName_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, INVALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        null, null, VALID_TAGS);
+                        null, null, VALID_TAGS, null);
         String expectedMessage = Name.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -75,7 +104,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullName_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_ROLE, null, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, null, null, VALID_TAGS);
+                VALID_ROLE, null, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, null, null, VALID_TAGS, null);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -84,7 +113,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidPhone_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        null, null, VALID_TAGS);
+                        null, null, VALID_TAGS, null);
         String expectedMessage = Phone.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -92,7 +121,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullPhone_returnsPersonWithoutPhone() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_ROLE, VALID_NAME, null, VALID_EMAIL, VALID_ADDRESS, null, null, VALID_TAGS);
+                VALID_ROLE, VALID_NAME, null, VALID_EMAIL, VALID_ADDRESS, null, null, VALID_TAGS, null);
         Person expectedPerson = new PersonBuilder(BENSON).withPhone(null).build();
         assertEquals(expectedPerson, person.toModelType());
     }
@@ -101,7 +130,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidEmail_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, INVALID_EMAIL, VALID_ADDRESS,
-                        null, null, VALID_TAGS);
+                        null, null, VALID_TAGS, null);
         String expectedMessage = Email.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -109,7 +138,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullEmail_returnsPersonWithoutEmail() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_ROLE, VALID_NAME, VALID_PHONE, null, VALID_ADDRESS, null, null, VALID_TAGS);
+                VALID_ROLE, VALID_NAME, VALID_PHONE, null, VALID_ADDRESS, null, null, VALID_TAGS, null);
         Person expectedPerson = new PersonBuilder(BENSON).withEmail(null).build();
         assertEquals(expectedPerson, person.toModelType());
     }
@@ -118,7 +147,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidAddress_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, INVALID_ADDRESS,
-                        null, null, VALID_TAGS);
+                        null, null, VALID_TAGS, null);
         String expectedMessage = Address.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -126,7 +155,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullAddress_returnsPersonWithoutAddress() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, null, null, null, VALID_TAGS);
+                VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, null, null, null, VALID_TAGS, null);
         Person expectedPerson = new PersonBuilder(BENSON).withAddress(null).build();
         assertEquals(expectedPerson, person.toModelType());
     }
@@ -135,7 +164,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidBusyStartDate_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        "invalid date", VALID_BUSY_END_DATE, VALID_TAGS);
+                        "invalid date", VALID_BUSY_END_DATE, VALID_TAGS, null);
         String expectedMessage = BusyPeriod.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -144,7 +173,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidBusyEndDate_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        VALID_BUSY_START_DATE, "invalid date", VALID_TAGS);
+                        VALID_BUSY_START_DATE, "invalid date", VALID_TAGS, null);
         String expectedMessage = BusyPeriod.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -153,7 +182,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidBusyPeriodLogic_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        VALID_BUSY_END_DATE, VALID_BUSY_START_DATE, VALID_TAGS);
+                        VALID_BUSY_END_DATE, VALID_BUSY_START_DATE, VALID_TAGS, null);
         String expectedMessage = BusyPeriod.MESSAGE_DATE_LOGIC;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
@@ -164,7 +193,7 @@ public class JsonAdaptedPersonTest {
         invalidTags.add(new JsonAdaptedTag(INVALID_TAG));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_ROLE, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        null, null, invalidTags);
+                        null, null, invalidTags, null);
         assertThrows(IllegalValueException.class, person::toModelType);
     }
 }

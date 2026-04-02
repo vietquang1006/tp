@@ -36,7 +36,7 @@ public class BusyCommand extends Command {
             + PREFIX_START_DATE + " 25/03/2026 "
             + PREFIX_END_DATE + " 28/03/2026";
 
-    public static final String MESSAGE_BUSY_PERSON_SUCCESS = "Successfully marked %1$s as busy from %2$s.";
+    public static final String MESSAGE_BUSY_PERSON_SUCCESS = "Successfully marked %1$s as busy for: %2$s.";
     public static final String MESSAGE_IDENTICAL_BUSY_PERIOD = "%1$s already has the busy period: %2$s.";
 
     private final Index index;
@@ -64,8 +64,8 @@ public class BusyCommand extends Command {
         Person personToBusy = lastShownList.get(index.getZeroBased());
         Person busyPerson = createBusyPerson(personToBusy, this.busyPeriod);
 
-        if (personToBusy.getBusyPeriod().equals(busyPerson.getBusyPeriod())) {
-            String busyPeriodString = personToBusy.getBusyPeriod()
+        if (personToBusy.getBusyPeriods().equals(busyPerson.getBusyPeriods())) {
+            String busyPeriodString = this.busyPeriod
                     .map(BusyPeriod::toString)
                     .orElse("No busy period");
             throw new CommandException(String.format(MESSAGE_IDENTICAL_BUSY_PERIOD,
@@ -75,7 +75,7 @@ public class BusyCommand extends Command {
         model.setPerson(personToBusy, busyPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        String busyPeriodString = busyPerson.getBusyPeriod()
+        String busyPeriodString = this.busyPeriod
                 .map(BusyPeriod::toString)
                 .orElse("No busy period");
 
@@ -105,7 +105,7 @@ public class BusyCommand extends Command {
 
     /**
      * Creates and returns a {@code Person} with the details of {@code personToBusy}
-     * with a new {@code BusyPeriod}
+     * with a new {@code BusyPeriod} added and merged.
      */
     private static Person createBusyPerson(Person personToBusy, Optional<BusyPeriod> busyPeriod) {
         assert personToBusy != null;
@@ -116,9 +116,12 @@ public class BusyCommand extends Command {
         Optional<Email> email = personToBusy.getEmail();
         Optional<Address> address = personToBusy.getAddress();
         Set<Tag> tags = personToBusy.getTags();
+        Set<BusyPeriod> busyPeriods = new java.util.HashSet<>(personToBusy.getBusyPeriods());
+        busyPeriod.ifPresent(busyPeriods::add);
+        Set<BusyPeriod> mergedPeriods = BusyPeriod.merge(busyPeriods);
 
 
-        return new Person(role, name, phone, email, address, tags, busyPeriod);
+        return new Person(role, name, phone, email, address, tags, mergedPeriods);
     }
 
     public String getCommandWord() {

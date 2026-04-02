@@ -47,7 +47,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label role;
     @FXML
-    private Label busyPeriod;
+    private FlowPane busyPeriods;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -77,13 +77,19 @@ public class PersonCard extends UiPart<Region> {
             email.setVisible(false);
             email.setManaged(false);
         });
-        person.getBusyPeriod().ifPresentOrElse(
-                bp -> busyPeriod.setText("Busy: " + bp.toString()), () -> {
-                    busyPeriod.setText("");
-                    busyPeriod.setManaged(false);
-                    busyPeriod.setVisible(false);
-                }
-        );
+        if (person.getBusyPeriods().isEmpty()) {
+            busyPeriods.setVisible(false);
+            busyPeriods.setManaged(false);
+        } else {
+            person.getBusyPeriods().stream()
+                    .sorted(Comparator.comparing(bp -> bp.startDate))
+                    .forEach(bp -> {
+                        Label bpLabel = new Label("Busy: " + bp.toString());
+                        bpLabel.getStyleClass().add("cell_busy_period_label");
+                        busyPeriods.getChildren().add(bpLabel);
+                        makeCopyable(bpLabel, "cell_busy_period_label");
+                    });
+        }
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .map(tag -> {
@@ -124,7 +130,6 @@ public class PersonCard extends UiPart<Region> {
         makeCopyable(email, "cell_email_label");
         makeCopyable(address, "cell_address_label");
         makeCopyable(role, "cell_role_label");
-        makeCopyable(busyPeriod, "cell_busy_period_label");
         tags.getChildren().forEach(node -> {
             if (node instanceof Label label) {
                 makeCopyable(label, "tag");

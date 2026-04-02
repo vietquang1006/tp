@@ -123,6 +123,7 @@ To ensure this guide is effective, we assume the target user:
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+
 ### Adding a person: `add`
 
 Adds a person to the address book.
@@ -156,27 +157,26 @@ Examples:
 
 ### Marking a person as busy : `busy`
 
-Marks a contact as busy for a specific period.
+Marks a contact as busy for a specific period. You can add multiple busy periods for each contact.
 
 **Format:** `busy INDEX -s START_DATE -e END_DATE`
 
-<div markdown="span" class="alert alert-warning">
+<div markdown="span" class="alert alert-primary">
 
-:exclamation: **Caution:**<br><br>
+:bulb: **Tip:**<br><br>
 
-Running `busy` again for the same contact replaces the previous busy period instead of merging date ranges.
+If you add a new busy period that overlaps with or is adjacent to an existing one, they will be automatically merged into a single larger period.
 </div>
 
 * Marks the person at the specified `INDEX` as busy from `START_DATE` to `END_DATE`.
 * The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * Dates **must follow the DD/MM/YYYY format** (e.g., 25/03/2026).
 * The `START_DATE` must be chronologically before or equal to the `END_DATE`.
-* If the contact already has a busy period, running a valid `busy` command will overwrite the existing period.
-* The busy period will be displayed in the contact's card in the UI.
+* All busy periods for a contact will be displayed in the contact's card in the UI.
 
 Examples:
 * `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
-* `find -n Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
+* If the 1st person is already busy from `29/03/2026` to `30/03/2026`, adding `busy 1 -s 25/03/2026 -e 28/03/2026` will result in a single merged busy period from `25/03/2026` to `30/03/2026`.
 
 ### Locating persons by busy period: `busyfilter`
 

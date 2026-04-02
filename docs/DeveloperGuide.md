@@ -264,23 +264,24 @@ For duplicate `add`, this design also allows normal non-duplicate additions to p
 
 ### Busy status feature
 
-The busy status feature allows users to mark a contact as unavailable for a specific period. This is implemented through the `BusyCommand` and the `BusyPeriod` model.
+The busy status feature allows users to mark a contact as unavailable for multiple specific periods. This is implemented through the `BusyCommand` and the `BusyPeriod` model.
 
 #### Implementation
 
-The `BusyPeriod` class represents the time interval during which a person is busy. It consists of a `startDate` and an `endDate` (both `LocalDate`).
+The `BusyPeriod` class represents a time interval during which a person is busy. It consists of a `startDate` and an `endDate` (both `LocalDate`).
 
 **Key aspects of the implementation:**
+* **Multiple Busy Periods:** Each `Person` object contains a `Set<BusyPeriod>` instead of a single period, allowing users to track multiple commitments.
+* **Automatic Merging:** The `BusyPeriod#merge(Set<BusyPeriod>)` method is used to consolidate overlapping or adjacent busy periods. This ensures that the schedule remains clean and readable (e.g., adding `04/01/2026-10/01/2026` to an existing `01/01/2026-05/01/2026` results in a single merged `01/01/2026-10/01/2026` period).
 * **Strict Date Validation:** The `BusyPeriod` uses `DateTimeFormatter` with `ResolverStyle.STRICT` to ensure that dates are valid (e.g., February 29th is only accepted on leap years, and April 31st is rejected).
 * **Logical Validation:** The constructor ensures that the `startDate` is chronologically before or equal to the `endDate`.
-* **Immutability:** `BusyPeriod` is an immutable class, consistent with other model components like `Name` and `Phone`.
-* **Integration with `Person`:** Each `Person` object now contains an `Optional<BusyPeriod>`.
-* **Storage:** The `JsonAdaptedPerson` was updated to persist `busyStartDate` and `busyEndDate` strings, which are then used to reconstruct the `BusyPeriod` during data loading.
-* **UI:** `PersonCard` was updated to display the busy period if it exists. The label is styled with a distinct color to make it easily identifiable.
+* **Immutability:** `BusyPeriod` is an immutable class.
+* **Storage:** The `JsonAdaptedPerson` handles a list of `JsonAdaptedBusyPeriod` objects. It also includes backward compatibility logic to migrate data from the previous single-period format (`busyStartDate` and `busyEndDate` fields).
+* **UI:** `PersonCard` uses a `FlowPane` to display all busy periods as individual labels. Each label is copyable via a click, similar to other contact fields.
 
 #### Design rationale
 
-By using an `Optional<BusyPeriod>` in the `Person` class, we maintain backward compatibility with contacts that don't have a busy status. The decision to use strict date resolution prevents subtle bugs where users might input non-existent dates that are silently "rounded" by the default Java date parser.
+Using a `Set<BusyPeriod>` provides the flexibility needed for student leaders who coordinate across multiple events. The automatic merging logic simplifies the user experience by preventing redundant or fragmented date ranges.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -865,12 +866,19 @@ testers are expected to do more *exploratory* testing.
     2. Test case: `busy 1 -s 25/03/2026 -e 28/03/2026`<br>
        Expected: The first person is marked as busy. A success message is shown. The person's card in the UI displays the busy period.
 
-2. Overwriting an existing busy period
+2. Adding multiple busy periods
 
-    1. Prerequisites: The first person already has a busy period.
+    1. Prerequisites: The first person already has a busy period `25/03/2026 to 28/03/2026`.
 
     2. Test case: `busy 1 -s 01/04/2026 -e 05/04/2026`<br>
-       Expected: The existing busy period is overwritten with the new one. Success message and UI update accordingly.
+       Expected: The first person now has two busy periods: `25/03/2026 to 28/03/2026` and `01/04/2026 to 05/04/2026`. Both are displayed in the UI.
+
+3. Merging overlapping busy periods
+
+    1. Prerequisites: The first person already has a busy period `25/03/2026 to 28/03/2026`.
+
+    2. Test case: `busy 1 -s 27/03/2026 -e 30/03/2026`<br>
+       Expected: The two overlapping periods are merged into a single busy period: `25/03/2026 to 30/03/2026`.
 
 3. Invalid busy commands
 
