@@ -15,6 +15,8 @@
 - Improvement to command confirmation: If the user cancels a command with "`n`" when prompted for confirmation, a message reflecting that the corresponding command was cancelled will now be displayed.
 <img src="images/ProductUI_V1-5_cancel.png" width="500px">
 - Feature `clear`: Command success message includes number of contacts getting cleared. 
+- Feature `exit`: Command requires `[y/n]` confirmation before exit the application
+
 
 
 ### Bug Fixes
