@@ -33,6 +33,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.BusyInDateRangePredicate;
 import seedu.address.model.person.BusyPeriod;
+import seedu.address.model.person.KeywordRelation;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.NameTagContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -118,6 +119,12 @@ public class AddressBookParserTest {
                 FindCommand.COMMAND_WORD + " -n meier -t friends");
         assertEquals(new FindCommand(new NameTagContainsKeywordsPredicate(
                 Arrays.asList("meier"), Arrays.asList("friends"))), command);
+
+        FindCommand mixedCommand = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " -n dan ; elle -m and -t friends ; student -m or");
+        assertEquals(new FindCommand(new NameTagContainsKeywordsPredicate(
+                Arrays.asList("dan", "elle"), Arrays.asList("friends", "student"),
+                KeywordRelation.ALL, KeywordRelation.ANY)), mixedCommand);
     }
 
     @Test

@@ -76,7 +76,7 @@ To ensure this guide is effective, we assume the target user:
 
   * `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-001` : Adds a contact named `John Doe` to the Address Book.
 
-  * `find -n Alice ; Benson` : Find contacts whose names contain both Alice and Benson.
+  * `find -n Alice ; Benson -m or` : Find contacts whose names contain Alice or Benson.
 
   * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
 
@@ -309,30 +309,32 @@ Exits the CampusConnect application.
 
 ### Locating persons by name/tags: `find`
 
-Finds persons whose names/tags contain any of the given keywords.
+Finds persons whose names/tags contain the given keyword groups.
 
-**Format:** `find -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]...]`
+**Format:** `find -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-m and|or] [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]... [-m and|or]]`
 
 <div markdown="span" class="alert alert-primary">
 
 :bulb: **Tip:**<br><br>
 
-Use `;` to split phrases into multiple keyword groups, e.g. `find -n alice pauline ; josh`.
+Use `;` to split phrases into multiple keyword groups, e.g. `find -n alice pauline ; josh -m or`.
 </div>
 
-* At least one of `-n` for name or `-t` for tag must be provided.
+* At least one of `-n` or `-t` must be provided.
 * The search is case-insensitive. e.g. `alice` will match `Alice`.
 * Use `;` to separate multiple keyword groups. Each keyword group can contain spaces.
-* All provided keyword groups for a field must match (`AND` search).
-* If both `-n` and `-t` are provided, a person must satisfy both.
+* `-m or` matches contacts that contain **any** of the keyword groups for the preceding field (default).
+* `-m and` matches contacts that contain **all** of the keyword groups for the preceding field.
+* If both `-n` and `-t` are provided, a person must satisfy both fields.
 * Matching is based on text containment. e.g. `ali` will match `Alice`.
 * Keywords can only contain alphanumeric characters and spaces.
 
 Examples:
-* `find -n alice pauline ; josh` returns persons whose names contain both `alice pauline` and `josh`.
-* `find -t RAG2026 ; finance department ; secretaries` returns persons with tags containing all listed groups.
-* `find -n meier -t friends` returns persons whose names contain `meier` and tags containing `friends`.
-* `find -n heng ; kang` returns persons whose names contain both `heng` or `kang`.<br>
+* `find -n alice pauline ; josh -m or` returns persons whose names contain `alice pauline` or `josh`.
+* `find -t RAG2026 ; finance department ; secretaries -m and` returns persons with tags containing all listed groups.
+* `find -n dan ; elle -m and -t friends ; student -m or` returns persons whose names contain both `dan` and `elle`,
+  and tags containing `friends` or `student`.
+* `find -n heng ; kang -m and` returns persons whose names contain both `heng` and `kang`.<br>
   ![result for 'find -n heng ; kang'](images/findNameHengKang.png)
 
 ### Viewing help : `help`
@@ -353,34 +355,7 @@ Alternatively, you can also access the user guide via the `Help` menu or by pres
 
 Shows a list of all persons in the address book.
 
-#### 1. Default Listin### Adding a person: `add`
-
-Adds a person to the address book.
-
-**Format:** `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
-
-<div markdown="span" class="alert alert-primary">
-
-:bulb: **Tip:**<br><br>
-
-A person can have any number of tags (including 0)
-</div>
-
-If the person being added does **not** already exist in the address book, the contact will be added immediately.
-
-If the person being added **already exists**, the application will prompt for confirmation before proceeding.
-
-**Duplicate-add confirmation prompt:**
-> `This person already exists: XXX`
-> `Add anyway? [y/n]`
-
-* If `y` is entered, the duplicate contact will be added.
-* If `n` is entered, the add operation will be cancelled.
-
-Examples:
-* `add -n John Doe`
-* `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-002`
-* `add -r Coordinator -n Lim Wei Jie -p 98765678 -e lwj.example@u.nus.edu -a 18 College Avenue West, #01-001`
+#### 1. Default Listing
 
 Displays all contacts in the order they are stored.
 
@@ -525,6 +500,9 @@ Action | Format, Examples
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
 **Help** | `help`
 **List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
+
+
+
 
 
 
