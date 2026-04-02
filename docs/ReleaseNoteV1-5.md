@@ -10,9 +10,10 @@
 - Feature `add`: 
 - Feature `busyfilter`: Improved invalid command message.
 - Feature `help`: Directly opens the user guide on the user's default browser.
+- Feature `list`: Update the error message examples displayed.
 - Improvement to command confirmation: If the user cancels a command with "`n`" when prompted for confirmation, a message reflecting that the corresponding command was cancelled will now be displayed.
 <img src="images/ProductUI_V1-5_cancel.png" width="500px">
-- `clear` command success message includes number of contacts getting cleared. 
+- Feature `clear`: Command success message includes number of contacts getting cleared. 
 
 
 ### Bug Fixes
