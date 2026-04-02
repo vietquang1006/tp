@@ -7,7 +7,7 @@
 
 <!-- use this header format and name it appropriately, lets not use feature 1/2/3 -->
 ### Improvements
-- Feature `add`:
+- Feature `add`: 
 - Feature `busyfilter`: Improved invalid command message.
 - Feature `help`: Directly opens the user guide on the user's default browser.
 - Improvement to command confirmation: If the user cancels a command with "`n`" when prompted for confirmation, a message reflecting that the corresponding command was cancelled will now be displayed.
@@ -16,7 +16,7 @@
 
 
 ### Bug Fixes
-- Feature `add`:
+- Feature `add`: Hide tags when there are none.
 
 ### Documentation
 - Updated the User Guide.
