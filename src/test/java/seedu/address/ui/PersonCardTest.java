@@ -200,11 +200,12 @@ public class PersonCardTest {
             fail("Test timed out on JavaFX thread.");
         }
 
-        Label busyPeriodLabel = getPrivateField(personCard[0], "busyPeriod");
+        javafx.scene.layout.FlowPane busyPeriodsPane = getPrivateField(personCard[0], "busyPeriods");
 
-        assertTrue(busyPeriodLabel.isVisible());
-        assertTrue(busyPeriodLabel.isManaged());
-        assertEquals("Busy: 25/03/2026 to 28/03/2026", busyPeriodLabel.getText());
+        assertTrue(busyPeriodsPane.isVisible());
+        assertTrue(busyPeriodsPane.isManaged());
+        assertEquals(1, busyPeriodsPane.getChildren().size());
+        assertEquals("Busy: 25/03/2026 to 28/03/2026", ((Label) busyPeriodsPane.getChildren().get(0)).getText());
     }
 
     /**
@@ -226,10 +227,10 @@ public class PersonCardTest {
             fail("Test timed out on JavaFX thread.");
         }
 
-        Label busyPeriodLabel = getPrivateField(personCard[0], "busyPeriod");
+        javafx.scene.layout.FlowPane busyPeriodsPane = getPrivateField(personCard[0], "busyPeriods");
 
-        assertFalse(busyPeriodLabel.isVisible());
-        assertFalse(busyPeriodLabel.isManaged());
+        assertFalse(busyPeriodsPane.isVisible());
+        assertFalse(busyPeriodsPane.isManaged());
     }
 
     /**

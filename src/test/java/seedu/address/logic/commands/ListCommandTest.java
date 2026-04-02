@@ -63,4 +63,10 @@ public class ListCommandTest {
         assertCommandSuccess(command, model,
                 ListCommand.MESSAGE_SUCCESS_SORT_DESCENDING, expectedModel);
     }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        ListCommand command = new ListCommand(ListCommand.SortOrder.ASCENDING);
+        org.junit.jupiter.api.Assertions.assertEquals(ListCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

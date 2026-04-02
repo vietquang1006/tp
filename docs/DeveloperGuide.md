@@ -204,16 +204,17 @@ This section describes some noteworthy details on how certain features are imple
 
 The application supports a shared confirmation workflow for commands that should not be executed immediately.
 
-For `delete`, confirmation is always required before the actual deletion is performed.
+For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
 
 For `clear`, confirmation is always required before clearing the currently listed/filtered contacts.
 
-For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
+For `delete`, confirmation is always required before the actual deletion is performed.
+
+For `edit`, confirmation is always required before the actual edit is performed. If the edit does not result in any effective change, the command is rejected instead of proceeding to confirmation.
 
 ![Confirm Command Class Diagram](images/ConfirmCommandClassDiagram.png)
 
-This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand`, `ConfirmClearCommand`, and `ConfirmAddCommand` inherit from their base classes, while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
-
+This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand`, `ConfirmClearCommand`, `ConfirmAddCommand`, and `ConfirmEditCommand` inherit from their base classes, while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
 #### Implementation
 
 When the user enters a command, `LogicManager` first calls `AddressBookParser#parseCommandWithConfirmation(...)`.
@@ -221,18 +222,33 @@ When the user enters a command, `LogicManager` first calls `AddressBookParser#pa
 If the command does not require confirmation, it is executed normally.
 
 If the command requires confirmation, a corresponding `ConfirmCommand` subclass is executed first:
-- `ConfirmDeleteCommand` for `delete`
-- `ConfirmClearCommand` for `clear`
 - `ConfirmAddCommand` for duplicate `add`
+- `ConfirmClearCommand` for `clear`
+- `ConfirmDeleteCommand` for `delete`
+- `ConfirmEditCommand` for `edit`
 
 These confirmation commands do not perform the final action immediately. Instead, they return a `CommandResult` indicating that the application is awaiting confirmation input.
+
+For `edit`, `ConfirmEditCommand` first constructs the edited `Person` using the provided `EditPersonDescriptor`, then compares it against the original `Person` field by field. The confirmation message includes a `Changes made:` section that shows only the fields that differ, for example:
+
+```text
+Are you sure you want to edit the contact: John?
+Changes made:
+Name: John -> Mary
+Phone number: 99999999 -> 91111111
+[y/n]
+```
+
+If the edit does not make any effective change, `ConfirmEditCommand` throws a `CommandException` instead of generating a confirmation message. This prevents no-op edits from proceeding and avoids showing an empty change summary.
+
+This makes the confirmation step more explicit by showing the exact changes before the edit is applied. The field-diff formatting logic is centralised in `ConfirmEditCommand#buildChangesMessage(...)`, allowing tests to reuse the same logic without duplicating formatting code.
 
 `LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms. (The sequence diagram for this interaction is detailed in the [Logic Component](#logic-component) section above).
 
 After that:
-- if the user enters `y`, the stored command is executed
-- if the user enters `n`, the operation is cancelled
-- if the user enters any other input, the application reports an invalid confirmation input
+- if the user enters `y`, the stored command is executed.
+- if the user enters `n`, the operation is cancelled. A message reflecting that the corresponding command was cancelled is shown.
+- if the user enters any other input, the application reports an invalid confirmation input.
 
 For duplicate `add`, the stored command is a confirmed `AddCommand`, which force-adds the duplicate contact after the user explicitly confirms. This keeps the confirmation decision in `ConfirmAddCommand` while leaving the actual insertion to `AddCommand`.
 
@@ -244,30 +260,31 @@ This design separates:
 
 As a result:
 - shared confirmation logic can be reused across multiple commands
-- `ConfirmDeleteCommand`, `ConfirmClearCommand`, and `ConfirmAddCommand` avoid duplicating common confirmation flow
-- the actual `AddCommand`, `DeleteCommand`, and `ClearCommand` remain focused on performing the final data modification
+- `ConfirmAddCommand`, `ConfirmClearCommand`, `ConfirmDeleteCommand`, and `ConfirmEditCommand` avoid duplicating common confirmation flow
+- the actual `AddCommand`, `ClearCommand`, `DeleteCommand`, and `EditCommand` remain focused on performing the final data modification
 
 For duplicate `add`, this design also allows normal non-duplicate additions to proceed immediately, while still protecting the user from accidentally adding duplicate contacts.
 
 ### Busy status feature
 
-The busy status feature allows users to mark a contact as unavailable for a specific period. This is implemented through the `BusyCommand` and the `BusyPeriod` model.
+The busy status feature allows users to mark a contact as unavailable for multiple specific periods. This is implemented through the `BusyCommand` and the `BusyPeriod` model.
 
 #### Implementation
 
-The `BusyPeriod` class represents the time interval during which a person is busy. It consists of a `startDate` and an `endDate` (both `LocalDate`).
+The `BusyPeriod` class represents a time interval during which a person is busy. It consists of a `startDate` and an `endDate` (both `LocalDate`).
 
 **Key aspects of the implementation:**
+* **Multiple Busy Periods:** Each `Person` object contains a `Set<BusyPeriod>` instead of a single period, allowing users to track multiple commitments.
+* **Automatic Merging:** The `BusyPeriod#merge(Set<BusyPeriod>)` method is used to consolidate overlapping or adjacent busy periods. This ensures that the schedule remains clean and readable (e.g., adding `04/01/2026-10/01/2026` to an existing `01/01/2026-05/01/2026` results in a single merged `01/01/2026-10/01/2026` period).
 * **Strict Date Validation:** The `BusyPeriod` uses `DateTimeFormatter` with `ResolverStyle.STRICT` to ensure that dates are valid (e.g., February 29th is only accepted on leap years, and April 31st is rejected).
 * **Logical Validation:** The constructor ensures that the `startDate` is chronologically before or equal to the `endDate`.
-* **Immutability:** `BusyPeriod` is an immutable class, consistent with other model components like `Name` and `Phone`.
-* **Integration with `Person`:** Each `Person` object now contains an `Optional<BusyPeriod>`.
-* **Storage:** The `JsonAdaptedPerson` was updated to persist `busyStartDate` and `busyEndDate` strings, which are then used to reconstruct the `BusyPeriod` during data loading.
-* **UI:** `PersonCard` was updated to display the busy period if it exists. The label is styled with a distinct color to make it easily identifiable.
+* **Immutability:** `BusyPeriod` is an immutable class.
+* **Storage:** The `JsonAdaptedPerson` handles a list of `JsonAdaptedBusyPeriod` objects. It also includes backward compatibility logic to migrate data from the previous single-period format (`busyStartDate` and `busyEndDate` fields).
+* **UI:** `PersonCard` uses a `FlowPane` to display all busy periods as individual labels. Each label is copyable via a click, similar to other contact fields.
 
 #### Design rationale
 
-By using an `Optional<BusyPeriod>` in the `Person` class, we maintain backward compatibility with contacts that don't have a busy status. The decision to use strict date resolution prevents subtle bugs where users might input non-existent dates that are silently "rounded" by the default Java date parser.
+Using a `Set<BusyPeriod>` provides the flexibility needed for student leaders who coordinate across multiple events. The automatic merging logic simplifies the user experience by preventing redundant or fragmented date ranges.
 
 ### Phone number normalization
 
@@ -761,19 +778,26 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
     2. Test case: `edit 1 -p 91234567`
-       Expected: A confirmation message is shown.
+       Expected: A confirmation message is shown, including a `Changes made:` section listing `Phone: OLD_PHONE -> 91234567`.
 
-    3. Test case: `edit 2 -n NAME_OF_EXISTING_PERSON`
-        1. If `NAME_OF_EXISTING_PERSON` is the same as name of the person being edited:
-           Expected: A confirmation message are shown.
+    3. Test case: `edit 1 -n Mary -p 91111111`
+       Expected: A confirmation message is shown, including a `Changes made:` section listing both the updated name and phone number on separate lines.
+
+    4. Test case: `edit 2 -n NAME_OF_EXISTING_PERSON -r SOME_DIFFERENT_ROLE`
+        1. If `NAME_OF_EXISTING_PERSON` is the same as the name of the person being edited:
+           Expected: A confirmation message is shown, including a `Changes made:` section.
         2. Otherwise:
-           Expected: A warning and confirmation message are shown.
+           Expected: A warning and confirmation message are shown, together with the `Changes made:` section.
 
-    4. Test case: `edit 0 -p 91234567`
+    5. Test case: `edit 0 -p 91234567`
        Expected: No person is edited. Error details shown in the status message.
 
-    5. Other incorrect edit commands to try: `edit`, `edit x`, `edit 1`
+    6. Other incorrect edit commands to try: `edit`, `edit x`, `edit 1`
        Expected: Similar to previous.
+
+    7. Test case: `edit 2 -n SAME_NAME -r SAME_ROLE`
+       Expected: No edit is performed. An error message is shown indicating that no effective change was made.
+
 
 ### Deleting a person
 
@@ -880,12 +904,19 @@ testers are expected to do more *exploratory* testing.
     2. Test case: `busy 1 -s 25/03/2026 -e 28/03/2026`<br>
        Expected: The first person is marked as busy. A success message is shown. The person's card in the UI displays the busy period.
 
-2. Overwriting an existing busy period
+2. Adding multiple busy periods
 
-    1. Prerequisites: The first person already has a busy period.
+    1. Prerequisites: The first person already has a busy period `25/03/2026 to 28/03/2026`.
 
     2. Test case: `busy 1 -s 01/04/2026 -e 05/04/2026`<br>
-       Expected: The existing busy period is overwritten with the new one. Success message and UI update accordingly.
+       Expected: The first person now has two busy periods: `25/03/2026 to 28/03/2026` and `01/04/2026 to 05/04/2026`. Both are displayed in the UI.
+
+3. Merging overlapping busy periods
+
+    1. Prerequisites: The first person already has a busy period `25/03/2026 to 28/03/2026`.
+
+    2. Test case: `busy 1 -s 27/03/2026 -e 30/03/2026`<br>
+       Expected: The two overlapping periods are merged into a single busy period: `25/03/2026 to 30/03/2026`.
 
 3. Invalid busy commands
 

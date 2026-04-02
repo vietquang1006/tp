@@ -76,7 +76,7 @@ To ensure this guide is effective, we assume the target user:
 
   * `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-001` : Adds a contact named `John Doe` to the Address Book.
 
-  * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
+  * `find -n Alice ; Benson -m or` : Find contacts whose names contain Alice or Benson.
 
   * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
 
@@ -123,6 +123,7 @@ To ensure this guide is effective, we assume the target user:
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+
 ### Adding a person: `add`
 
 Adds a person to the address book.
@@ -133,12 +134,14 @@ Adds a person to the address book.
 
 :bulb: **Tip:**<br><br>
 
-A person can have any number of tags (including 0)
+A person can have any number of tags (including 0).
 </div>
 
 If the person being added does **not** already exist in the address book, the contact will be added immediately.
 
 If the person being added **already exists**, the application will prompt for confirmation before proceeding.
+
+Note: Two people are considered the same person if and only if they have the exact same name (case-sensitive).
 
 **Duplicate-add confirmation prompt:**
 > `This person already exists: XXX`
@@ -154,27 +157,26 @@ Examples:
 
 ### Marking a person as busy : `busy`
 
-Marks a contact as busy for a specific period.
+Marks a contact as busy for a specific period. You can add multiple busy periods for each contact.
 
 **Format:** `busy INDEX -s START_DATE -e END_DATE`
 
-<div markdown="span" class="alert alert-warning">
+<div markdown="span" class="alert alert-primary">
 
-:exclamation: **Caution:**<br><br>
+:bulb: **Tip:**<br><br>
 
-Running `busy` again for the same contact replaces the previous busy period instead of merging date ranges.
+If you add a new busy period that overlaps with or is adjacent to an existing one, they will be automatically merged into a single larger period.
 </div>
 
 * Marks the person at the specified `INDEX` as busy from `START_DATE` to `END_DATE`.
 * The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * Dates **must follow the DD/MM/YYYY format** (e.g., 25/03/2026).
 * The `START_DATE` must be chronologically before or equal to the `END_DATE`.
-* If the contact already has a busy period, running a valid `busy` command will overwrite the existing period.
-* The busy period will be displayed in the contact's card in the UI.
+* All busy periods for a contact will be displayed in the contact's card in the UI.
 
 Examples:
 * `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
-* `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
+* If the 1st person is already busy from `29/03/2026` to `30/03/2026`, adding `busy 1 -s 25/03/2026 -e 28/03/2026` will result in a single merged busy period from `25/03/2026` to `30/03/2026`.
 
 ### Locating persons by busy period: `busyfilter`
 
@@ -222,7 +224,7 @@ Clears the contacts currently shown in the list.
 
 Examples:
 * `list` followed by `clear` then `y` clears all currently listed contacts.
-* `find tag NUSSU welfare club members` followed by `clear` then `y` clears only the filtered contacts in that result.
+* `find -t NUSSU welfare club members` followed by `clear` then `y` clears only the filtered contacts in that result.
 * `clear` followed by `n` cancels the operation and leaves all contacts unchanged.
 
 ### Deleting a person : `delete`
@@ -233,9 +235,7 @@ Deletes the specified person from the address book.
 
 <div markdown="span" class="alert alert-warning">
 
-:exclamation:
-
-**Caution:**<br><br>
+:exclamation: **Caution:**<br><br>
 
 `INDEX` refers to the currently displayed list. Run `list` first if you want to delete from the full contact list.
 </div>
@@ -253,7 +253,7 @@ Deletes the specified person from the address book.
 
 Examples:
 * `list` followed by `delete 2` prompts confirmation for deleting the 2nd person in the address book.
-* `find name Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
+* `find -n Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
 
 ### Editing a person : `edit`
 
@@ -268,23 +268,38 @@ Edits an existing person in the address book.
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
-Before the edit is performed, the application will prompt for confirmation.
+Before the edit is performed, the application will prompt for confirmation and show the exact fields that will be changed. If the edit does not make any effective change, the command will be rejected.
 
-> `Are you sure you want to edit the contact: YYY? [y/n]`
+**Edit confirmation prompt:**
+> `Are you sure you want to edit the contact: YYY?`<br>
+> `Changes made:`<br>
+> `Name: John -> Mary`<br>
+> `Phone number: 99999999 -> 91111111`<br>
+> `[y/n]`
+
+Only the fields that are actually changed are shown in the `Changes made:` section.
 
 If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
+
+If the edit does not make any effective change, the command will be rejected.
 
 **Duplicate-edit confirmation prompt:**
 > `Warning: XXX`<br>
 > `is an existing person.`<br>
-> `Are you sure you want to edit the contact: YYY? [y/n]`
+> `Are you sure you want to edit the contact: YYY?`<br>
+> `Changes made:`<br>
+> `Name: John -> Mary`<br>
+> `[y/n]`
 
 * If `y` is entered, the edit will proceed.
 * If `n` is entered, the edit will be cancelled.
 
 Examples:
-*  `edit 1 -p 91234567 -e johndoe@u.nus.edu` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
-*  `edit 2 -n Wang -t` Edits the name of the 2nd person to be `Wang` and clears all existing tags.
+*  `edit 1 -p 91234567 -e johndoe@u.nus.edu` prompts for confirmation and shows that only the phone number and email address will be updated.
+*  `edit 2 -n Wang -t` prompts for confirmation and shows that the name is changed to `Wang` and all existing tags are cleared.
+
+An edit with no effective change produces the following message:
+> `No changes were made to the contact.`
 
 ### Exiting the program : `exit`
 
@@ -292,31 +307,43 @@ Exits the CampusConnect application.
 
 **Format:** `exit`
 
+Before the exit is performed, the application will prompt for confirmation.
+
+**Exit confirmation prompt:**
+> `Are you sure you want to exit the application? [y/n]`
+
+* If `y` is entered, the application will exit.
+* If `n` is entered, the exit operation will be cancelled.
+
 ### Locating persons by name/tags: `find`
 
-Finds persons whose names/tags contain any of the given keywords.
+Finds persons whose names/tags contain the given keyword groups.
 
-**Format:** `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
+**Format:** `find -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-m and|or] [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]... [-m and|or]]`
 
 <div markdown="span" class="alert alert-primary">
 
 :bulb: **Tip:**<br><br>
 
-Use `;` to split phrases into multiple search groups, e.g. `find name alice pauline ; josh`.
+Use `;` to split phrases into multiple keyword groups, e.g. `find -n alice pauline ; josh -m or`.
 </div>
 
-* `SEARCH_BY` must be either `name` or `tag` (lowercase).
+* At least one of `-n` or `-t` must be provided.
 * The search is case-insensitive. e.g. `alice` will match `Alice`.
-* Use `;` to separate multiple keywords. Each keyword can contain spaces.
-* Persons matching at least one keyword will be returned (`OR` search).
+* Use `;` to separate multiple keyword groups. Each keyword group can contain spaces.
+* `-m or` matches contacts that contain **any** of the keyword groups for the preceding field (default).
+* `-m and` matches contacts that contain **all** of the keyword groups for the preceding field.
+* If both `-n` and `-t` are provided, a person must satisfy both fields.
 * Matching is based on text containment. e.g. `ali` will match `Alice`.
 * Keywords can only contain alphanumeric characters and spaces.
 
 Examples:
-* `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
-* `find tag RAG2026 ; finance department ; secretaries` returns persons with tags containing `RAG2026`, `finance department`, or `secretaries`.
-* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
-  ![result for 'find name heng ; kang'](images/findNameHengKang.png)
+* `find -n alice pauline ; josh -m or` returns persons whose names contain `alice pauline` or `josh`.
+* `find -t RAG2026 ; finance department ; secretaries -m and` returns persons with tags containing all listed groups.
+* `find -n dan ; elle -m and -t friends ; student -m or` returns persons whose names contain both `dan` and `elle`,
+  and tags containing `friends` or `student`.
+* `find -n heng ; kang -m and` returns persons whose names contain both `heng` and `kang`.<br>
+  ![result for 'find -n heng ; kang'](images/findNameHengKang.png)
 
 ### Viewing help : `help`
 
@@ -336,34 +363,7 @@ Alternatively, you can also access the user guide via the `Help` menu or by pres
 
 Shows a list of all persons in the address book.
 
-#### 1. Default Listin### Adding a person: `add`
-
-Adds a person to the address book.
-
-**Format:** `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
-
-<div markdown="span" class="alert alert-primary">
-
-:bulb: **Tip:**<br><br>
-
-A person can have any number of tags (including 0)
-</div>
-
-If the person being added does **not** already exist in the address book, the contact will be added immediately.
-
-If the person being added **already exists**, the application will prompt for confirmation before proceeding.
-
-**Duplicate-add confirmation prompt:**
-> `This person already exists: XXX`
-> `Add anyway? [y/n]`
-
-* If `y` is entered, the duplicate contact will be added.
-* If `n` is entered, the add operation will be cancelled.
-
-Examples:
-* `add -n John Doe`
-* `add -r President -n John Doe -p 98765432 -e johnd@u.nus.edu -a 18 College Avenue West, #01-002`
-* `add -r Coordinator -n Lim Wei Jie -p 98765678 -e lwj.example@u.nus.edu -a 18 College Avenue West, #01-001`
+#### 1. Default Listing
 
 Displays all contacts in the order they are stored.
 
@@ -504,7 +504,7 @@ Action | Format, Examples
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@u.nus.edu` <br>(then confirm with `y` or cancel with `n`)
-**Exit** | `exit`
+**Exit** | `exit`<br>(then confirm with `y` or cancel with `n`)
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
 **Help** | `help`
 **List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`

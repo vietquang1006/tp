@@ -11,19 +11,20 @@ import seedu.address.model.person.Person;
 
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
+ * Finds and lists all persons whose name and/or tags contain the provided keywords.
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names/tags contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: SEARCH_BY KEYWORD [; MORE_KEYWORDS]...\n"
-            + "SEARCH_BY: name | tag\n"
-            + "Examples: " + COMMAND_WORD + " name alice pauline ; josh\n"
-            + "          " + COMMAND_WORD + " tag friends ; owes me ; secretary";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names/tags contain "
+            + "specified keywords (case-insensitive) and displays them as a list.\n"
+            + "Parameters: -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-m and|or] "
+            + "[-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]... [-m and|or]]\n"
+            + "Examples: " + COMMAND_WORD + " -n dan ; elle -m and -t friends ; student -m or\n"
+            + "          " + COMMAND_WORD + " -n alice pauline ; josh -m or\n"
+            + "          " + COMMAND_WORD + " -t friends ; owes me ; secretary -m and";
 
     private final Predicate<Person> predicate;
 
@@ -36,7 +37,7 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getSortedFilteredPersonList().size()));
+                Messages.getMessageForPersonsListed(model.getSortedFilteredPersonList().size()));
     }
 
     @Override
@@ -59,5 +60,9 @@ public class FindCommand extends Command {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
                 .toString();
+    }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
     }
 }

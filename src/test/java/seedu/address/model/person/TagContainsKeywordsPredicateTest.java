@@ -32,6 +32,11 @@ public class TagContainsKeywordsPredicateTest {
         TagContainsKeywordsPredicate firstPredicateCopy = new TagContainsKeywordsPredicate(firstPredicateKeywordList);
         assertTrue(firstPredicate.equals(firstPredicateCopy));
 
+        // different relation -> returns false
+        TagContainsKeywordsPredicate allPredicate = new TagContainsKeywordsPredicate(firstPredicateKeywordList,
+                KeywordRelation.ALL);
+        assertFalse(firstPredicate.equals(allPredicate));
+
         // different types -> returns false
         assertFalse(firstPredicate.equals(1));
 
@@ -52,9 +57,13 @@ public class TagContainsKeywordsPredicateTest {
         predicate = new TagContainsKeywordsPredicate(Collections.singletonList("class"));
         assertTrue(predicate.test(new PersonBuilder().withTags("classmate").build()));
 
-        // Multiple keywords with one match
-        predicate = new TagContainsKeywordsPredicate(Arrays.asList("teaching", "friend"));
-        assertTrue(predicate.test(new PersonBuilder().withTags("friend", "family").build()));
+        // Multiple keywords (any match across tags)
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "class"));
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend", "classmate").build()));
+
+        // Multiple keywords (all match across tags)
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "class"), KeywordRelation.ALL);
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend", "classmate").build()));
 
         // Mixed-case keywords
         predicate = new TagContainsKeywordsPredicate(Arrays.asList("FrIeNd", "cLaSs"));
@@ -67,6 +76,14 @@ public class TagContainsKeywordsPredicateTest {
         assertFalse(predicate.test(new PersonBuilder().withTags("friend", "family").build()));
 
         predicate = new TagContainsKeywordsPredicate(Collections.emptyList());
+        assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
+
+        // Any matching keyword returns true
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "owes"));
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend").build()));
+
+        // All relation requires both keywords
+        predicate = new TagContainsKeywordsPredicate(Arrays.asList("friend", "owes"), KeywordRelation.ALL);
         assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
 
         predicate = new TagContainsKeywordsPredicate(Collections.singletonList("owes me"));
@@ -89,7 +106,8 @@ public class TagContainsKeywordsPredicateTest {
         List<String> keywords = List.of("keyword1", "keyword2");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(keywords);
 
-        String expected = TagContainsKeywordsPredicate.class.getCanonicalName() + "{keywords=" + keywords + "}";
+        String expected = TagContainsKeywordsPredicate.class.getCanonicalName()
+                + "{keywords=" + keywords + ", relation=" + KeywordRelation.ANY + "}";
         assertEquals(expected, predicate.toString());
     }
 }

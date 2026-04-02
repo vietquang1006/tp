@@ -186,4 +186,49 @@ public class BusyPeriodTest {
         BusyPeriod bp2 = new BusyPeriod("25/03/2026", "28/03/2026");
         assertEquals(bp1.hashCode(), bp2.hashCode());
     }
+
+    @Test
+    public void merge_emptySet_returnsEmptySet() {
+        assertTrue(BusyPeriod.merge(new java.util.HashSet<>()).isEmpty());
+    }
+
+    @Test
+    public void merge_singlePeriod_returnsSamePeriod() {
+        java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
+        periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
+        java.util.Set<BusyPeriod> merged = BusyPeriod.merge(periods);
+        assertEquals(1, merged.size());
+        assertTrue(merged.contains(new BusyPeriod("01/01/2026", "05/01/2026")));
+    }
+
+    @Test
+    public void merge_overlappingPeriods_merged() {
+        java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
+        periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
+        periods.add(new BusyPeriod("04/01/2026", "10/01/2026"));
+        java.util.Set<BusyPeriod> merged = BusyPeriod.merge(periods);
+        assertEquals(1, merged.size());
+        assertTrue(merged.contains(new BusyPeriod("01/01/2026", "10/01/2026")));
+    }
+
+    @Test
+    public void merge_adjacentPeriods_merged() {
+        java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
+        periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
+        periods.add(new BusyPeriod("06/01/2026", "10/01/2026"));
+        java.util.Set<BusyPeriod> merged = BusyPeriod.merge(periods);
+        assertEquals(1, merged.size());
+        assertTrue(merged.contains(new BusyPeriod("01/01/2026", "10/01/2026")));
+    }
+
+    @Test
+    public void merge_nonOverlappingPeriods_notMerged() {
+        java.util.Set<BusyPeriod> periods = new java.util.HashSet<>();
+        periods.add(new BusyPeriod("01/01/2026", "05/01/2026"));
+        periods.add(new BusyPeriod("07/01/2026", "10/01/2026"));
+        java.util.Set<BusyPeriod> merged = BusyPeriod.merge(periods);
+        assertEquals(2, merged.size());
+        assertTrue(merged.contains(new BusyPeriod("01/01/2026", "05/01/2026")));
+        assertTrue(merged.contains(new BusyPeriod("07/01/2026", "10/01/2026")));
+    }
 }

@@ -118,4 +118,10 @@ public class DeleteCommandTest {
 
         assertTrue(model.getSortedFilteredPersonList().isEmpty());
     }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        DeleteCommand command = new DeleteCommand(seedu.address.commons.core.index.Index.fromOneBased(1));
+        org.junit.jupiter.api.Assertions.assertEquals(DeleteCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }

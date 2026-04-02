@@ -49,7 +49,7 @@ public class MainWindowTest {
         @Override
         public void openUserGuide() {
             if (failOnOpen) {
-                throw new RuntimeException("Failed to open browser");
+                return; // mimic HelpWindow behavior by swallowing open failures
             }
             opened = true;
         }

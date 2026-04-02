@@ -34,16 +34,20 @@ import seedu.address.testutil.PersonBuilder;
  */
 public class ConfirmEditCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_allFieldsSpecifiedUnfilteredList_success() {
+    public void execute_allFieldsSpecifiedUnfilteredList_success() throws CommandException {
         Person personToEdit = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(new PersonBuilder().build()).build();
+        Person editedPerson = new PersonBuilder().build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
-                Messages.format(personToEdit));
+        String expectedChanges = confirmEditCommand.buildChangesMessage(personToEdit, editedPerson);
+        String expectedMessage = String.format(
+                ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                Messages.format(personToEdit),
+                expectedChanges);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, false, false, true);
@@ -52,16 +56,46 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
-    public void execute_someFieldsSpecifiedUnfilteredList_success() {
+    public void execute_someFieldsSpecifiedUnfilteredList_success() throws CommandException {
         Index indexLastPerson = Index.fromOneBased(model.getSortedFilteredPersonList().size());
         Person lastPerson = model.getSortedFilteredPersonList().get(indexLastPerson.getZeroBased());
 
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_HUSBAND).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withTags(VALID_TAG_HUSBAND)
+                .build();
         ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(indexLastPerson, descriptor);
 
-        String expectedMessage = String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
-                Messages.format(lastPerson));
+        Person editedPerson = EditCommand.createEditedPerson(lastPerson, descriptor);
+        String expectedChanges = confirmEditCommand.buildChangesMessage(lastPerson, editedPerson);
+        String expectedMessage = String.format(
+                ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                Messages.format(lastPerson),
+                expectedChanges);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        CommandResult expectedCommandResult = new CommandResult(expectedMessage, false, false, true);
+
+        assertCommandSuccess(confirmEditCommand, model, expectedCommandResult, expectedModel);
+    }
+
+    @Test
+    public void execute_nameAndPhoneSpecifiedUnfilteredList_success() throws CommandException {
+        Person personToEdit = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName("Mary")
+                .withPhone("91111111")
+                .build();
+        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        Person editedPerson = EditCommand.createEditedPerson(personToEdit, descriptor);
+        String expectedChanges = confirmEditCommand.buildChangesMessage(personToEdit, editedPerson);
+        String expectedMessage = String.format(
+                ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                Messages.format(personToEdit),
+                expectedChanges);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, false, false, true);
@@ -74,11 +108,15 @@ public class ConfirmEditCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personInFilteredList = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON,
-                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
+        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
-                Messages.format(personInFilteredList));
+        Person editedPerson = EditCommand.createEditedPerson(personInFilteredList, descriptor);
+        String expectedChanges = confirmEditCommand.buildChangesMessage(personInFilteredList, editedPerson);
+        String expectedMessage = String.format(
+                ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                Messages.format(personInFilteredList),
+                expectedChanges);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
@@ -89,15 +127,20 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
-    public void execute_duplicatePersonUnfilteredList_warningShown() {
+    public void execute_duplicatePersonUnfilteredList_warningShown() throws CommandException {
         Person firstPerson = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPerson = model.getSortedFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
         ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_SECOND_PERSON, descriptor);
 
+        Person editedPerson = EditCommand.createEditedPerson(secondPerson, descriptor);
+        String expectedChanges = confirmEditCommand.buildChangesMessage(secondPerson, editedPerson);
         String expectedMessage =
-                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(firstPerson))
-                + String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION, Messages.format(secondPerson));
+                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(editedPerson))
+                        + String.format(
+                        ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                        Messages.format(secondPerson),
+                        expectedChanges);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, false, false, true);
@@ -111,12 +154,17 @@ public class ConfirmEditCommandTest {
 
         Person personInFilteredList = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person duplicatePerson = model.getAddressBook().getPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON,
-                new EditPersonDescriptorBuilder(duplicatePerson).build());
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(duplicatePerson).build();
+        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
 
+        Person editedPerson = EditCommand.createEditedPerson(personInFilteredList, descriptor);
+        String expectedChanges = confirmEditCommand.buildChangesMessage(personInFilteredList, editedPerson);
         String expectedMessage =
-                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(duplicatePerson))
-                + String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION, Messages.format(personInFilteredList));
+                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(editedPerson))
+                        + String.format(
+                        ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION,
+                        Messages.format(personInFilteredList),
+                        expectedChanges);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
@@ -124,6 +172,14 @@ public class ConfirmEditCommandTest {
         CommandResult expectedCommandResult = new CommandResult(expectedMessage, false, false, true);
 
         assertCommandSuccess(confirmEditCommand, model, expectedCommandResult, expectedModel);
+    }
+
+    @Test
+    public void execute_noEffectiveChange_failure() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().build();
+        ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(confirmEditCommand, model, ConfirmEditCommand.MESSAGE_NO_CHANGE);
     }
 
     @Test
@@ -136,8 +192,7 @@ public class ConfirmEditCommandTest {
     }
 
     /**
-     * Edit filtered list where index is larger than size of filtered list,
-     * but smaller than size of address book.
+     * Edits a person in a filtered list where the index is larger than the filtered list size.
      */
     @Test
     public void execute_invalidPersonIndexFilteredList_failure() throws CommandException {
@@ -152,21 +207,33 @@ public class ConfirmEditCommandTest {
     }
 
     @Test
+    public void buildChangesMessage_noChange_throwsCommandException() {
+        Person person = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        ConfirmEditCommand confirmEditCommand =
+                new ConfirmEditCommand(INDEX_FIRST_PERSON, new EditPersonDescriptorBuilder().build());
+
+        try {
+            confirmEditCommand.buildChangesMessage(person, person);
+        } catch (CommandException e) {
+            assertEquals(ConfirmEditCommand.MESSAGE_NO_CHANGE, e.getMessage());
+            return;
+        }
+
+        throw new AssertionError("Expected CommandException to be thrown.");
+    }
+
+    @Test
     public void equals() {
         final ConfirmEditCommand standardCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON, DESC_AMY);
 
         EditPersonDescriptor copyDescriptor = new EditPersonDescriptor(DESC_AMY);
         ConfirmEditCommand commandWithSameValues = new ConfirmEditCommand(INDEX_FIRST_PERSON, copyDescriptor);
+
         assertTrue(standardCommand.equals(commandWithSameValues));
-
         assertTrue(standardCommand.equals(standardCommand));
-
         assertFalse(standardCommand.equals(null));
-
         assertFalse(standardCommand.equals(new ClearCommand()));
-
         assertFalse(standardCommand.equals(new ConfirmEditCommand(INDEX_SECOND_PERSON, DESC_AMY)));
-
         assertFalse(standardCommand.equals(new ConfirmEditCommand(INDEX_FIRST_PERSON, DESC_BOB)));
     }
 
