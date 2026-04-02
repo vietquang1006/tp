@@ -78,4 +78,8 @@ public class AddCommand extends Command {
                 .toString();
     }
 
+    public String getCommandWord() {
+        return COMMAND_WORD;
+    }
+
 }

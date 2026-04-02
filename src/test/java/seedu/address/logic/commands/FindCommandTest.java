@@ -3,14 +3,11 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
-import static seedu.address.testutil.TypicalPersons.ELLE;
-import static seedu.address.testutil.TypicalPersons.FIONA;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -18,11 +15,13 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.NameTagContainsKeywordsPredicate;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
 
 /**
@@ -61,7 +60,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_zeroKeywords_noPersonFound() throws CommandException {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getMessageForPersonsListed(0);
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -70,18 +69,28 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_multipleKeywords_multiplePersonsFound() throws CommandException {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+    public void execute_multipleKeywords_onePersonFound() throws CommandException {
+        String expectedMessage = Messages.getMessageForPersonsListed(1);;
+        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getSortedFilteredPersonList());
+        assertEquals(Arrays.asList(CARL), model.getSortedFilteredPersonList());
+    }
+
+    @Test
+    public void execute_multipleKeywords_singlePersonFound() throws CommandException {
+        String expectedMessage = Messages.getMessageForPersonsListed(2);;
+        NameContainsKeywordsPredicate predicate = preparePredicate("Benson Meier");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(BENSON, DANIEL), model.getSortedFilteredPersonList());
     }
 
     @Test
     public void execute_tagKeyword_multiplePersonsFound() throws CommandException {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        String expectedMessage = Messages.getMessageForPersonsListed(3);
         TagContainsKeywordsPredicate predicate = prepareTagPredicate("friend");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -91,12 +100,23 @@ public class FindCommandTest {
 
     @Test
     public void execute_tagKeyword_noPersonFound() throws CommandException {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getMessageForPersonsListed(0);
         TagContainsKeywordsPredicate predicate = prepareTagPredicate("teammate");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getSortedFilteredPersonList());
+    }
+
+    @Test
+    public void execute_nameAndTagKeywords_multiplePersonsFound() throws CommandException {
+        String expectedMessage = Messages.getMessageForPersonsListed(2);
+        NameTagContainsKeywordsPredicate predicate =
+                new NameTagContainsKeywordsPredicate(Arrays.asList("Meier"), Arrays.asList("friends"));
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(BENSON, DANIEL), model.getSortedFilteredPersonList());
     }
 
     @Test
@@ -119,5 +139,11 @@ public class FindCommandTest {
      */
     private TagContainsKeywordsPredicate prepareTagPredicate(String userInput) throws CommandException {
         return new TagContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    }
+
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() throws Exception {
+        FindCommand command = new FindCommand(prepareTagPredicate("alice"));
+        org.junit.jupiter.api.Assertions.assertEquals(FindCommand.COMMAND_WORD, command.getCommandWord());
     }
 }

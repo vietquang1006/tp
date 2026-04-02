@@ -33,7 +33,7 @@ public class BusyFilterCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getSortedFilteredPersonList().size()));
+                Messages.getMessageForPersonsListed(model.getSortedFilteredPersonList().size()));
     }
 
     @Override
@@ -52,6 +52,10 @@ public class BusyFilterCommand extends Command {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
                 .toString();
+    }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
     }
 }
 

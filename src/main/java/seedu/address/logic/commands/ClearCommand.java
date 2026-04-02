@@ -15,7 +15,7 @@ import seedu.address.model.person.Person;
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_SUCCESS = "Listed contacts have been cleared.";
+    public static final String MESSAGE_SUCCESS = "%d contact(s) have been cleared.";
 
 
     @Override
@@ -26,6 +26,10 @@ public class ClearCommand extends Command {
         currentPersonList.forEach(model::deletePerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(MESSAGE_SUCCESS);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, currentPersonList.size()));
+    }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
     }
 }
