@@ -13,7 +13,7 @@
 - Improvement to command confirmation: If the user cancels a command with "`n`" when prompted for confirmation, a message reflecting that the corresponding command was cancelled will now be displayed.
 <img src="images/ProductUI_V1-5_cancel.png" width="500px">
 - `clear` command success message includes number of contacts getting cleared. 
-
+- Feature `find`: User can search contacts that satisfy multiple keyword simultaneously using the `-m and` in the find command, and also able to search contacts that satisfy names and tags at the same command using both `-n` and `-t` at the same time.
 
 ### Bug Fixes
 - Feature `add`: Hide tags when there are none.
