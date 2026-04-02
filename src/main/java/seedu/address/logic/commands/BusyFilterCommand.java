@@ -19,7 +19,7 @@ public class BusyFilterCommand extends Command {
     public static final String MESSAGE_USAGE =
             COMMAND_WORD + ": Filters persons whose busy period overlaps with the specified date range "
             + "and displays them as a list with index numbers.\n"
-            + "Parameters: START_DATE END_DATE (both in DD/MM/YYYY format)\n"
+            + "Parameters: -s START_DATE -e END_DATE (both in DD/MM/YYYY format)\n"
             + "Example: " + COMMAND_WORD + " -s 01/01/2026 -e 31/12/2026";
 
     private final Predicate<Person> predicate;
@@ -33,7 +33,7 @@ public class BusyFilterCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getSortedFilteredPersonList().size()));
+                Messages.getMessageForPersonsListed(model.getSortedFilteredPersonList().size()));
     }
 
     @Override
@@ -52,6 +52,10 @@ public class BusyFilterCommand extends Command {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
                 .toString();
+    }
+
+    public String getCommandWord() {
+        return COMMAND_WORD;
     }
 }
 

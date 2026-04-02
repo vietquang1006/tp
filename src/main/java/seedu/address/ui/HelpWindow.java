@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import seedu.address.commons.core.LogsCenter;
 
@@ -18,6 +19,9 @@ public class HelpWindow extends UiPart<Stage> {
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
+
+    @FXML
+    private Label helpMessage;
 
     /**
      * Creates a new HelpWindow.
@@ -33,6 +37,11 @@ public class HelpWindow extends UiPart<Stage> {
      */
     public HelpWindow() {
         this(new Stage());
+    }
+
+    @FXML
+    private void initialize() {
+        helpMessage.setText(HELP_MESSAGE);
     }
 
     /**

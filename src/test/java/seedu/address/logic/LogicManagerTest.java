@@ -129,7 +129,8 @@ public class LogicManagerTest {
         // Cancel (second step: execution)
         String cancelCommand = "n";
         CommandResult cancelResult = logic.execute(cancelCommand);
-        assertEquals("", cancelResult.getFeedbackToUser());
+        assertEquals(String.format(seedu.address.logic.Messages.MESSAGE_SUCCESSFUL_CANCEL,
+                "Delete"), cancelResult.getFeedbackToUser());
 
         // Verify person is still in address book
         assertEquals(1, model.getAddressBook().getPersonList().size());
@@ -153,7 +154,8 @@ public class LogicManagerTest {
 
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
+        assertThrows(UnsupportedOperationException.class, () ->
+                logic.getFilteredPersonList().remove(0));
     }
 
     /**
@@ -295,7 +297,8 @@ public class LogicManagerTest {
         logic.execute(addCommand);
         CommandResult result = logic.execute("n");
 
-        assertEquals("", result.getFeedbackToUser());
+        assertEquals(String.format(seedu.address.logic.Messages.MESSAGE_SUCCESSFUL_CANCEL, "Add"),
+                result.getFeedbackToUser());
         assertEquals(1, model.getAddressBook().getPersonList().size());
     }
 
@@ -373,7 +376,8 @@ public class LogicManagerTest {
         logic.execute(ClearCommand.COMMAND_WORD);
         CommandResult result = logic.execute("y");
 
-        assertEquals(ClearCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        String expectedMessage = String.format(ClearCommand.MESSAGE_SUCCESS, 1);
+        assertEquals(expectedMessage, result.getFeedbackToUser());
         assertEquals(0, model.getAddressBook().getPersonList().size());
     }
 
@@ -390,7 +394,8 @@ public class LogicManagerTest {
         logic.execute(ClearCommand.COMMAND_WORD);
         CommandResult result = logic.execute("n");
 
-        assertEquals("", result.getFeedbackToUser());
+        assertEquals(String.format(seedu.address.logic.Messages.MESSAGE_SUCCESSFUL_CANCEL, "Clear"),
+                result.getFeedbackToUser());
         assertEquals(1, model.getAddressBook().getPersonList().size());
     }
 

@@ -8,7 +8,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Name} matches all of the keywords given.
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private static final String KEYWORD_VALIDATION_REGEX = "^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$";
@@ -31,6 +31,10 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        if (keywords.isEmpty()) {
+            return false;
+        }
+
         return keywords.stream()
                 .anyMatch(keyword -> containsIgnoreCase(person.getName().fullName, keyword));
     }

@@ -202,4 +202,9 @@ public class AddCommandTest {
         }
     }
 
+    @org.junit.jupiter.api.Test
+    public void getCommandWord() {
+        AddCommand command = new AddCommand(new seedu.address.testutil.PersonBuilder().build());
+        org.junit.jupiter.api.Assertions.assertEquals(AddCommand.COMMAND_WORD, command.getCommandWord());
+    }
 }
