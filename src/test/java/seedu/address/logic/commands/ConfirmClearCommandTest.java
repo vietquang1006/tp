@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -102,6 +104,21 @@ public class ConfirmClearCommandTest {
     public void getConfirmationMessage_nullModel_throwsNullPointerException() {
         ConfirmClearCommand confirmClearCommand = new ConfirmClearCommand();
         assertThrows(NullPointerException.class, () -> confirmClearCommand.getConfirmationMessage(null));
+    }
+
+    @Test
+    public void getConfirmationMessage_nullPersonList_assertionError() {
+        assumeTrue(ConfirmClearCommand.class.desiredAssertionStatus());
+
+        Model modelWithNullPersonList = new ModelManager(getTypicalAddressBook(), new UserPrefs()) {
+            @Override
+            public ObservableList<Person> getSortedFilteredPersonList() {
+                return null;
+            }
+        };
+
+        ConfirmClearCommand confirmClearCommand = new ConfirmClearCommand();
+        assertThrows(AssertionError.class, () -> confirmClearCommand.getConfirmationMessage(modelWithNullPersonList));
     }
 
     @Test

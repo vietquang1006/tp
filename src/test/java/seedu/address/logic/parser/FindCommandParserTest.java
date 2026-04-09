@@ -1,11 +1,16 @@
 package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static seedu.address.logic.Messages.MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -143,5 +148,49 @@ public class FindCommandParserTest {
         assertParseFailure(parser, " -n -m and", invalidFormatMessage);
         assertParseFailure(parser, " -t friend -m or -m and", invalidFormatMessage);
         assertParseFailure(parser, " -n Alice -t -m or", invalidFormatMessage);
+    }
+
+    @Test
+    public void parseSegment_nullPrefix_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Method parseSegment = FindCommandParser.class.getDeclaredMethod("parseSegment", Prefix.class, String.class);
+        parseSegment.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> parseSegment.invoke(parser, null, "Alice"));
+        assertTrue(thrown.getCause() instanceof AssertionError);
+    }
+
+    @Test
+    public void parsedSegment_nullPrefix_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Class<?> parsedSegmentClass = Class.forName("seedu.address.logic.parser.FindCommandParser$ParsedSegment");
+        Constructor<?> constructor = parsedSegmentClass.getDeclaredConstructor(
+                Prefix.class, java.util.List.class, KeywordRelation.class);
+        constructor.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> constructor.newInstance(
+                        null, Arrays.asList("alice", "bob"), KeywordRelation.ANY));
+        assertTrue(thrown.getCause() instanceof AssertionError);
+    }
+
+    @Test
+    public void parsedFindSegments_nullRelation_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Class<?> parsedFindSegmentsClass = Class.forName(
+                "seedu.address.logic.parser.FindCommandParser$ParsedFindSegments");
+        Constructor<?> constructor = parsedFindSegmentsClass.getDeclaredConstructor(
+                java.util.List.class, java.util.List.class, KeywordRelation.class, KeywordRelation.class);
+        constructor.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> constructor.newInstance(
+                        Arrays.asList("alice", "bob"), Arrays.asList("friend", "student"),
+                        null, KeywordRelation.ANY));
+        assertTrue(thrown.getCause() instanceof AssertionError);
     }
 }

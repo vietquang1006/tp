@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
@@ -10,6 +11,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -70,6 +72,21 @@ public class ClearCommandTest {
     public void execute_nullModel_throwsNullPointerException() {
         ClearCommand command = new ClearCommand();
         assertThrows(NullPointerException.class, () -> command.execute(null));
+    }
+
+    @Test
+    public void execute_nullPersonList_assertionPathThrowsNullPointerException() {
+        assumeTrue(ClearCommand.class.desiredAssertionStatus());
+
+        Model modelWithNullPersonList = new ModelManager(getTypicalAddressBook(), new UserPrefs()) {
+            @Override
+            public ObservableList<Person> getSortedFilteredPersonList() {
+                return null;
+            }
+        };
+
+        ClearCommand command = new ClearCommand();
+        assertThrows(NullPointerException.class, () -> command.execute(modelWithNullPersonList));
     }
 
     @Test
