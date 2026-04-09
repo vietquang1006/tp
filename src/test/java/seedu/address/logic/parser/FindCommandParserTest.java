@@ -178,6 +178,36 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parsedSegment_nullKeywords_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Class<?> parsedSegmentClass = Class.forName("seedu.address.logic.parser.FindCommandParser$ParsedSegment");
+        Constructor<?> constructor = parsedSegmentClass.getDeclaredConstructor(
+                Prefix.class, java.util.List.class, KeywordRelation.class);
+        constructor.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> constructor.newInstance(
+                        CliSyntax.PREFIX_NAME, null, KeywordRelation.ANY));
+        assertTrue(thrown.getCause() instanceof AssertionError);
+    }
+
+    @Test
+    public void parsedSegment_nullRelation_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Class<?> parsedSegmentClass = Class.forName("seedu.address.logic.parser.FindCommandParser$ParsedSegment");
+        Constructor<?> constructor = parsedSegmentClass.getDeclaredConstructor(
+                Prefix.class, java.util.List.class, KeywordRelation.class);
+        constructor.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> constructor.newInstance(
+                        CliSyntax.PREFIX_NAME, Arrays.asList("alice", "bob"), null));
+        assertTrue(thrown.getCause() instanceof AssertionError);
+    }
+
+    @Test
     public void parsedFindSegments_nullRelation_throwsAssertionError() throws Exception {
         assumeTrue(FindCommandParser.class.desiredAssertionStatus());
 
@@ -191,6 +221,23 @@ public class FindCommandParserTest {
                 InvocationTargetException.class, () -> constructor.newInstance(
                         Arrays.asList("alice", "bob"), Arrays.asList("friend", "student"),
                         null, KeywordRelation.ANY));
+        assertTrue(thrown.getCause() instanceof AssertionError);
+    }
+
+    @Test
+    public void parsedFindSegments_nullTagRelation_throwsAssertionError() throws Exception {
+        assumeTrue(FindCommandParser.class.desiredAssertionStatus());
+
+        Class<?> parsedFindSegmentsClass = Class.forName(
+                "seedu.address.logic.parser.FindCommandParser$ParsedFindSegments");
+        Constructor<?> constructor = parsedFindSegmentsClass.getDeclaredConstructor(
+                java.util.List.class, java.util.List.class, KeywordRelation.class, KeywordRelation.class);
+        constructor.setAccessible(true);
+
+        InvocationTargetException thrown = assertThrows(
+                InvocationTargetException.class, () -> constructor.newInstance(
+                        Arrays.asList("alice", "bob"), Arrays.asList("friend", "student"),
+                        KeywordRelation.ANY, null));
         assertTrue(thrown.getCause() instanceof AssertionError);
     }
 }
