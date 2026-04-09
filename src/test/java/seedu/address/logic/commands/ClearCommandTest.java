@@ -40,7 +40,7 @@ public class ClearCommandTest {
     }
 
     @Test
-    public void execute_filteredList_clearsOnlyShownPersons_success() throws CommandException {
+    public void execute_filteredList_success() throws CommandException {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
