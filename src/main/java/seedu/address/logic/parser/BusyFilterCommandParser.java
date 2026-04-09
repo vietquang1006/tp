@@ -1,3 +1,9 @@
+/**
+ * Yi Heng: I used AI to help me ideate what are the points of assertions in the main code
+ * and only kept the instances recommended by AI that I think are the most important, following
+ * the course's instructions to use assertions to check for programmer errors and not user input errors.
+ */
+
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
@@ -22,6 +28,8 @@ public class BusyFilterCommandParser implements Parser<BusyFilterCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public BusyFilterCommand parse(String args) throws ParseException {
+        assert args != null : "Arguments string should not be null";
+
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_START_DATE, PREFIX_END_DATE);
 
@@ -48,7 +56,8 @@ public class BusyFilterCommandParser implements Parser<BusyFilterCommand> {
             throw new ParseException(e.getMessage());
         }
 
-        return new BusyFilterCommand(predicate);
+        BusyFilterCommand command = new BusyFilterCommand(predicate);
+        return command;
     }
 
     /**
@@ -56,6 +65,7 @@ public class BusyFilterCommandParser implements Parser<BusyFilterCommand> {
      * {@code ArgumentMultimap}.
      */
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        assert argumentMultimap != null : "ArgumentMultimap should not be null";
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }

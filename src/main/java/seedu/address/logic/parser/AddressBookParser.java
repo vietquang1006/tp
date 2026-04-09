@@ -1,3 +1,8 @@
+/**
+ * Yi Heng: I used AI to help me complete the rest of the logging instances after I wrote the first user input
+ * log and warning, and the first case under switch.
+ */
+
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
@@ -47,8 +52,11 @@ public class AddressBookParser {
      * @throws ParseException if the user input does not conform the expected format
      */
     public Command parseCommand(String userInput) throws ParseException, CommandException {
+        logger.info("Parsing command from user input: '" + userInput + "'");
+
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
+            logger.warning("User input does not match basic command format: '" + userInput + "'");
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
@@ -63,34 +71,43 @@ public class AddressBookParser {
         switch (commandWord) {
 
         case AddCommand.COMMAND_WORD:
+            logger.fine("Routing to AddCommandParser");
             return new AddCommandParser().parse(arguments);
 
         case BusyCommand.COMMAND_WORD:
+            logger.fine("Routing to BusyCommandParser");
             return new BusyCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
+            logger.fine("Routing to EditCommandParser");
             return new EditCommandParser().parse(arguments);
 
         case DeleteCommand.COMMAND_WORD:
+            logger.fine("Routing to DeleteCommandParser");
             return new DeleteCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
+            logger.fine("Executing ClearCommand");
             return new ClearCommand();
 
         case FindCommand.COMMAND_WORD:
+            logger.fine("Routing to FindCommandParser");
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
+            logger.fine("Routing to ListCommandParser");
             return new ListCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
+            logger.info("Exit command detected - preparing to exit");
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
+            logger.fine("Help command detected");
             return new HelpCommand();
 
         default:
-            logger.finer("This user input caused a ParseException: " + userInput);
+            logger.warning("Unknown command detected: '" + commandWord + "'");
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
     }
@@ -102,10 +119,12 @@ public class AddressBookParser {
      * @return the command or ConfirmCommand based on the user input
      * @throws ParseException if the user input does not conform the expected format
      */
-
     public Command parseCommandWithConfirmation(String userInput) throws ParseException, CommandException {
+        logger.info("Parsing command (with confirmation) from user input: '" + userInput + "'");
+
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
+            logger.warning("User input does not match basic command format: '" + userInput + "'");
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
@@ -120,37 +139,47 @@ public class AddressBookParser {
         switch (commandWord) {
 
         case ConfirmAddCommand.COMMAND_WORD:
+            logger.fine("Routing to ConfirmAddCommandParser");
             return new ConfirmAddCommandParser().parse(arguments);
 
         case BusyCommand.COMMAND_WORD:
+            logger.fine("Routing to BusyCommandParser");
             return new BusyCommandParser().parse(arguments);
 
         case BusyFilterCommand.COMMAND_WORD:
+            logger.fine("Routing to BusyFilterCommandParser");
             return new BusyFilterCommandParser().parse(arguments);
 
         case ConfirmEditCommand.COMMAND_WORD:
+            logger.fine("Routing to ConfirmEditCommandParser");
             return new ConfirmEditCommandParser().parse(arguments);
 
         case ConfirmDeleteCommand.COMMAND_WORD:
+            logger.fine("Routing to ConfirmDeleteCommandParser");
             return new ConfirmDeleteCommandParser().parse(arguments);
 
         case ConfirmClearCommand.COMMAND_WORD:
+            logger.fine("Executing ConfirmClearCommand");
             return new ConfirmClearCommand();
 
         case FindCommand.COMMAND_WORD:
+            logger.fine("Routing to FindCommandParser");
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
+            logger.fine("Routing to ListCommandParser");
             return new ListCommandParser().parse(arguments);
 
         case ConfirmExitCommand.COMMAND_WORD:
+            logger.info("Confirm exit command detected - preparing to exit");
             return new ConfirmExitCommand();
 
         case HelpCommand.COMMAND_WORD:
+            logger.fine("Help command detected");
             return new HelpCommand();
 
         default:
-            logger.finer("This user input caused a ParseException: " + userInput);
+            logger.warning("Unknown command detected: '" + commandWord + "'");
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
     }
@@ -162,10 +191,12 @@ public class AddressBookParser {
      * @return boolean based on the user input
      * @throws ParseException if the user input does not conform the expected format
      */
-
     public boolean parseYesNo(String userInput) throws ParseException, CommandException {
+        logger.info("Parsing yes/no response from user input: '" + userInput + "'");
+
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
+            logger.warning("User input does not match basic command format for yes/no: '" + userInput + "'");
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
@@ -180,13 +211,15 @@ public class AddressBookParser {
         switch (commandWord) {
 
         case "y":
+            logger.fine("User confirmed with 'yes' response");
             return true;
 
         case "n":
+            logger.fine("User declined with 'no' response");
             return false;
 
         default:
-            logger.finer("This user input caused a ParseException: " + userInput);
+            logger.warning("Invalid yes/no response received: '" + commandWord + "'");
             throw new ParseException(MESSAGE_ONLY_YES_NO);
         }
     }
