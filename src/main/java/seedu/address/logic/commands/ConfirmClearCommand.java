@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -14,6 +16,8 @@ import seedu.address.model.person.Person;
 public class ConfirmClearCommand extends ClearCommand implements ConfirmCommand {
     public static final String MESSAGE_ASK_CONFIRMATION =
             "Are you sure you want to clear the currently listed contacts? [y/n]%1$s";
+
+    private static final Logger logger = LogsCenter.getLogger(ConfirmClearCommand.class);
 
     @Override
     public CommandResult execute(Model model) {
@@ -29,6 +33,9 @@ public class ConfirmClearCommand extends ClearCommand implements ConfirmCommand 
     public String getConfirmationMessage(Model model) {
         requireNonNull(model);
         List<Person> lastShownList = model.getSortedFilteredPersonList();
+        assert lastShownList != null;
+
+        logger.fine("Preparing clear confirmation for listed contacts. Count: " + lastShownList.size());
 
         StringBuilder sb = new StringBuilder();
         lastShownList.stream()

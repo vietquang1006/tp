@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
@@ -15,7 +17,6 @@ import seedu.address.model.person.Person;
  * Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
-
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names/tags contain "
@@ -26,9 +27,15 @@ public class FindCommand extends Command {
             + "          " + COMMAND_WORD + " -n alice pauline ; josh -m or\n"
             + "          " + COMMAND_WORD + " -t friends ; owes me ; secretary -m and";
 
+    private static final Logger logger = LogsCenter.getLogger(FindCommand.class);
+
     private final Predicate<Person> predicate;
 
+    /**
+     * Creates a {@code FindCommand} with a predicate to filter contacts.
+     */
     public FindCommand(Predicate<Person> predicate) {
+        requireNonNull(predicate);
         this.predicate = predicate;
     }
 
@@ -36,8 +43,9 @@ public class FindCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
-        return new CommandResult(
-                Messages.getMessageForPersonsListed(model.getSortedFilteredPersonList().size()));
+        int personsListed = model.getSortedFilteredPersonList().size();
+        logger.fine("Find command matched contacts count: " + personsListed);
+        return new CommandResult(Messages.getMessageForPersonsListed(personsListed));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -7,11 +8,13 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -24,8 +27,8 @@ import seedu.address.model.person.TagContainsKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
-    private static final String SEARCH_MODE_NAME = "-n";
-    private static final String SEARCH_MODE_TAG = "-t";
+    private static final Logger logger = LogsCenter.getLogger(FindCommandParser.class);
+    private static final Pattern RELATION_MARKER_PATTERN = Pattern.compile("(?<=^|\\s)-m\\b");
 
 
     /**
@@ -34,8 +37,11 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException, CommandException {
+        requireNonNull(args);
+
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
+            logger.finer("Rejected empty find command arguments");
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
@@ -43,8 +49,10 @@ public class FindCommandParser implements Parser<FindCommand> {
         ParsedFindSegments segments = parseSegments(trimmedArgs);
         List<String> nameKeywords = segments.nameKeywords;
         List<String> tagKeywords = segments.tagKeywords;
+        assert nameKeywords != null || tagKeywords != null;
 
         if (nameKeywords != null && tagKeywords != null) {
+            logger.fine("Parsed find command with both name and tag keywords");
             return new FindCommand(new NameTagContainsKeywordsPredicate(
                     nameKeywords,
                     tagKeywords,
@@ -53,9 +61,11 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         if (nameKeywords != null) {
+            logger.fine("Parsed find command with name keywords only");
             return new FindCommand(new NameContainsKeywordsPredicate(nameKeywords, segments.nameRelation));
         }
 
+        logger.fine("Parsed find command with tag keywords only");
         return new FindCommand(new TagContainsKeywordsPredicate(tagKeywords, segments.tagRelation));
     }
 
@@ -110,11 +120,13 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     private ParsedSegment parseSegment(Prefix prefix, String segment) throws ParseException {
+        assert prefix != null;
+
         if (segment.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        Matcher matcher = Pattern.compile("(?<=^|\\s)-m\\b").matcher(segment);
+        Matcher matcher = RELATION_MARKER_PATTERN.matcher(segment);
         int matchIndex = -1;
         while (matcher.find()) {
             if (matchIndex != -1) {
@@ -203,6 +215,8 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
+        assert keywords.stream().noneMatch(String::isEmpty);
+
         return keywords;
     }
 
@@ -226,6 +240,9 @@ public class FindCommandParser implements Parser<FindCommand> {
         private final KeywordRelation relation;
 
         ParsedSegment(Prefix prefix, List<String> keywords, KeywordRelation relation) {
+            assert prefix != null;
+            assert keywords != null;
+            assert relation != null;
             this.prefix = prefix;
             this.keywords = keywords;
             this.relation = relation;
@@ -240,6 +257,8 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ParsedFindSegments(List<String> nameKeywords, List<String> tagKeywords,
                            KeywordRelation nameRelation, KeywordRelation tagRelation) {
+            assert nameRelation != null;
+            assert tagRelation != null;
             this.nameKeywords = nameKeywords;
             this.tagKeywords = tagKeywords;
             this.nameRelation = nameRelation;
