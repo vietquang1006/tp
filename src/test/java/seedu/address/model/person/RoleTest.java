@@ -6,6 +6,12 @@ import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Thinh: I used AI assistance to help identify relevant files to modify
+ * and to generate and refine validation test cases for roles. I reviewed
+ * and adapted the final tests.
+ */
+
 public class RoleTest {
 
     @Test

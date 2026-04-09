@@ -6,11 +6,14 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 /**
  * Represents a Person's role in the address book.
  * Guarantees: immutable; role name is valid as declared in {@link #isValidRole(String)}.
- * Note: Each {@code Person} entry is expected to have a single role.
- * If a person holds multiple responsibilities, it is recommended to
- * create separate entries for each role.
  */
 public class Role {
+
+    /**
+     * Thinh: I used AI assistance to help identify relevant files to modify
+     * and to refine the validation rules for roles. I reviewed and adjusted
+     * the final regex, constraints, and implementation.
+     */
 
     public static final String MESSAGE_CONSTRAINTS =
             "Roles should not be blank, must not start or end with spaces, "
@@ -18,6 +21,7 @@ public class Role {
                     + "and the symbols &, /, (, ), comma, hyphen, and apostrophe.";
 
     /**
+     * Thinh: I used Ai assistance to write this.
      * Starts with alphanumeric.
      * Then allows alphanumeric or allowed punctuation.
      * Spaces are allowed only if they are single spaces (not consecutive).

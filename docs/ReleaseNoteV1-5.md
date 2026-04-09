@@ -14,7 +14,7 @@
 - Feature `list`: Update the error message examples displayed.
 - Improvement to command confirmation: If the user cancels a command with "`n`" when prompted for confirmation, a message reflecting that the corresponding command was cancelled will now be displayed.
 <img src="images/ProductUI_V1-5_cancel.png" width="500px">
-- Feature `clear`: Command success message includes number of contacts getting cleared. 
+- Feature `clear`: Command success message includes number of contacts getting cleared.
 - Feature `edit`: Confirmation message now shows a detailed field-by-field summary of the changes to be made.
 - Feature `edit`: Edits that do not make any effective change are now rejected.
 - Product UI: Result display area has been adjusted to better accommodate longer multi-line confirmation messages.

@@ -34,6 +34,13 @@ import seedu.address.testutil.PersonBuilder;
  */
 public class ConfirmEditCommandTest {
 
+    /**
+     * Thinh: I used AI assistance to help ideate and refine several test cases
+     * for edit confirmation behavior, including changed-field summaries,
+     * duplicate warnings, filtered-list behavior, and no-effective-change cases.
+     * I reviewed and adapted the final test suite.
+     */
+
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test

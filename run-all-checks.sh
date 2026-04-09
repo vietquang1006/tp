@@ -1,4 +1,8 @@
 #!/bin/sh
+# Thinh: I used AI assistance to help draft and refine this script,
+# especially for aggregating Gradle checks, running all check-* scripts,
+# and fixing the path-handling logic. I reviewed and adapted the final version.
+
 # Run gradle + all check-* scripts, aggregate result
 
 dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd) || exit 1
