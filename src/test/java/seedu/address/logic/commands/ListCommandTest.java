@@ -75,6 +75,13 @@ public class ListCommandTest {
                 ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
+    @Test
+    public void execute_sortNull_fail() {
+        org.junit.jupiter.api.Assertions.assertThrows(AssertionError.class, () -> {
+            new ListCommand(null);
+        });
+    }
+
     @org.junit.jupiter.api.Test
     public void getCommandWord() {
         ListCommand command = new ListCommand(ListCommand.SortOrder.ASCENDING);
