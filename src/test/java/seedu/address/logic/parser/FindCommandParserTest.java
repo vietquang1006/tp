@@ -92,4 +92,23 @@ public class FindCommandParserTest {
         assertParseFailure(parser, " -n alice -m and -m or",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_validArgsWithoutLeadingWhitespace_returnsFindCommand() throws CommandException {
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+        assertParseSuccess(parser, "-n Alice ; Bob", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_invalidSegmentStructure_throwsParseException() {
+        String invalidFormatMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE);
+
+        assertParseFailure(parser, "abc -n Alice", invalidFormatMessage);
+        assertParseFailure(parser, " -n Alice -n Bob", invalidFormatMessage);
+        assertParseFailure(parser, " -t friend -t classmate", invalidFormatMessage);
+        assertParseFailure(parser, " -n Alice -m", invalidFormatMessage);
+        assertParseFailure(parser, " -n Alice -m and or", invalidFormatMessage);
+        assertParseFailure(parser, " -n -m and", invalidFormatMessage);
+    }
 }
