@@ -64,6 +64,24 @@ public class ListCommandTest {
                 ListCommand.MESSAGE_SUCCESS_SORT_DESCENDING, expectedModel);
     }
 
+    @Test
+    public void execute_sortNone_success() throws Exception {
+        ListCommand command = new ListCommand(ListCommand.SortOrder.NONE);
+
+        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.updateSortedPersonList(null);
+
+        assertCommandSuccess(command, model,
+                ListCommand.MESSAGE_SUCCESS, expectedModel);
+    }
+
+    @Test
+    public void execute_sortNull_fail() {
+        org.junit.jupiter.api.Assertions.assertThrows(AssertionError.class, () -> {
+            new ListCommand(null);
+        });
+    }
+
     @org.junit.jupiter.api.Test
     public void getCommandWord() {
         ListCommand command = new ListCommand(ListCommand.SortOrder.ASCENDING);
