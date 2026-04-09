@@ -20,6 +20,14 @@ import seedu.address.model.tag.Tag;
  */
 public class ConfirmEditCommand extends EditCommand implements ConfirmCommand {
 
+    /**
+     * Thinh: I used AI assistance to help identify relevant files to modify
+     * and to refine the logic for generating the field-by-field edit
+     * confirmation summary, including formatting changed values and handling
+     * the "no effective change" case. I reviewed and modified the final
+     * implementation.
+     */
+
     public static final String MESSAGE_DUPLICATE_PERSON_WARNING =
             "Warning: %1$s\nis an existing person.\n";
 

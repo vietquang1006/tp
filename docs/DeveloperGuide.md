@@ -2,6 +2,13 @@
 layout: page
 title: Developer Guide
 ---
+
+<!--
+Thinh: I used AI assistance to help identify relevant sections of the User Guide
+to update and to refine parts of the documentation wording and examples for the
+features described here. I reviewed and adapted the final documentation.
+-->
+
 ## **Table of Contents**
 
 - [Acknowledgements](#acknowledgements)

@@ -20,6 +20,12 @@ public class PhoneTest {
         assertThrows(IllegalArgumentException.class, () -> new Phone(invalidPhone));
     }
 
+    /**
+     * Thinh: I used AI assistance to help generate and refine validation test cases
+     * for phone numbers, especially cases involving spaces and input normalization.
+     * I reviewed and adapted the final tests.
+     */
+
     @Test
     public void constructor_phoneWithSpaces_storesTrimmedPhone() {
         Phone phone = new Phone("9312 1534");
