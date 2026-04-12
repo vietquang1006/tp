@@ -101,7 +101,6 @@ public class PersonCard extends UiPart<Region> {
                     label.getStyleClass().add("tag");
                     label.setMaxWidth(100);
                     label.setWrapText(true);
-                    label.setEllipsisString("...");
                     return label;
                 })
                 .forEach(tags.getChildren()::add);
