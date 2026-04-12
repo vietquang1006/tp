@@ -71,7 +71,7 @@ To ensure this guide is effective, we assume the target user:
 
 3. Copy the file to the folder you want to use as the _home folder_ for your CampusConnect.
 
-4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar campusconnect.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar [CS2103T-W13-3][CampusConnect].jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/ProductUI_V1-3_home.png)
 
