@@ -163,7 +163,7 @@ Examples:
 
 ### Marking a person as busy : `busy`
 
-Marks a contact as busy for a specific period. You can add one busy period for each contact.
+Marks a contact as busy for a specific period. You can add multiple busy periods for each contact.
 
 **Format:** `busy INDEX -s START_DATE -e END_DATE`
 
@@ -471,7 +471,7 @@ _Details coming soon ..._
 - The start date is before or equal to the end date
 
 **Q**: Can a contact have multiple busy periods?<br>
-**A**: No. Each contact can only have one busy period. Running the `busy` command again will overwrite the existing period.
+**A**: Yes. Each contact can only have one busy period. Running the `busy` command again will overwrite the existing period.
 
 **Q**: Why does `busyfilter` not show some contacts?<br>
 **A**: `busyfilter` only shows contacts who are busy **within the specified date range**. Contacts without a busy period, or whose busy period does not overlap with the given range, will not be shown.
