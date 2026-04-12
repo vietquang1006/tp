@@ -844,8 +844,8 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: The app contains contacts such as "Jonathan", "Johnny", "John Doe".
 
-    2. Test case: `find -n John`<br>
-       Expected: All contacts with names containing "John" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
+    2. Test case: `find -n Jo`<br>
+       Expected: All contacts with names containing "Jo" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
 
 3. Finding persons with no matches
 
