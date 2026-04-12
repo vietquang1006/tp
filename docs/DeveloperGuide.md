@@ -831,35 +831,35 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: The app contains multiple contacts with different names.
 
-    2. Test case: `find John`<br>
+    2. Test case: `find -n John`<br>
        Expected: All contacts with names containing "John" are displayed.
 
-    3. Test case: `find alice`<br>
+    3. Test case: `find -n alice`<br>
        Expected: Contacts matching "alice" are displayed (case-insensitive).
 
-    4. Test case: `find John; alice`<br>
+    4. Test case: `find -n John; alice`<br>
        Expected: Contacts matching "John" and "alice" are displayed (case-insensitive).
 
 2. Finding persons by partial match
 
     1. Prerequisites: The app contains contacts such as "Jonathan", "Johnny", "John Doe".
 
-    2. Test case: `find John`<br>
+    2. Test case: `find -n John`<br>
        Expected: All contacts with names containing "John" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
 
 3. Finding persons with no matches
 
     1. Prerequisites: The app contains multiple contacts.
 
-    2. Test case: `find xyz`<br>
+    2. Test case: `find -n xyz`<br>
        Expected: No contacts are displayed. A message indicating no matches found is shown.
 
 4. Invalid find commands
 
-    1. Test case: `find`<br>
+    1. Test case: `find -n`<br>
        Expected: Error message shown indicating invalid command format.
 
-    2. Test case: `find @@@`<br>
+    2. Test case: `find -n @@@`<br>
        Expected: Error message shown indicating invalid command format.
 
 ### Listing persons
