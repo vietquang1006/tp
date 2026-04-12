@@ -321,6 +321,9 @@ Before the exit is performed, the application will prompt for confirmation.
 * If `y` is entered, the application will exit.
 * If `n` is entered, the exit operation will be cancelled.
 
+**Alternative:**
+* You can also exit the application by clicking `File` > `Exit` in the menu bar without any confirmation prompt.
+
 ### Locating persons by name/tags: `find`
 
 Finds persons whose names/tags contain the given keyword groups.
