@@ -501,15 +501,16 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action | Format, Examples
---------|------------------
-**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br><br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@u.nus.edu -a 123, Clementi Rd, 1234665 -t friend -t colleague`
-**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br><br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
-**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br><br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
-**Clear** | `clear` (then confirm with `y` or cancel with `n`)
-**Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
-**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@u.nus.edu` <br>(then confirm with `y` or cancel with `n`)
-**Exit** | `exit`<br>(then confirm with `y` or cancel with `n`)
-**Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
-**Help** | `help`
-**List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
+Action | Format, Examples                                                                                                                                                                                                                                              
+--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br><br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@u.nus.edu -a 123, Clementi Rd, 1234665 -t friend -t colleague`                                               
+**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br><br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`                                                                                                                                                                     
+**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br><br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`                                                                                                                                                                 
+**Clear** | `clear` (then confirm with `y` or cancel with `n`)                                                                                                                                                                                                            
+**Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)                                                                                                                                                                         
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@u.nus.edu` <br>(then confirm with `y` or cancel with `n`)                                                                 
+**Exit** | `exit`<br>(then confirm with `y` or cancel with `n`)                                                                                                                                                                                                          
+**Find** | `find -n NAME_KEYWORDS [; MORE_NAME_KEYWORDS]... [-m and\|or] [-t TAG_KEYWORDS [; MORE_TAG_KEYWORDS]... [-m and                                                                                                 \|or]]` <br><br> e.g., `find -n alex ; david` 
+**Help** | `help`                                                                                                                                                                                                                                                        
+**List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`                                                                                                                                                                                                              
+
