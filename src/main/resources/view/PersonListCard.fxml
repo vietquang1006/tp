@@ -26,7 +26,7 @@
           <Region fx:constant="USE_PREF_SIZE"/>
         </minWidth>
       </Label>
-      <Label fx:id="name" text="$first" styleClass="cell_name_label"/>
+      <Label fx:id="name" text="$first" styleClass="cell_name_label" wrapText="true"/>
     </HBox>
     <FlowPane fx:id="busyPeriods" styleClass="busy-period-container"/>
 
@@ -40,15 +40,15 @@
         <ColumnConstraints minWidth="100" halignment="LEFT"/>
       </columnConstraints>
 
-      <Label fx:id="phone" styleClass="cell_phone_label" text="$phone" GridPane.valignment="TOP" GridPane.columnIndex="0"/>
-      <Label fx:id="email" styleClass="cell_email_label" text="$email" GridPane.valignment="TOP" GridPane.columnIndex="1"/>
+      <Label fx:id="phone" styleClass="cell_phone_label" text="$phone" wrapText="true" GridPane.valignment="TOP" GridPane.columnIndex="0"/>
+      <Label fx:id="email" styleClass="cell_email_label" text="$email" wrapText="true" GridPane.valignment="TOP" GridPane.columnIndex="1"/>
       <Label fx:id="address"
              styleClass="cell_address_label"
              text="$address"
              wrapText="true"
              GridPane.valignment="TOP"
              GridPane.columnIndex="2"/>
-      <Label fx:id="role" styleClass="cell_role_label" text="$role" GridPane.valignment="TOP" GridPane.columnIndex="3"/>
+      <Label fx:id="role" styleClass="cell_role_label" text="$role" wrapText="true" GridPane.valignment="TOP" GridPane.columnIndex="3"/>
       <FlowPane fx:id="tags"
                 prefWrapLength="140"
                 styleClass="tag-container"
