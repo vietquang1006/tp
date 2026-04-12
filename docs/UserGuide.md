@@ -140,7 +140,7 @@ Adds a person to the address book.
 
 :bulb: **Tip:**<br><br>
 
-A person can have any number of tags (including 0).
+A person can have any number of tags (including 0). But each tag cannot have a space.
 </div>
 
 If the person being added does **not** already exist in the address book, the contact will be added immediately.
