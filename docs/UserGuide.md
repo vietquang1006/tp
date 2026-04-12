@@ -474,7 +474,7 @@ _Details coming soon ..._
 - The start date is before or equal to the end date
 
 **Q**: Can a contact have multiple busy periods?<br>
-**A**: Yes. Each contact can only have multiple busy period.
+**A**: Yes. Each contact can have multiple busy periods.
 
 **Q**: Why does `busyfilter` not show some contacts?<br>
 **A**: `busyfilter` only shows contacts who are busy **within the specified date range**. Contacts without a busy period, or whose busy period does not overlap with the given range, will not be shown.
