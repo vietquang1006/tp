@@ -192,7 +192,7 @@ Shows all contacts who are busy at **any point within the given date range**.
 `busyfilter -s START_DATE -e END_DATE`
 
 * `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
-* Contacts with busy period are considered available and will not be displayed.
+* Contacts without busy period are considered available and will not be displayed.
 
 **Example:**
 ```
