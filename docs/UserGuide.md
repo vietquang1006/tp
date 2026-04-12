@@ -163,7 +163,7 @@ Examples:
 
 ### Marking a person as busy : `busy`
 
-Marks a contact as busy for a specific period. You can add multiple busy periods for each contact.
+Marks a contact as busy for a specific period. You can add one busy period for each contact.
 
 **Format:** `busy INDEX -s START_DATE -e END_DATE`
 
