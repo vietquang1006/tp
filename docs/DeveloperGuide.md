@@ -630,7 +630,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS (Main Success Scenario):**
 1. Marcus instructs the application to mark the nth contact as busy from a start date to an end date.
 2. CampusConnect validates the dates and the selected contact.
-3. CampusConnect overwrites any existing busy period for the contact with the new dates.
+3. CampusConnect adds the busy period to the contact, merging the period if it overlaps with an existing one.
 4. CampusConnect confirms the update and displays the contact’s updated profile.<br>
    Use case ends.
 

@@ -15,7 +15,8 @@ import java.util.Objects;
  */
 public class BusyPeriod {
 
-    public static final String MESSAGE_CONSTRAINTS = "Dates must follow the DD/MM/YYYY format (e.g., 25/03/2026).";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Dates must be valid and follow the DD/MM/YYYY format (e.g., 25/03/2026).";
     public static final String MESSAGE_DATE_LOGIC = "The start date cannot be later than the end date.";
 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/uuuu")
