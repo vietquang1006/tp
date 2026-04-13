@@ -120,7 +120,7 @@ To ensure this guide is effective, we assume the target user:
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[-t TAG]…​` can be used as ` ` (i.e. 0 times), `-t friend`, `-t friend -t family` etc.
 
-* Parameters can be in any order.<br>
+* Parameters can be in any order (except `FIND` keyword).<br>
   e.g. if the command specifies `-n NAME -p PHONE_NUMBER`, `-p PHONE_NUMBER -n NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `exit` and `clear`, or `y`/`n` for confirmation command) will be ignored.<br>
@@ -339,9 +339,13 @@ Use `;` to split phrases into multiple keyword groups, e.g. `find -n alice pauli
 
 * At least one of `-n` or `-t` must be provided.
 * The search is case-insensitive. e.g. `alice` will match `Alice`.
-* Use `;` to separate multiple keyword groups. Each keyword group can contain spaces.
-* `-m or` matches contacts that contain **any** of the keyword groups for the preceding field (default).
-* `-m and` matches contacts that contain **all** of the keyword groups for the preceding field.
+* A **keyword group** is one phrase inside a field (one or more alphanumeric words), e.g. `alice pauline`.
+* Use `;` to separate multiple keyword groups within the same field (`-n` or `-t`).
+* The `-m` keyword is **OPTIONAL**. By default, keyword groups in a field use `OR` logic (`-m or`).
+* `-m or` matches contacts that contain **any** keyword group of the preceding field.
+* `-m and` matches contacts that contain **all** keyword groups of the preceding field.
+* For `;`-separated groups, evaluation is done within that field only: the groups are combined by that field's `-m` mode.
+* `-m and|or` must come after a `-n` or `-t` keyword group; it cannot appear before both fields.
 * If both `-n` and `-t` are provided, a person must satisfy both fields.
 * Matching is based on text containment. e.g. `ali` will match `Alice`.
 * Keywords can only contain alphanumeric characters and spaces.
@@ -351,6 +355,7 @@ Examples:
 * `find -t RAG2026 ; finance ; secretaries -m and` returns persons with tags containing all listed groups.
 * `find -n dan ; elle -m and -t friends ; student -m or` returns persons whose names contain both `dan` and `elle`,
   and tags containing `friends` or `student`.
+* Invalid: `find -m and -n name1 ; name2` (`-m` cannot come before `-n`/`-t`).
 * `find -n heng ; kang -m and` returns persons whose names contain both `heng` and `kang`.<br>
   ![result for 'find -n heng ; kang'](images/findNameHengKang.png)
 

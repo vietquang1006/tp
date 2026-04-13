@@ -208,7 +208,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         Stream<String> keywordStream = trimmedQuery.contains(";")
-                ? Stream.of(trimmedQuery.split(";"))
+                ? Stream.of(trimmedQuery.split(";", -1))
                 : Stream.of(trimmedQuery);
 
         List<String> keywords = keywordStream

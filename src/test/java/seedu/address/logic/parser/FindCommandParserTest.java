@@ -116,14 +116,11 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_trailingSemicolon_success() throws CommandException {
-        FindCommand expectedNameCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Collections.singletonList("Alice")));
-        assertParseSuccess(parser, " -n Alice ;", expectedNameCommand);
-
-        FindCommand expectedTagCommand =
-                new FindCommand(new TagContainsKeywordsPredicate(Collections.singletonList("friend")));
-        assertParseSuccess(parser, " -t friend ;", expectedTagCommand);
+    public void parse_trailingSemicolon_throwsParseException() {
+        String invalidFormatMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, " -n Alice ;", invalidFormatMessage);
+        assertParseFailure(parser, " -t friend ;", invalidFormatMessage);
+        assertParseFailure(parser, " -n alice ; -m and", invalidFormatMessage);
     }
 
     @Test
