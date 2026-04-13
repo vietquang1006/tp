@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -49,6 +51,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane busyPeriods;
 
+    private final Map<Label, String> labelOriginalStyles = new HashMap<>();
+    private final Map<Label, PauseTransition> labelPendingTransitions = new HashMap<>();
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
      */
@@ -95,6 +99,8 @@ public class PersonCard extends UiPart<Region> {
                 .map(tag -> {
                     Label label = new Label(tag.tagName);
                     label.getStyleClass().add("tag");
+                    label.setMaxWidth(100);
+                    label.setWrapText(true);
                     return label;
                 })
                 .forEach(tags.getChildren()::add);
@@ -144,6 +150,7 @@ public class PersonCard extends UiPart<Region> {
      */
     private void makeCopyable(Label label, String cssClass) {
         label.getStyleClass().add(cssClass);
+        labelOriginalStyles.put(label, label.getStyle());
         label.setOnMouseClicked(event -> {
             // Step ONE: Copy to clipboard
             Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -152,14 +159,19 @@ public class PersonCard extends UiPart<Region> {
             clipboard.setContent(content);
             System.out.println("Copied: " + label.getText());
 
+            PauseTransition pendingTransition = labelPendingTransitions.get(label);
+            if (pendingTransition != null) {
+                pendingTransition.stop();
+            }
             // Step TWO: Simulate feedback by changing background color
-            String originalStyle = label.getStyle();
+            String originalStyle = labelOriginalStyles.get(label);
             String copiedStyle = "-fx-background-color: #FFC0CB"; // Light pink color to indicate copy action
             label.setStyle(copiedStyle);
 
             // Step THREE: Revert back after 200ms
             PauseTransition pause = new PauseTransition(Duration.millis(200));
             pause.setOnFinished(e -> label.setStyle(originalStyle));
+            labelPendingTransitions.put(label, pause);
             pause.play();
         });
     }
