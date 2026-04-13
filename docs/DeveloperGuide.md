@@ -608,6 +608,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 3a1. CampusConnect displays an error message explaining the command format.
     * 3a2. Marcus re-enters a valid sort field.
     * Use case resumes at step 1.
+    
 ---
 **UC09: Mark a Contact as Busy**
 
